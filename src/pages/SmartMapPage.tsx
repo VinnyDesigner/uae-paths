@@ -5,7 +5,6 @@ import { Header } from '@/components/layout/Header';
 import { SmartSearch } from '@/components/search/SmartSearch';
 import { InteractiveMap } from '@/components/map/InteractiveMap';
 import { ResultsPanel } from '@/components/map/ResultsPanel';
-import { FacilityCard } from '@/components/map/FacilityCard';
 import { BaseMapSelector } from '@/components/map/BaseMapSelector';
 import { MapLegendOverlay } from '@/components/map/MapLegendOverlay';
 import { InlineFilters } from '@/components/map/InlineFilters';
@@ -178,18 +177,6 @@ export default function SmartMapPage() {
           </Button>
         </div>
 
-        {/* Desktop Facility Card */}
-        {selectedFacility && (
-          <div className="hidden lg:block absolute top-20 left-4 z-10 w-80 animate-slide-in-left">
-            <FacilityCard
-              facility={selectedFacility}
-              onClose={() => setSelectedFacility(null)}
-              onNavigate={() => {
-                window.open(`https://www.google.com/maps/dir/?api=1&destination=${selectedFacility.coordinates[1]},${selectedFacility.coordinates[0]}`, '_blank');
-              }}
-            />
-          </div>
-        )}
 
         {/* Results Panel */}
         {searchResults.length > 0 && (
@@ -266,18 +253,6 @@ export default function SmartMapPage() {
         </div>
       )}
 
-      {/* Mobile Facility Card */}
-      {selectedFacility && (
-        <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 p-4 bg-gradient-to-t from-background via-background to-transparent pt-10">
-          <FacilityCard
-            facility={selectedFacility}
-            onClose={() => setSelectedFacility(null)}
-            onNavigate={() => {
-              window.open(`https://www.google.com/maps/dir/?api=1&destination=${selectedFacility.coordinates[1]},${selectedFacility.coordinates[0]}`, '_blank');
-            }}
-          />
-        </div>
-      )}
     </div>
   );
 }

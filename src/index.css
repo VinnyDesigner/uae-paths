@@ -30,23 +30,23 @@
     --muted: 210 15% 95%;
     --muted-foreground: 215 15% 45%;
 
-    /* Accent - Healthcare Teal */
-    --accent: 175 65% 40%;
+    /* Accent - Deep Blue #063660 */
+    --accent: 208 88% 20%;
     --accent-foreground: 0 0% 100%;
-    --accent-light: 175 55% 92%;
+    --accent-light: 208 60% 92%;
 
     /* Education - Bright Blue #38B6FF */
     --education: 200 100% 61%;
     --education-foreground: 0 0% 100%;
     --education-light: 200 100% 94%;
 
-    /* Healthcare - Teal */
-    --healthcare: 175 65% 40%;
+    /* Healthcare - Deep Blue #063660 */
+    --healthcare: 208 88% 20%;
     --healthcare-foreground: 0 0% 100%;
-    --healthcare-light: 175 55% 92%;
+    --healthcare-light: 208 60% 92%;
 
     /* Success, Warning, Destructive */
-    --success: 145 65% 40%;
+    --success: 208 88% 20%;
     --success-foreground: 0 0% 100%;
     --warning: 38 95% 50%;
     --warning-foreground: 38 95% 15%;
@@ -98,19 +98,19 @@
     --muted: 215 20% 18%;
     --muted-foreground: 215 15% 60%;
 
-    --accent: 175 55% 45%;
+    --accent: 208 80% 35%;
     --accent-foreground: 0 0% 100%;
-    --accent-light: 175 40% 18%;
+    --accent-light: 208 50% 22%;
 
     --education: 200 100% 65%;
     --education-foreground: 0 0% 100%;
     --education-light: 200 60% 20%;
 
-    --healthcare: 175 55% 45%;
+    --healthcare: 208 80% 35%;
     --healthcare-foreground: 0 0% 100%;
-    --healthcare-light: 175 40% 18%;
+    --healthcare-light: 208 50% 22%;
 
-    --success: 145 55% 45%;
+    --success: 208 80% 35%;
     --success-foreground: 0 0% 100%;
     --warning: 38 90% 55%;
     --warning-foreground: 0 0% 100%;
@@ -173,7 +173,7 @@
   }
 
   .gradient-healthcare {
-    background: linear-gradient(135deg, hsl(var(--healthcare)) 0%, hsl(175 70% 35%) 100%);
+    background: linear-gradient(135deg, hsl(var(--healthcare)) 0%, hsl(208 88% 15%) 100%);
   }
 
   .gradient-education {

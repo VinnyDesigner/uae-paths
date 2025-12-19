@@ -244,7 +244,7 @@ export function InteractiveMap({
               align-items: center;
               justify-content: center;
               font-size: 22px;
-              background-color: ${isHealthcare ? '#ccfbf1' : '#fef3c7'};
+              background-color: ${isHealthcare ? '#ccfbf1' : '#e0f4ff'};
               flex-shrink: 0;
             ">
               ${isHealthcare ? '🏥' : '🎓'}
@@ -260,8 +260,8 @@ export function InteractiveMap({
                 font-size: 11px;
                 font-weight: 600;
                 letter-spacing: 0.02em;
-                background-color: ${isHealthcare ? '#ccfbf1' : '#fef3c7'};
-                color: ${isHealthcare ? '#0d9488' : '#d97706'};
+                background-color: ${isHealthcare ? '#ccfbf1' : '#e0f4ff'};
+                color: ${isHealthcare ? '#0d9488' : '#38B6FF'};
               ">
                 ${facility.type}
               </span>

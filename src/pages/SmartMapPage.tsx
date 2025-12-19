@@ -9,6 +9,7 @@ import { DynamicLegend } from '@/components/map/DynamicLegend';
 import { InteractiveMap } from '@/components/map/InteractiveMap';
 import { ResultsPanel } from '@/components/map/ResultsPanel';
 import { FacilityCard } from '@/components/map/FacilityCard';
+import { MapLayerControl } from '@/components/map/MapLayerControl';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { themeGroups } from '@/data/layers';
@@ -159,6 +160,11 @@ export default function SmartMapPage() {
             suggestedZoom={searchIntent?.suggestedZoom}
             className="h-full w-full"
           />
+
+          {/* Layer Control on Map - Desktop */}
+          <div className="hidden lg:block">
+            <MapLayerControl layers={layers} onLayerToggle={handleLayerToggle} />
+          </div>
 
           {/* Mobile Bottom Sheet Toggle */}
           <Button

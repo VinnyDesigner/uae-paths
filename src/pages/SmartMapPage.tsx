@@ -139,6 +139,23 @@ export default function SmartMapPage() {
               </h4>
               <SidePanelLayers layers={layers} onLayerToggle={handleLayerToggle} />
             </div>
+            
+            {/* Base Map & Legend Section */}
+            <div className="bg-white/30 dark:bg-white/5 rounded-xl p-4 border border-white/20 dark:border-white/10 space-y-4">
+              {/* Base Map */}
+              <div>
+                <h4 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                  <Layers className="w-4 h-4 text-primary" />
+                  Base Map
+                </h4>
+                <BaseMapSelector selectedMap={baseMapId} onMapChange={setBaseMapId} />
+              </div>
+              
+              {/* Legend */}
+              <div className="border-t border-white/20 dark:border-white/10 pt-4">
+                <MapLegendOverlay layers={layers} />
+              </div>
+            </div>
           </div>
           
           {/* Search Results Count */}
@@ -174,16 +191,8 @@ export default function SmartMapPage() {
             className="h-full w-full"
           />
 
-          {/* Map Controls Overlay - Desktop */}
-          <div className="hidden lg:flex absolute bottom-4 left-4 z-[1000] gap-2">
-            <BaseMapSelector selectedMap={baseMapId} onMapChange={setBaseMapId} />
-            <LayerTogglePanel layers={layers} onLayerToggle={handleLayerToggle} />
-          </div>
-
-          {/* Legend Overlay - Desktop (bottom-right) */}
-          <div className="hidden lg:block absolute bottom-4 right-4 z-[1000]">
-            <MapLegendOverlay layers={layers} />
-          </div>
+          {/* Map Controls Overlay - Desktop (removed base map & legend - now in side panel) */}
+          {/* Kept empty for potential future controls */}
 
           {/* Mobile Bottom Controls */}
           <div className="lg:hidden absolute bottom-20 left-4 right-4 z-10 flex items-center justify-between gap-2">

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Menu, X, Sparkles, Layers } from 'lucide-react';
+import { Menu, X, Sparkles, Layers, Filter } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { SmartSearch } from '@/components/search/SmartSearch';
 import { InteractiveMap } from '@/components/map/InteractiveMap';
@@ -106,25 +106,34 @@ export default function SmartMapPage() {
 
       {/* Map Area */}
       <main className="flex-1 relative h-full min-h-[500px]">
-        {/* Left Panel Overlay - Desktop */}
-        <div className="hidden lg:flex flex-col w-80 absolute top-4 left-4 bottom-4 bg-card/95 backdrop-blur-sm border border-border rounded-xl shadow-lg z-[1001] overflow-hidden">
-          <div className="p-4 space-y-4 overflow-y-auto flex-1">
-            <SmartSearch onSearch={handleSearch} onLocateMe={handleLocateMe} isSearching={isSearching} size="default" />
+        {/* Left Panel Overlay - Desktop (Glassmorphism) */}
+        <div className="hidden lg:flex flex-col w-80 absolute top-4 left-4 bottom-4 bg-white/40 dark:bg-card/40 backdrop-blur-xl border border-white/30 dark:border-white/10 rounded-2xl shadow-2xl z-[1001] overflow-hidden">
+          <div className="p-4 space-y-4 overflow-y-auto flex-1 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-white/30 hover:scrollbar-thumb-white/50">
+            {/* Search Section */}
+            <div className="bg-white/50 dark:bg-white/5 rounded-xl p-3 border border-white/20 dark:border-white/10 transition-all hover:bg-white/60 dark:hover:bg-white/10">
+              <SmartSearch onSearch={handleSearch} onLocateMe={handleLocateMe} isSearching={isSearching} size="default" />
+            </div>
+            
             {userMessage && (
-              <div className="flex items-center gap-2 text-sm text-muted-foreground bg-secondary/50 rounded-lg px-3 py-2 border border-border">
+              <div className="flex items-center gap-2 text-sm text-foreground/80 bg-white/40 dark:bg-white/5 backdrop-blur-sm rounded-xl px-3 py-2.5 border border-white/20 dark:border-white/10">
                 <Sparkles className="w-3 h-3 text-primary flex-shrink-0" />
                 <span className="line-clamp-2">{userMessage}</span>
               </div>
             )}
-            <div className="border-t border-border pt-4">
-              <h4 className="text-sm font-semibold text-foreground mb-3">Filters</h4>
-              <InlineFilters filters={filters} onFilterChange={setFilters} className="flex-wrap" />
+            
+            {/* Filters Section */}
+            <div className="bg-white/30 dark:bg-white/5 rounded-xl p-4 border border-white/20 dark:border-white/10">
+              <h4 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
+                <Filter className="w-4 h-4 text-primary" />
+                Filters
+              </h4>
+              <InlineFilters filters={filters} onFilterChange={setFilters} className="flex-col gap-3" />
             </div>
           </div>
           
           {/* Search Results Count */}
           {searchResults.length > 0 && (
-            <div className="px-4 py-2 bg-primary/10 border-t border-border flex items-center gap-2">
+            <div className="px-4 py-3 bg-primary/20 backdrop-blur-sm border-t border-white/20 dark:border-white/10 flex items-center gap-2">
               <Layers className="w-4 h-4 text-primary" />
               <span className="text-sm font-medium text-foreground">
                 {searchResults.length} facilities found

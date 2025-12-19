@@ -69,48 +69,52 @@ export default function HomePage() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative py-16 md:py-24 lg:py-32 overflow-hidden">
-          {/* Background Pattern */}
-          <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-            <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-accent/5 rounded-full blur-3xl" />
-          </div>
+        <section className="relative py-20 md:py-28 lg:py-36 overflow-hidden bg-hero-pattern">
+          {/* Dotted Pattern Background */}
+          <div 
+            className="absolute inset-0 pointer-events-none opacity-40"
+            style={{
+              backgroundImage: 'radial-gradient(circle, hsl(var(--muted-foreground) / 0.15) 1px, transparent 1px)',
+              backgroundSize: '24px 24px'
+            }}
+          />
 
           <div className="container mx-auto px-4 relative">
             <div className="max-w-4xl mx-auto text-center">
               {/* Badge */}
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-light text-primary text-sm font-medium mb-6 animate-fade-up">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent text-accent-foreground text-sm font-medium mb-8 animate-fade-up">
                 <Globe className="w-4 h-4" />
-                <span>Abu Dhabi Spatial Data Infrastructure</span>
+                <span>SDI Abu Dhabi OpenData</span>
               </div>
 
               {/* Title */}
-              <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6 animate-fade-up delay-100">
-                Smart Map for <span className="text-primary">Daily Life</span>
+              <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-5 animate-fade-up delay-100">
+                Smart Map for <span className="text-accent">Daily Life</span>
               </h1>
 
               {/* Subtitle */}
-              <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 animate-fade-up delay-200">
-                Find healthcare and education services across the UAE with our interactive, 
-                map-based experience powered by official SDI OpenData.
+              <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto mb-10 animate-fade-up delay-200">
+                Find healthcare and education services across the UAE with our
+                interactive map powered by official government data.
               </p>
 
               {/* Search Bar */}
-              <div className="max-w-2xl mx-auto mb-8 animate-fade-up delay-300">
+              <div className="max-w-xl mx-auto mb-8 animate-fade-up delay-300">
                 <SmartSearch onSearch={handleSearch} size="large" />
               </div>
 
               {/* CTAs */}
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-up delay-400">
-                <Button variant="hero" size="xl" asChild>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 animate-fade-up delay-400">
+                <Button variant="accent" size="lg" asChild className="rounded-lg px-6">
                   <Link to="/map">
-                    <MapPin className="w-5 h-5 mr-2" />
+                    <MapPin className="w-4 h-4 mr-2" />
                     Open Smart Map
+                    <ArrowRight className="w-4 h-4 ml-2" />
                   </Link>
                 </Button>
-                <Button variant="hero-outline" size="xl" asChild>
+                <Button variant="outline" size="lg" asChild className="rounded-lg px-6 bg-card">
                   <Link to="/map">
-                    <Layers className="w-5 h-5 mr-2" />
+                    <Layers className="w-4 h-4 mr-2" />
                     Browse Public Layers
                   </Link>
                 </Button>

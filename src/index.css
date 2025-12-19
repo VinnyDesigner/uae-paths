@@ -147,6 +147,10 @@
 }
 
 @layer utilities {
+  .bg-hero-pattern {
+    @apply bg-secondary/40;
+  }
+
   .glass {
     @apply bg-card/80 backdrop-blur-md border border-border/50;
   }

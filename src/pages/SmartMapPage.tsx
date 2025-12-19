@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Menu, X, Sparkles, Layers, Filter } from 'lucide-react';
+import { Menu, X, Sparkles, Layers, Filter, Map } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { SmartSearch } from '@/components/search/SmartSearch';
 import { InteractiveMap } from '@/components/map/InteractiveMap';
@@ -9,6 +9,7 @@ import { BaseMapSelector } from '@/components/map/BaseMapSelector';
 import { MapLegendOverlay } from '@/components/map/MapLegendOverlay';
 import { InlineFilters } from '@/components/map/InlineFilters';
 import { LayerTogglePanel } from '@/components/map/LayerTogglePanel';
+import { SidePanelLayers } from '@/components/map/SidePanelLayers';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { themeGroups } from '@/data/layers';
@@ -128,6 +129,15 @@ export default function SmartMapPage() {
                 Filters
               </h4>
               <InlineFilters filters={filters} onFilterChange={setFilters} className="flex-col gap-3" />
+            </div>
+            
+            {/* Map Layers Section */}
+            <div>
+              <h4 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2 px-1">
+                <Map className="w-4 h-4 text-primary" />
+                Map Layers
+              </h4>
+              <SidePanelLayers layers={layers} onLayerToggle={handleLayerToggle} />
             </div>
           </div>
           

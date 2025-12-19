@@ -105,14 +105,14 @@ export default function SmartMapPage() {
     <div className="h-screen flex flex-col bg-background">
       <Header />
 
-      {/* Search & Filters Bar - Full Width */}
-      <div className="sticky top-0 z-30 bg-card/95 backdrop-blur-sm border-b border-border">
-        {/* Desktop Search & Filters */}
-        <div className="hidden lg:block px-4 py-3">
-          <div className="max-w-5xl mx-auto space-y-3">
+      {/* Map Area - Full Width with overlayed search */}
+      <main className="flex-1 relative h-full min-h-[500px]">
+        {/* Search Bar Overlay - Desktop */}
+        <div className="hidden lg:block absolute top-4 left-1/2 -translate-x-1/2 z-[1001] w-full max-w-3xl px-4">
+          <div className="space-y-3">
             <SmartSearch onSearch={handleSearch} onLocateMe={handleLocateMe} isSearching={isSearching} />
             {userMessage && (
-              <div className="flex items-center gap-2 text-sm text-muted-foreground bg-secondary/50 rounded-lg px-3 py-2">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground bg-card/95 backdrop-blur-sm rounded-lg px-3 py-2 shadow-lg border border-border">
                 <Sparkles className="w-3 h-3 text-primary flex-shrink-0" />
                 <span>{userMessage}</span>
               </div>
@@ -121,20 +121,16 @@ export default function SmartMapPage() {
           </div>
         </div>
 
-        {/* Mobile Search Bar */}
-        <div className="lg:hidden p-3">
+        {/* Mobile Search Bar Overlay */}
+        <div className="lg:hidden absolute top-4 left-4 right-4 z-[1001]">
           <SmartSearch onSearch={handleSearch} onLocateMe={handleLocateMe} isSearching={isSearching} />
           {userMessage && (
-            <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
+            <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground bg-card/95 backdrop-blur-sm rounded-lg px-3 py-2 shadow-lg border border-border">
               <Sparkles className="w-3 h-3 text-primary" />
               <span className="truncate">{userMessage}</span>
             </div>
           )}
         </div>
-      </div>
-
-      {/* Map Area - Full Width */}
-      <main className="flex-1 relative h-full min-h-[500px]">
         <InteractiveMap
           layers={layers}
           facilities={uaeFacilities}
@@ -152,8 +148,8 @@ export default function SmartMapPage() {
           <LayerTogglePanel layers={layers} onLayerToggle={handleLayerToggle} />
         </div>
 
-        {/* Legend Overlay - Desktop */}
-        <div className="hidden lg:block absolute top-4 left-4 z-[1000]">
+        {/* Legend Overlay - Desktop (bottom-right) */}
+        <div className="hidden lg:block absolute bottom-4 right-4 z-[1000]">
           <MapLegendOverlay layers={layers} />
         </div>
 

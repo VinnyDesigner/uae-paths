@@ -80,40 +80,50 @@ interface MapControlsProps {
 
 function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFullscreen }: MapControlsProps) {
   return (
-    <div className="absolute top-4 right-4 z-[1000] flex flex-col gap-2">
-      <div className="bg-card rounded-xl shadow-lg border border-border overflow-hidden">
-        <button
-          onClick={onZoomIn}
-          className="p-3 hover:bg-secondary transition-colors border-b border-border"
-          title="Zoom in"
-        >
-          <ZoomIn className="w-5 h-5 text-foreground" />
-        </button>
-        <button
-          onClick={onZoomOut}
-          className="p-3 hover:bg-secondary transition-colors"
-          title="Zoom out"
-        >
-          <ZoomOut className="w-5 h-5 text-foreground" />
-        </button>
-      </div>
+    <div className="absolute top-4 right-4 z-[1000] flex flex-col gap-3">
+      {/* Zoom In Button - Separated */}
+      <button
+        onClick={onZoomIn}
+        className="bg-card rounded-xl shadow-lg border border-border p-3.5 hover:bg-secondary hover:scale-105 active:scale-95 transition-all duration-200"
+        title="Zoom in"
+      >
+        <ZoomIn className="w-5 h-5 text-foreground" />
+      </button>
+      
+      {/* Zoom Out Button - Separated */}
+      <button
+        onClick={onZoomOut}
+        className="bg-card rounded-xl shadow-lg border border-border p-3.5 hover:bg-secondary hover:scale-105 active:scale-95 transition-all duration-200"
+        title="Zoom out"
+      >
+        <ZoomOut className="w-5 h-5 text-foreground" />
+      </button>
+      
+      {/* Divider */}
+      <div className="w-8 h-px bg-border mx-auto" />
+      
+      {/* Reset View */}
       <button
         onClick={onResetView}
-        className="bg-card rounded-xl shadow-lg border border-border p-3 hover:bg-secondary transition-colors"
+        className="bg-card rounded-xl shadow-lg border border-border p-3.5 hover:bg-secondary hover:scale-105 active:scale-95 transition-all duration-200"
         title="Reset to UAE"
       >
         <Home className="w-5 h-5 text-foreground" />
       </button>
+      
+      {/* Locate Me */}
       <button
         onClick={onLocateMe}
-        className="bg-card rounded-xl shadow-lg border border-border p-3 hover:bg-primary hover:text-primary-foreground transition-colors"
+        className="bg-card rounded-xl shadow-lg border border-border p-3.5 hover:bg-primary hover:text-primary-foreground hover:scale-105 active:scale-95 transition-all duration-200"
         title="Locate me"
       >
         <LocateFixed className="w-5 h-5" />
       </button>
+      
+      {/* Fullscreen */}
       <button
         onClick={onFullscreen}
-        className="bg-card rounded-xl shadow-lg border border-border p-3 hover:bg-secondary transition-colors"
+        className="bg-card rounded-xl shadow-lg border border-border p-3.5 hover:bg-secondary hover:scale-105 active:scale-95 transition-all duration-200"
         title="Fullscreen"
       >
         <Maximize className="w-5 h-5 text-foreground" />

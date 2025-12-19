@@ -1,12 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { ZoomIn, ZoomOut, Maximize, LocateFixed, Home } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ThemeGroup, Facility } from '@/types/map';
 import { sampleFacilities } from '@/data/layers';
-import { Button } from '@/components/ui/button';
 
 // Fix for default marker icons
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -100,77 +98,6 @@ function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFu
   );
 }
 
-interface FacilityPopupProps {
-  facility: Facility;
-}
-
-function FacilityPopupContent({ facility }: FacilityPopupProps) {
-  const isHealthcare = facility.theme === 'healthcare';
-  
-  return (
-    <div className="p-3 min-w-[240px]">
-      <div className="flex items-start gap-3">
-        <div
-          className={cn(
-            "w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 text-lg",
-            isHealthcare ? "bg-healthcare-light" : "bg-education-light"
-          )}
-        >
-          {isHealthcare ? '🏥' : '🎓'}
-        </div>
-        <div className="flex-1 min-w-0">
-          <h4 className="font-heading font-semibold text-foreground text-sm leading-tight">
-            {facility.name}
-          </h4>
-          <span
-            className={cn(
-              "inline-block mt-1 px-2 py-0.5 rounded-full text-xs font-medium",
-              isHealthcare
-                ? "bg-healthcare-light text-healthcare"
-                : "bg-education-light text-education"
-            )}
-          >
-            {facility.type}
-          </span>
-        </div>
-      </div>
-      <div className="mt-3 space-y-1.5 text-sm">
-        <p className="text-muted-foreground">
-          <span className="font-medium text-foreground">Address:</span> {facility.address}
-        </p>
-        <p className="text-muted-foreground">
-          <span className="font-medium text-foreground">Emirate:</span> {facility.emirate}
-        </p>
-        {facility.distance !== undefined && (
-          <p className="text-muted-foreground">
-            <span className="font-medium text-foreground">Distance:</span> {facility.distance.toFixed(1)} km
-          </p>
-        )}
-      </div>
-      <button className="mt-3 w-full text-center py-2 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary-dark transition-colors">
-        View Details
-      </button>
-    </div>
-  );
-}
-
-interface MapViewControllerProps {
-  center: [number, number] | null;
-  zoom: number | null;
-}
-
-function MapViewController({ center, zoom }: MapViewControllerProps) {
-  const map = useMap();
-
-  useEffect(() => {
-    if (center && zoom) {
-      map.flyTo(center, zoom, { duration: 1 });
-    }
-  }, [center, zoom, map]);
-
-  return null;
-}
-
 interface InteractiveMapProps {
   layers: ThemeGroup[];
   selectedFacility?: Facility | null;
@@ -179,13 +106,13 @@ interface InteractiveMapProps {
 }
 
 // UAE Center coordinates
-const UAE_CENTER: [number, number] = [24.4539, 54.3773];
+const UAE_CENTER: L.LatLngTuple = [24.4539, 54.3773];
 const UAE_ZOOM = 10;
 
 export function InteractiveMap({ layers, selectedFacility, onFacilitySelect, className }: InteractiveMapProps) {
-  const [mapCenter, setMapCenter] = useState<[number, number] | null>(null);
-  const [mapZoom, setMapZoom] = useState<number | null>(null);
+  const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
+  const markersRef = useRef<L.Marker[]>([]);
 
   // Get visible layer IDs
   const visibleLayerIds = layers.flatMap(theme =>
@@ -206,6 +133,107 @@ export function InteractiveMap({ layers, selectedFacility, onFacilitySelect, cla
     return '#0d9488';
   };
 
+  // Initialize map
+  useEffect(() => {
+    if (!mapContainerRef.current || mapRef.current) return;
+
+    const map = L.map(mapContainerRef.current, {
+      center: UAE_CENTER,
+      zoom: UAE_ZOOM,
+      zoomControl: false,
+    });
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    }).addTo(map);
+
+    mapRef.current = map;
+
+    return () => {
+      map.remove();
+      mapRef.current = null;
+    };
+  }, []);
+
+  // Update markers when visible facilities change
+  useEffect(() => {
+    if (!mapRef.current) return;
+
+    // Clear existing markers
+    markersRef.current.forEach(marker => marker.remove());
+    markersRef.current = [];
+
+    // Add new markers
+    visibleFacilities.forEach(facility => {
+      const isHealthcare = facility.theme === 'healthcare';
+      const marker = L.marker(facility.coordinates, {
+        icon: createCustomIcon(getLayerColor(facility.layerId), isHealthcare),
+      });
+
+      const popupContent = `
+        <div style="padding: 12px; min-width: 220px; font-family: system-ui, sans-serif;">
+          <div style="display: flex; align-items: flex-start; gap: 12px;">
+            <div style="
+              width: 40px;
+              height: 40px;
+              border-radius: 8px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 18px;
+              background-color: ${isHealthcare ? '#ccfbf1' : '#fef3c7'};
+            ">
+              ${isHealthcare ? '🏥' : '🎓'}
+            </div>
+            <div style="flex: 1; min-width: 0;">
+              <h4 style="font-weight: 600; font-size: 14px; margin: 0 0 4px 0; color: #1e293b;">
+                ${facility.name}
+              </h4>
+              <span style="
+                display: inline-block;
+                padding: 2px 8px;
+                border-radius: 12px;
+                font-size: 11px;
+                font-weight: 500;
+                background-color: ${isHealthcare ? '#ccfbf1' : '#fef3c7'};
+                color: ${isHealthcare ? '#0d9488' : '#d97706'};
+              ">
+                ${facility.type}
+              </span>
+            </div>
+          </div>
+          <div style="margin-top: 12px; font-size: 13px;">
+            <p style="color: #64748b; margin: 0 0 4px 0;">
+              <strong style="color: #1e293b;">Address:</strong> ${facility.address}
+            </p>
+            <p style="color: #64748b; margin: 0;">
+              <strong style="color: #1e293b;">Emirate:</strong> ${facility.emirate}
+            </p>
+          </div>
+          <button style="
+            margin-top: 12px;
+            width: 100%;
+            padding: 8px;
+            border-radius: 8px;
+            background-color: #0c4a6e;
+            color: white;
+            font-size: 13px;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+          ">
+            View Details
+          </button>
+        </div>
+      `;
+
+      marker.bindPopup(popupContent);
+      marker.on('click', () => onFacilitySelect?.(facility));
+      marker.addTo(mapRef.current!);
+      markersRef.current.push(marker);
+    });
+  }, [visibleFacilities, layers, onFacilitySelect]);
+
   const handleZoomIn = () => {
     mapRef.current?.zoomIn();
   };
@@ -215,16 +243,18 @@ export function InteractiveMap({ layers, selectedFacility, onFacilitySelect, cla
   };
 
   const handleResetView = () => {
-    setMapCenter(UAE_CENTER);
-    setMapZoom(UAE_ZOOM);
+    mapRef.current?.flyTo(UAE_CENTER, UAE_ZOOM, { duration: 1 });
   };
 
   const handleLocateMe = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          setMapCenter([position.coords.latitude, position.coords.longitude]);
-          setMapZoom(14);
+          mapRef.current?.flyTo(
+            [position.coords.latitude, position.coords.longitude],
+            14,
+            { duration: 1 }
+          );
         },
         (error) => {
           console.error('Error getting location:', error);
@@ -234,47 +264,23 @@ export function InteractiveMap({ layers, selectedFacility, onFacilitySelect, cla
   };
 
   const handleFullscreen = () => {
-    const mapContainer = document.querySelector('.leaflet-container');
-    if (mapContainer) {
+    const container = mapContainerRef.current;
+    if (container) {
       if (document.fullscreenElement) {
         document.exitFullscreen();
       } else {
-        mapContainer.requestFullscreen();
+        container.requestFullscreen();
       }
     }
   };
 
   return (
-    <div className={cn("relative w-full h-full rounded-xl overflow-hidden", className)}>
-      <MapContainer
-        center={UAE_CENTER}
-        zoom={UAE_ZOOM}
+    <div className={cn("relative w-full h-full min-h-[500px] rounded-xl overflow-hidden", className)}>
+      <div
+        ref={mapContainerRef}
         className="w-full h-full"
-        zoomControl={false}
-        ref={mapRef}
-      >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-          url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-        />
-        
-        <MapViewController center={mapCenter} zoom={mapZoom} />
-
-        {visibleFacilities.map((facility) => (
-          <Marker
-            key={facility.id}
-            position={facility.coordinates}
-            icon={createCustomIcon(getLayerColor(facility.layerId), facility.theme === 'healthcare')}
-            eventHandlers={{
-              click: () => onFacilitySelect?.(facility),
-            }}
-          >
-            <Popup>
-              <FacilityPopupContent facility={facility} />
-            </Popup>
-          </Marker>
-        ))}
-      </MapContainer>
+        style={{ minHeight: '500px' }}
+      />
 
       <MapControlsOverlay
         onZoomIn={handleZoomIn}

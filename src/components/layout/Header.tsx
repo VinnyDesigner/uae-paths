@@ -7,7 +7,6 @@ import { cn } from '@/lib/utils';
 const navItems = [
   { name: 'Home', path: '/', icon: Home },
   { name: 'Smart Map', path: '/map', icon: MapPin },
-  { name: 'Layers', path: '/map', icon: Layers },
   { name: 'About', path: '/about', icon: Info },
 ];
 
@@ -52,13 +51,6 @@ export function Header() {
             })}
           </nav>
 
-          {/* Desktop CTA */}
-          <div className="hidden md:flex items-center gap-3">
-            <Button variant="hero" size="lg" asChild>
-              <Link to="/map">Open Map</Link>
-            </Button>
-          </div>
-
           {/* Mobile Menu Button */}
           <button
             className="md:hidden p-2 rounded-lg hover:bg-secondary transition-colors"
@@ -96,11 +88,6 @@ export function Header() {
                 </Link>
               );
             })}
-            <div className="pt-2 border-t border-border mt-2">
-              <Button variant="hero" className="w-full" asChild>
-                <Link to="/map" onClick={() => setMobileMenuOpen(false)}>Open Smart Map</Link>
-              </Button>
-            </div>
           </nav>
         </div>
       )}

@@ -25,11 +25,11 @@ export const educationLayers: ThemeGroup = {
   icon: 'GraduationCap',
   colorClass: 'education',
   layers: [
-    { id: 211, name: 'Public Schools', description: 'Government public schools', visible: true, color: '#f59e0b', icon: 'School' },
-    { id: 212, name: 'Private Schools', description: 'Private educational institutions', visible: false, color: '#fbbf24', icon: 'Building' },
-    { id: 208, name: 'Charter Schools', description: 'Charter and specialized schools', visible: false, color: '#fcd34d', icon: 'BookOpen' },
-    { id: 209, name: 'Nurseries', description: 'Early childhood education centers', visible: false, color: '#fde68a', icon: 'Baby' },
-    { id: 210, name: 'POD Centers', description: 'Professional Outreach for Development', visible: false, color: '#d97706', icon: 'Users' },
+    { id: 211, name: 'Public Schools', description: 'Government public schools', visible: true, color: '#38B6FF', icon: 'School' },
+    { id: 212, name: 'Private Schools', description: 'Private educational institutions', visible: false, color: '#5CC8FF', icon: 'Building' },
+    { id: 208, name: 'Charter Schools', description: 'Charter and specialized schools', visible: false, color: '#7ED4FF', icon: 'BookOpen' },
+    { id: 209, name: 'Nurseries', description: 'Early childhood education centers', visible: false, color: '#A1E0FF', icon: 'Baby' },
+    { id: 210, name: 'POD Centers', description: 'Professional Outreach for Development', visible: false, color: '#1E9EE8', icon: 'Users' },
   ],
 };
 

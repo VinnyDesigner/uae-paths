@@ -15,6 +15,7 @@ const buttonVariants = cva(
         secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-secondary hover:text-secondary-foreground",
         link: "text-primary underline-offset-4 hover:underline",
+        accent: "bg-accent text-accent-foreground shadow-sm hover:bg-accent/90 hover:shadow-md active:scale-[0.98] font-medium",
         hero: "gradient-primary text-primary-foreground shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] font-semibold",
         "hero-outline": "border-2 border-primary text-primary bg-transparent hover:bg-primary hover:text-primary-foreground font-semibold",
         healthcare: "gradient-healthcare text-healthcare-foreground shadow-sm hover:shadow-md active:scale-[0.98]",

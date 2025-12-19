@@ -153,15 +153,14 @@ export function SmartSearch({
             onClick={() => handleSubmit()}
             disabled={!query.trim() || isSearching}
             className={cn(
-              "gradient-primary text-primary-foreground rounded-xl font-medium transition-all hover:shadow-lg hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center",
-              isLarge ? "h-10 md:h-12 w-10 md:w-12" : "h-9 w-9"
+              "gradient-primary text-primary-foreground rounded-xl font-medium transition-all hover:shadow-lg hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center px-4",
+              isLarge ? "h-10 md:h-12" : "h-9"
             )}
-            title="Search"
           >
             {isSearching ? (
               <Loader2 className="w-4 h-4 animate-spin" />
             ) : (
-              <Search className="w-4 h-4" />
+              <span className="text-sm font-medium">Search</span>
             )}
           </button>
         </div>

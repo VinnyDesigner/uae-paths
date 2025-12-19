@@ -104,11 +104,11 @@ export default function SmartMapPage() {
     <div className="h-screen flex flex-col bg-background">
       <Header />
 
-      {/* Map Area with Left Panel */}
-      <main className="flex-1 flex h-full min-h-[500px]">
-        {/* Left Panel - Desktop */}
-        <div className="hidden lg:flex flex-col w-80 bg-card border-r border-border z-[1001] shrink-0">
-          <div className="p-4 space-y-4">
+      {/* Map Area */}
+      <main className="flex-1 relative h-full min-h-[500px]">
+        {/* Left Panel Overlay - Desktop */}
+        <div className="hidden lg:flex flex-col w-80 absolute top-4 left-4 bottom-4 bg-card/95 backdrop-blur-sm border border-border rounded-xl shadow-lg z-[1001] overflow-hidden">
+          <div className="p-4 space-y-4 overflow-y-auto flex-1">
             <SmartSearch onSearch={handleSearch} onLocateMe={handleLocateMe} isSearching={isSearching} size="default" />
             {userMessage && (
               <div className="flex items-center gap-2 text-sm text-muted-foreground bg-secondary/50 rounded-lg px-3 py-2 border border-border">
@@ -124,7 +124,7 @@ export default function SmartMapPage() {
           
           {/* Search Results Count */}
           {searchResults.length > 0 && (
-            <div className="px-4 py-2 bg-primary/10 border-y border-border flex items-center gap-2">
+            <div className="px-4 py-2 bg-primary/10 border-t border-border flex items-center gap-2">
               <Layers className="w-4 h-4 text-primary" />
               <span className="text-sm font-medium text-foreground">
                 {searchResults.length} facilities found
@@ -133,19 +133,18 @@ export default function SmartMapPage() {
           )}
         </div>
 
-        {/* Map Container */}
-        <div className="flex-1 relative">
-          {/* Mobile Search Bar Overlay */}
-          <div className="lg:hidden absolute top-4 left-4 right-4 z-[1001]">
-            <SmartSearch onSearch={handleSearch} onLocateMe={handleLocateMe} isSearching={isSearching} />
-            {userMessage && (
-              <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground bg-card/95 backdrop-blur-sm rounded-lg px-3 py-2 shadow-lg border border-border">
-                <Sparkles className="w-3 h-3 text-primary" />
-                <span className="truncate">{userMessage}</span>
-              </div>
-            )}
-          </div>
-          <InteractiveMap
+        {/* Mobile Search Bar Overlay */}
+        <div className="lg:hidden absolute top-4 left-4 right-4 z-[1001]">
+          <SmartSearch onSearch={handleSearch} onLocateMe={handleLocateMe} isSearching={isSearching} />
+          {userMessage && (
+            <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground bg-card/95 backdrop-blur-sm rounded-lg px-3 py-2 shadow-lg border border-border">
+              <Sparkles className="w-3 h-3 text-primary" />
+              <span className="truncate">{userMessage}</span>
+            </div>
+          )}
+        </div>
+
+        <InteractiveMap
             layers={layers}
             facilities={uaeFacilities}
             searchResults={searchResults}
@@ -193,7 +192,6 @@ export default function SmartMapPage() {
               />
             </div>
           )}
-        </div>
       </main>
 
       {/* Mobile Bottom Sheet */}

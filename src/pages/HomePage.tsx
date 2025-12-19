@@ -69,15 +69,9 @@ export default function HomePage() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative py-20 md:py-28 lg:py-36 overflow-hidden bg-hero-pattern">
-          {/* Dotted Pattern Background */}
-          <div 
-            className="absolute inset-0 pointer-events-none opacity-40"
-            style={{
-              backgroundImage: 'radial-gradient(circle, hsl(var(--muted-foreground) / 0.15) 1px, transparent 1px)',
-              backgroundSize: '24px 24px'
-            }}
-          />
+        <section className="relative py-20 md:py-28 lg:py-36 overflow-hidden bg-hero-gradient">
+          {/* Plus Pattern Background */}
+          <div className="absolute inset-0 pointer-events-none bg-plus-pattern opacity-50" />
 
           <div className="container mx-auto px-4 relative">
             <div className="max-w-4xl mx-auto text-center">

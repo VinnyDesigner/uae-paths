@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { ZoomIn, ZoomOut, Maximize, LocateFixed, Home, Layers } from 'lucide-react';
+import { ZoomIn, ZoomOut, Maximize, LocateFixed, Home } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ThemeGroup, Facility } from '@/types/map';
+import { baseMaps, BaseMapOption } from './BaseMapSelector';
 
 // Fix for default marker icons
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -128,6 +129,7 @@ interface InteractiveMapProps {
   selectedFacility?: Facility | null;
   onFacilitySelect?: (facility: Facility) => void;
   suggestedZoom?: number;
+  baseMapId?: string;
   className?: string;
 }
 
@@ -142,10 +144,12 @@ export function InteractiveMap({
   selectedFacility, 
   onFacilitySelect, 
   suggestedZoom,
+  baseMapId = 'default',
   className 
 }: InteractiveMapProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
+  const tileLayerRef = useRef<L.TileLayer | null>(null);
   const markersRef = useRef<L.Marker[]>([]);
   const userMarkerRef = useRef<L.Marker | null>(null);
 
@@ -183,17 +187,28 @@ export function InteractiveMap({
       zoomControl: false,
     });
 
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    const initialBaseMap = baseMaps.find(m => m.id === baseMapId) || baseMaps[0];
+    const tileLayer = L.tileLayer(initialBaseMap.url, {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     }).addTo(map);
 
+    tileLayerRef.current = tileLayer;
     mapRef.current = map;
 
     return () => {
       map.remove();
       mapRef.current = null;
+      tileLayerRef.current = null;
     };
   }, []);
+
+  // Update base map when baseMapId changes
+  useEffect(() => {
+    if (!mapRef.current || !tileLayerRef.current) return;
+
+    const newBaseMap = baseMaps.find(m => m.id === baseMapId) || baseMaps[0];
+    tileLayerRef.current.setUrl(newBaseMap.url);
+  }, [baseMapId]);
 
   // Zoom to search results when they change
   useEffect(() => {
@@ -424,16 +439,6 @@ export function InteractiveMap({
         onLocateMe={handleLocateMe}
         onFullscreen={handleFullscreen}
       />
-
-      {/* Search results indicator */}
-      {searchResults.length > 0 && (
-        <div className="absolute top-4 left-4 z-[1000] bg-card rounded-xl shadow-lg border border-border px-4 py-2 flex items-center gap-2 animate-fade-in">
-          <Layers className="w-4 h-4 text-primary" />
-          <span className="text-sm font-medium text-foreground">
-            {searchResults.length} facilities found
-          </span>
-        </div>
-      )}
 
       {/* Gradient overlay at bottom */}
       <div className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none bg-gradient-to-t from-background/20 to-transparent" />

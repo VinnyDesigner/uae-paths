@@ -148,7 +148,7 @@ export default function SmartMapPage() {
                   <Layers className="w-4 h-4 text-primary" />
                   Base Map
                 </h4>
-                <BaseMapSelector selectedMap={baseMapId} onMapChange={setBaseMapId} />
+                <BaseMapSelector selectedMap={baseMapId} onMapChange={setBaseMapId} variant="panel" />
               </div>
               
               {/* Legend */}

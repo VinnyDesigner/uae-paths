@@ -104,91 +104,96 @@ export default function SmartMapPage() {
     <div className="h-screen flex flex-col bg-background">
       <Header />
 
-      {/* Map Area - Full Width with overlayed search */}
-      <main className="flex-1 relative h-full min-h-[500px]">
-        {/* Search Bar Overlay - Desktop */}
-        <div className="hidden lg:block absolute top-4 left-1/2 -translate-x-1/2 z-[1001] w-full max-w-3xl px-4">
-          <div className="space-y-3">
-            <SmartSearch onSearch={handleSearch} onLocateMe={handleLocateMe} isSearching={isSearching} />
+      {/* Map Area with Left Panel */}
+      <main className="flex-1 flex h-full min-h-[500px]">
+        {/* Left Panel - Desktop */}
+        <div className="hidden lg:flex flex-col w-80 bg-card border-r border-border z-[1001] shrink-0">
+          <div className="p-4 space-y-4">
+            <SmartSearch onSearch={handleSearch} onLocateMe={handleLocateMe} isSearching={isSearching} size="default" />
             {userMessage && (
-              <div className="flex items-center gap-2 text-sm text-muted-foreground bg-card/95 backdrop-blur-sm rounded-lg px-3 py-2 shadow-lg border border-border">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground bg-secondary/50 rounded-lg px-3 py-2 border border-border">
                 <Sparkles className="w-3 h-3 text-primary flex-shrink-0" />
-                <span>{userMessage}</span>
+                <span className="line-clamp-2">{userMessage}</span>
               </div>
             )}
-            <InlineFilters filters={filters} onFilterChange={setFilters} />
+            <div className="border-t border-border pt-4">
+              <h4 className="text-sm font-semibold text-foreground mb-3">Filters</h4>
+              <InlineFilters filters={filters} onFilterChange={setFilters} className="flex-wrap" />
+            </div>
           </div>
-        </div>
-
-        {/* Mobile Search Bar Overlay */}
-        <div className="lg:hidden absolute top-4 left-4 right-4 z-[1001]">
-          <SmartSearch onSearch={handleSearch} onLocateMe={handleLocateMe} isSearching={isSearching} />
-          {userMessage && (
-            <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground bg-card/95 backdrop-blur-sm rounded-lg px-3 py-2 shadow-lg border border-border">
-              <Sparkles className="w-3 h-3 text-primary" />
-              <span className="truncate">{userMessage}</span>
+          
+          {/* Search Results Count */}
+          {searchResults.length > 0 && (
+            <div className="px-4 py-2 bg-primary/10 border-y border-border flex items-center gap-2">
+              <Layers className="w-4 h-4 text-primary" />
+              <span className="text-sm font-medium text-foreground">
+                {searchResults.length} facilities found
+              </span>
             </div>
           )}
         </div>
-        <InteractiveMap
-          layers={layers}
-          facilities={uaeFacilities}
-          searchResults={searchResults}
-          selectedFacility={selectedFacility}
-          onFacilitySelect={handleFacilityClick}
-          suggestedZoom={searchIntent?.suggestedZoom}
-          baseMapId={baseMapId}
-          className="h-full w-full"
-        />
 
-        {/* Map Controls Overlay - Desktop */}
-        <div className="hidden lg:flex absolute bottom-4 left-4 z-[1000] gap-2">
-          <BaseMapSelector selectedMap={baseMapId} onMapChange={setBaseMapId} />
-          <LayerTogglePanel layers={layers} onLayerToggle={handleLayerToggle} />
-        </div>
-
-        {/* Legend Overlay - Desktop (bottom-right) */}
-        <div className="hidden lg:block absolute bottom-4 right-4 z-[1000]">
-          <MapLegendOverlay layers={layers} />
-        </div>
-
-        {/* Search Results Count Badge */}
-        {searchResults.length > 0 && (
-          <div className="absolute top-4 left-1/2 -translate-x-1/2 lg:left-auto lg:translate-x-0 lg:right-20 z-[1000] bg-card rounded-xl shadow-lg border border-border px-4 py-2 flex items-center gap-2 animate-fade-in">
-            <Layers className="w-4 h-4 text-primary" />
-            <span className="text-sm font-medium text-foreground">
-              {searchResults.length} facilities found
-            </span>
+        {/* Map Container */}
+        <div className="flex-1 relative">
+          {/* Mobile Search Bar Overlay */}
+          <div className="lg:hidden absolute top-4 left-4 right-4 z-[1001]">
+            <SmartSearch onSearch={handleSearch} onLocateMe={handleLocateMe} isSearching={isSearching} />
+            {userMessage && (
+              <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground bg-card/95 backdrop-blur-sm rounded-lg px-3 py-2 shadow-lg border border-border">
+                <Sparkles className="w-3 h-3 text-primary" />
+                <span className="truncate">{userMessage}</span>
+              </div>
+            )}
           </div>
-        )}
+          <InteractiveMap
+            layers={layers}
+            facilities={uaeFacilities}
+            searchResults={searchResults}
+            selectedFacility={selectedFacility}
+            onFacilitySelect={handleFacilityClick}
+            suggestedZoom={searchIntent?.suggestedZoom}
+            baseMapId={baseMapId}
+            className="h-full w-full"
+          />
 
-        {/* Mobile Bottom Controls */}
-        <div className="lg:hidden absolute bottom-20 left-4 right-4 z-10 flex items-center justify-between gap-2">
-          <div className="flex gap-2">
+          {/* Map Controls Overlay - Desktop */}
+          <div className="hidden lg:flex absolute bottom-4 left-4 z-[1000] gap-2">
             <BaseMapSelector selectedMap={baseMapId} onMapChange={setBaseMapId} />
+            <LayerTogglePanel layers={layers} onLayerToggle={handleLayerToggle} />
           </div>
-          <Button
-            variant="default"
-            className="shadow-lg"
-            onClick={() => setMobileSheetOpen(true)}
-          >
-            <Menu className="w-4 h-4 mr-2" />
-            Layers & Filters
-          </Button>
+
+          {/* Legend Overlay - Desktop (bottom-right) */}
+          <div className="hidden lg:block absolute bottom-4 right-4 z-[1000]">
+            <MapLegendOverlay layers={layers} />
+          </div>
+
+          {/* Mobile Bottom Controls */}
+          <div className="lg:hidden absolute bottom-20 left-4 right-4 z-10 flex items-center justify-between gap-2">
+            <div className="flex gap-2">
+              <BaseMapSelector selectedMap={baseMapId} onMapChange={setBaseMapId} />
+            </div>
+            <Button
+              variant="default"
+              className="shadow-lg"
+              onClick={() => setMobileSheetOpen(true)}
+            >
+              <Menu className="w-4 h-4 mr-2" />
+              Layers & Filters
+            </Button>
+          </div>
+
+          {/* Results Panel */}
+          {searchResults.length > 0 && (
+            <div className="absolute bottom-0 left-0 right-0 z-10">
+              <ResultsPanel
+                results={searchResults}
+                searchQuery={searchIntent?.responseMessage || ''}
+                onFacilityClick={handleFacilityClick}
+                onClose={handleClearResults}
+              />
+            </div>
+          )}
         </div>
-
-
-        {/* Results Panel */}
-        {searchResults.length > 0 && (
-          <div className="absolute bottom-0 left-0 right-0 z-10">
-            <ResultsPanel
-              results={searchResults}
-              searchQuery={searchIntent?.responseMessage || ''}
-              onFacilityClick={handleFacilityClick}
-              onClose={handleClearResults}
-            />
-          </div>
-        )}
       </main>
 
       {/* Mobile Bottom Sheet */}

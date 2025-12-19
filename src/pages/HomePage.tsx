@@ -86,7 +86,7 @@ export default function HomePage() {
 
               {/* Title */}
               <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6 animate-fade-up delay-100">
-                <span className="text-gradient">Smart Map</span>
+                Smart Map for <span className="text-primary">Daily Life</span>
               </h1>
 
               {/* Subtitle */}

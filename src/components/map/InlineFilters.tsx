@@ -63,13 +63,13 @@ export function InlineFilters({ filters, onFilterChange, className }: InlineFilt
   };
 
   return (
-    <div className={cn("flex items-center gap-2", className)}>
+    <div className={cn("flex items-center gap-3", className)}>
       {/* Emirate Filter */}
       <div className="relative w-full">
         <button
           onClick={() => setOpenDropdown(openDropdown === 'emirate' ? null : 'emirate')}
           className={cn(
-            "w-full flex items-center justify-between gap-2 px-4 py-3 rounded-xl border transition-all text-sm group",
+            "w-full flex items-center justify-between gap-2 px-4 py-3.5 rounded-xl border transition-all text-sm group",
             filters.emirate !== 'All Emirates'
               ? "bg-primary/20 text-foreground border-primary/50 shadow-sm"
               : "bg-white/30 dark:bg-white/5 border-white/20 dark:border-white/10 hover:bg-white/50 dark:hover:bg-white/10 text-foreground"
@@ -86,7 +86,7 @@ export function InlineFilters({ filters, onFilterChange, className }: InlineFilt
           <>
             <div className="fixed inset-0 z-40" onClick={() => setOpenDropdown(null)} />
             <div className="absolute top-full mt-2 left-0 right-0 bg-white/90 dark:bg-card/95 backdrop-blur-xl rounded-xl shadow-2xl border border-white/30 dark:border-white/10 overflow-hidden z-50 animate-fade-in">
-              <div className="p-2 max-h-64 overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-primary/20">
+              <div className="p-2.5 max-h-64 overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-primary/20">
                 {emirates.map((emirate) => (
                   <button
                     key={emirate}
@@ -112,7 +112,7 @@ export function InlineFilters({ filters, onFilterChange, className }: InlineFilt
         <button
           onClick={() => setOpenDropdown(openDropdown === 'distance' ? null : 'distance')}
           className={cn(
-            "w-full flex items-center justify-between gap-2 px-4 py-3 rounded-xl border transition-all text-sm",
+            "w-full flex items-center justify-between gap-2 px-4 py-3.5 rounded-xl border transition-all text-sm",
             filters.distance && filters.distance > 0
               ? "bg-primary/20 text-foreground border-primary/50 shadow-sm"
               : "bg-white/30 dark:bg-white/5 border-white/20 dark:border-white/10 hover:bg-white/50 dark:hover:bg-white/10 text-foreground"
@@ -128,7 +128,7 @@ export function InlineFilters({ filters, onFilterChange, className }: InlineFilt
         {openDropdown === 'distance' && (
           <>
             <div className="fixed inset-0 z-40" onClick={() => setOpenDropdown(null)} />
-            <div className="absolute top-full mt-2 left-0 right-0 bg-white/90 dark:bg-card/95 backdrop-blur-xl rounded-xl shadow-2xl border border-white/30 dark:border-white/10 overflow-hidden z-50 animate-fade-in p-4">
+            <div className="absolute top-full mt-2 left-0 right-0 bg-white/90 dark:bg-card/95 backdrop-blur-xl rounded-xl shadow-2xl border border-white/30 dark:border-white/10 overflow-hidden z-50 animate-fade-in p-5">
               <p className="text-sm font-medium text-foreground mb-4">Distance radius</p>
               <Slider
                 value={[filters.distance || 0]}
@@ -136,7 +136,7 @@ export function InlineFilters({ filters, onFilterChange, className }: InlineFilt
                 min={0}
                 max={50}
                 step={1}
-                className="mb-3"
+                className="mb-4"
               />
               <div className="flex justify-between text-xs text-muted-foreground">
                 <span>0 km</span>
@@ -153,7 +153,7 @@ export function InlineFilters({ filters, onFilterChange, className }: InlineFilt
         <button
           onClick={() => setOpenDropdown(openDropdown === 'type' ? null : 'type')}
           className={cn(
-            "w-full flex items-center justify-between gap-2 px-4 py-3 rounded-xl border transition-all text-sm",
+            "w-full flex items-center justify-between gap-2 px-4 py-3.5 rounded-xl border transition-all text-sm",
             filters.facilityTypes && filters.facilityTypes.length > 0
               ? "bg-primary/20 text-foreground border-primary/50 shadow-sm"
               : "bg-white/30 dark:bg-white/5 border-white/20 dark:border-white/10 hover:bg-white/50 dark:hover:bg-white/10 text-foreground"
@@ -174,12 +174,12 @@ export function InlineFilters({ filters, onFilterChange, className }: InlineFilt
           <>
             <div className="fixed inset-0 z-40" onClick={() => setOpenDropdown(null)} />
             <div className="absolute top-full mt-2 left-0 right-0 bg-white/90 dark:bg-card/95 backdrop-blur-xl rounded-xl shadow-2xl border border-white/30 dark:border-white/10 overflow-hidden z-50 animate-fade-in">
-              <div className="p-3 space-y-1">
+              <div className="p-3.5 space-y-2">
                 {facilityTypes.map((type) => (
                   <label
                     key={type.id}
                     className={cn(
-                      "flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-all",
+                      "flex items-center gap-3 px-3.5 py-3 rounded-lg cursor-pointer transition-all",
                       filters.facilityTypes?.includes(type.id)
                         ? "bg-primary/15 border border-primary/30"
                         : "hover:bg-primary/10 border border-transparent"
@@ -204,7 +204,7 @@ export function InlineFilters({ filters, onFilterChange, className }: InlineFilt
       {hasActiveFilters && (
         <button
           onClick={clearFilters}
-          className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-destructive/10 text-destructive hover:bg-destructive/20 transition-all text-sm border border-destructive/20"
+          className="w-full flex items-center justify-center gap-2 px-4 py-3.5 rounded-xl bg-destructive/10 text-destructive hover:bg-destructive/20 transition-all text-sm border border-destructive/20"
         >
           <X className="w-4 h-4" />
           <span>Clear All Filters</span>

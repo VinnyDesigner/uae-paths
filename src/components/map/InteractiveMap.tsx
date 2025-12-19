@@ -128,7 +128,6 @@ interface InteractiveMapProps {
   selectedFacility?: Facility | null;
   onFacilitySelect?: (facility: Facility) => void;
   suggestedZoom?: number;
-  baseMapUrl?: string;
   className?: string;
 }
 
@@ -143,14 +142,12 @@ export function InteractiveMap({
   selectedFacility, 
   onFacilitySelect, 
   suggestedZoom,
-  baseMapUrl = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
   className 
 }: InteractiveMapProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
   const markersRef = useRef<L.Marker[]>([]);
   const userMarkerRef = useRef<L.Marker | null>(null);
-  const tileLayerRef = useRef<L.TileLayer | null>(null);
 
   // Get visible layer IDs
   const visibleLayerIds = layers.flatMap(theme =>
@@ -186,30 +183,17 @@ export function InteractiveMap({
       zoomControl: false,
     });
 
-    const tileLayer = L.tileLayer(baseMapUrl, {
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     }).addTo(map);
 
-    tileLayerRef.current = tileLayer;
     mapRef.current = map;
 
     return () => {
       map.remove();
       mapRef.current = null;
-      tileLayerRef.current = null;
     };
   }, []);
-
-  // Update base map when URL changes
-  useEffect(() => {
-    if (!mapRef.current || !tileLayerRef.current) return;
-    
-    tileLayerRef.current.remove();
-    const newTileLayer = L.tileLayer(baseMapUrl, {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    }).addTo(mapRef.current);
-    tileLayerRef.current = newTileLayer;
-  }, [baseMapUrl]);
 
   // Zoom to search results when they change
   useEffect(() => {

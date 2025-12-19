@@ -1,16 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Menu, X, Sparkles, Layers } from 'lucide-react';
+import { Menu, X, Sparkles } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { SmartSearch } from '@/components/search/SmartSearch';
 import { LayerCatalogue } from '@/components/map/LayerCatalogue';
-import { QuickFilters } from '@/components/map/QuickFilters';
+import { MapFilters } from '@/components/map/MapFilters';
+import { DynamicLegend } from '@/components/map/DynamicLegend';
 import { InteractiveMap } from '@/components/map/InteractiveMap';
 import { ResultsPanel } from '@/components/map/ResultsPanel';
 import { FacilityCard } from '@/components/map/FacilityCard';
 import { MapLayerControl } from '@/components/map/MapLayerControl';
-import { BaseMapSelector, BaseMapStyle, baseMapOptions } from '@/components/map/BaseMapSelector';
-import { MapLegend } from '@/components/map/MapLegend';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { themeGroups } from '@/data/layers';
@@ -35,8 +34,6 @@ export default function SmartMapPage() {
   const [mobileSheetOpen, setMobileSheetOpen] = useState(false);
   const [selectedFacility, setSelectedFacility] = useState<Facility | null>(null);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | undefined>();
-  const [baseMapStyle, setBaseMapStyle] = useState<BaseMapStyle>('default');
-  const [baseMapUrl, setBaseMapUrl] = useState('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png');
 
   const { isSearching, searchResults, searchIntent, userMessage, search, clearResults, getLayersToEnable } = useAISearch();
 
@@ -104,25 +101,19 @@ export default function SmartMapPage() {
     clearResults();
   };
 
-  const handleBaseMapChange = (style: BaseMapStyle, url: string) => {
-    setBaseMapStyle(style);
-    setBaseMapUrl(url);
-  };
-
   return (
     <div className="h-screen flex flex-col bg-background">
       <Header />
 
-      {/* Mobile Search & Filters - Sticky */}
-      <div className="lg:hidden sticky top-0 z-30 p-3 pb-2 bg-card/95 backdrop-blur-sm border-b border-border space-y-2">
+      {/* Mobile Search Bar - Sticky */}
+      <div className="lg:hidden sticky top-0 z-30 p-3 bg-card/95 backdrop-blur-sm border-b border-border">
         <SmartSearch onSearch={handleSearch} onLocateMe={handleLocateMe} isSearching={isSearching} />
         {userMessage && (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
             <Sparkles className="w-3 h-3 text-primary" />
             <span>{userMessage}</span>
           </div>
         )}
-        <QuickFilters filters={filters} onFilterChange={setFilters} />
       </div>
 
       <div className="flex-1 flex overflow-hidden relative">
@@ -131,19 +122,19 @@ export default function SmartMapPage() {
           "hidden lg:flex flex-col bg-card border-r border-border transition-all duration-300 overflow-hidden",
           sidebarOpen ? "w-80 xl:w-96" : "w-0"
         )}>
-          <div className="p-4 border-b border-border space-y-3">
+          <div className="p-4 border-b border-border">
             <SmartSearch onSearch={handleSearch} onLocateMe={handleLocateMe} isSearching={isSearching} />
             {userMessage && (
-              <div className="flex items-center gap-2 text-sm text-muted-foreground bg-secondary/50 rounded-lg p-2">
+              <div className="mt-3 flex items-center gap-2 text-sm text-muted-foreground bg-secondary/50 rounded-lg p-2">
                 <Sparkles className="w-3 h-3 text-primary flex-shrink-0" />
                 <span>{userMessage}</span>
               </div>
             )}
-            {/* Filters directly under search */}
-            <QuickFilters filters={filters} onFilterChange={setFilters} />
           </div>
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
             <LayerCatalogue layers={layers} onLayerToggle={handleLayerToggle} />
+            <DynamicLegend layers={layers} />
+            <MapFilters filters={filters} onFilterChange={setFilters} />
           </div>
         </aside>
 
@@ -167,20 +158,8 @@ export default function SmartMapPage() {
             selectedFacility={selectedFacility}
             onFacilitySelect={handleFacilityClick}
             suggestedZoom={searchIntent?.suggestedZoom}
-            baseMapUrl={baseMapUrl}
             className="h-full w-full"
           />
-
-          {/* Base Map Selector on Map */}
-          <BaseMapSelector
-            selectedStyle={baseMapStyle}
-            onStyleChange={handleBaseMapChange}
-          />
-
-          {/* Legend on Map - Desktop */}
-          <div className="hidden lg:block">
-            <MapLegend layers={layers} />
-          </div>
 
           {/* Layer Control on Map - Desktop */}
           <div className="hidden lg:block">
@@ -193,8 +172,8 @@ export default function SmartMapPage() {
             className="lg:hidden absolute bottom-20 left-4 z-10 shadow-lg"
             onClick={() => setMobileSheetOpen(true)}
           >
-            <Layers className="w-4 h-4 mr-2" />
-            Layers
+            <Menu className="w-4 h-4 mr-2" />
+            Layers & Filters
           </Button>
 
           {/* Desktop Facility Card */}
@@ -229,32 +208,15 @@ export default function SmartMapPage() {
             <div className="absolute inset-0 bg-foreground/20 backdrop-blur-sm" onClick={() => setMobileSheetOpen(false)} />
             <div className="absolute bottom-0 left-0 right-0 bg-card rounded-t-2xl border-t border-border max-h-[80vh] overflow-y-auto animate-slide-in-right">
               <div className="sticky top-0 bg-card border-b border-border p-4 flex items-center justify-between">
-                <h3 className="font-heading font-semibold text-foreground">Layers</h3>
+                <h3 className="font-heading font-semibold text-foreground">Layers & Filters</h3>
                 <button onClick={() => setMobileSheetOpen(false)} className="p-2 rounded-lg hover:bg-secondary">
                   <X className="w-5 h-5" />
                 </button>
               </div>
               <div className="p-4 space-y-4">
                 <LayerCatalogue layers={layers} onLayerToggle={handleLayerToggle} />
-                {/* Mobile Legend */}
-                <div className="bg-secondary/30 rounded-xl p-3">
-                  <h4 className="text-sm font-semibold text-foreground mb-2">Legend</h4>
-                  <div className="space-y-2">
-                    {layers.flatMap(theme =>
-                      theme.layers
-                        .filter(layer => layer.visible)
-                        .map(layer => (
-                          <div key={layer.id} className="flex items-center gap-2">
-                            <div
-                              className="w-4 h-4 rounded"
-                              style={{ backgroundColor: theme.colorClass === 'education' ? 'hsl(200, 100%, 61%)' : layer.color }}
-                            />
-                            <span className="text-xs text-foreground">{layer.name}</span>
-                          </div>
-                        ))
-                    )}
-                  </div>
-                </div>
+                <DynamicLegend layers={layers} />
+                <MapFilters filters={filters} onFilterChange={setFilters} />
               </div>
             </div>
           </div>

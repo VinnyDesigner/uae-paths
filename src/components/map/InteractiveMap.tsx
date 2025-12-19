@@ -1,10 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { ZoomIn, ZoomOut, Maximize, LocateFixed, Home } from 'lucide-react';
+import { ZoomIn, ZoomOut, Maximize, LocateFixed, Home, Layers } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ThemeGroup, Facility } from '@/types/map';
-import { sampleFacilities } from '@/data/layers';
 
 // Fix for default marker icons
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -14,35 +13,59 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
 
-// Custom marker icons
-const createCustomIcon = (color: string, isHealthcare: boolean) => {
+// Custom marker icons with pulse animation for search results
+const createCustomIcon = (color: string, isHealthcare: boolean, isHighlighted: boolean = false) => {
+  const pulseAnimation = isHighlighted ? `
+    <div style="
+      position: absolute;
+      width: 48px;
+      height: 48px;
+      top: -8px;
+      left: -8px;
+      border-radius: 50%;
+      background: ${color}33;
+      animation: pulse 2s infinite;
+    "></div>
+    <style>
+      @keyframes pulse {
+        0% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.5); opacity: 0; }
+        100% { transform: scale(1); opacity: 0; }
+      }
+    </style>
+  ` : '';
+
   return L.divIcon({
     className: 'custom-marker',
     html: `
-      <div style="
-        width: 32px;
-        height: 32px;
-        background: ${color};
-        border-radius: 50% 50% 50% 0;
-        transform: rotate(-45deg);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        border: 2px solid white;
-      ">
+      <div style="position: relative;">
+        ${pulseAnimation}
         <div style="
-          transform: rotate(45deg);
-          color: white;
-          font-size: 14px;
+          width: 36px;
+          height: 36px;
+          background: ${color};
+          border-radius: 50% 50% 50% 0;
+          transform: rotate(-45deg);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 4px 12px ${color}66;
+          border: 3px solid white;
+          ${isHighlighted ? 'animation: bounce 1s ease-in-out;' : ''}
         ">
-          ${isHealthcare ? '🏥' : '🎓'}
+          <div style="
+            transform: rotate(45deg);
+            color: white;
+            font-size: 16px;
+          ">
+            ${isHealthcare ? '🏥' : '🎓'}
+          </div>
         </div>
       </div>
     `,
-    iconSize: [32, 32],
-    iconAnchor: [16, 32],
-    popupAnchor: [0, -32],
+    iconSize: [36, 36],
+    iconAnchor: [18, 36],
+    popupAnchor: [0, -36],
   });
 };
 
@@ -57,17 +80,17 @@ interface MapControlsProps {
 function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFullscreen }: MapControlsProps) {
   return (
     <div className="absolute top-4 right-4 z-[1000] flex flex-col gap-2">
-      <div className="bg-card rounded-lg shadow-md border border-border overflow-hidden">
+      <div className="bg-card rounded-xl shadow-lg border border-border overflow-hidden">
         <button
           onClick={onZoomIn}
-          className="p-2.5 hover:bg-secondary transition-colors border-b border-border"
+          className="p-3 hover:bg-secondary transition-colors border-b border-border"
           title="Zoom in"
         >
           <ZoomIn className="w-5 h-5 text-foreground" />
         </button>
         <button
           onClick={onZoomOut}
-          className="p-2.5 hover:bg-secondary transition-colors"
+          className="p-3 hover:bg-secondary transition-colors"
           title="Zoom out"
         >
           <ZoomOut className="w-5 h-5 text-foreground" />
@@ -75,21 +98,21 @@ function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFu
       </div>
       <button
         onClick={onResetView}
-        className="bg-card rounded-lg shadow-md border border-border p-2.5 hover:bg-secondary transition-colors"
+        className="bg-card rounded-xl shadow-lg border border-border p-3 hover:bg-secondary transition-colors"
         title="Reset to UAE"
       >
         <Home className="w-5 h-5 text-foreground" />
       </button>
       <button
         onClick={onLocateMe}
-        className="bg-card rounded-lg shadow-md border border-border p-2.5 hover:bg-secondary transition-colors"
+        className="bg-card rounded-xl shadow-lg border border-border p-3 hover:bg-primary hover:text-primary-foreground transition-colors"
         title="Locate me"
       >
-        <LocateFixed className="w-5 h-5 text-foreground" />
+        <LocateFixed className="w-5 h-5" />
       </button>
       <button
         onClick={onFullscreen}
-        className="bg-card rounded-lg shadow-md border border-border p-2.5 hover:bg-secondary transition-colors"
+        className="bg-card rounded-xl shadow-lg border border-border p-3 hover:bg-secondary transition-colors"
         title="Fullscreen"
       >
         <Maximize className="w-5 h-5 text-foreground" />
@@ -100,8 +123,11 @@ function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFu
 
 interface InteractiveMapProps {
   layers: ThemeGroup[];
+  facilities: Facility[];
+  searchResults?: Facility[];
   selectedFacility?: Facility | null;
   onFacilitySelect?: (facility: Facility) => void;
+  suggestedZoom?: number;
   className?: string;
 }
 
@@ -109,10 +135,19 @@ interface InteractiveMapProps {
 const UAE_CENTER: L.LatLngTuple = [24.4539, 54.3773];
 const UAE_ZOOM = 10;
 
-export function InteractiveMap({ layers, selectedFacility, onFacilitySelect, className }: InteractiveMapProps) {
+export function InteractiveMap({ 
+  layers, 
+  facilities,
+  searchResults = [],
+  selectedFacility, 
+  onFacilitySelect, 
+  suggestedZoom,
+  className 
+}: InteractiveMapProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
   const markersRef = useRef<L.Marker[]>([]);
+  const userMarkerRef = useRef<L.Marker | null>(null);
 
   // Get visible layer IDs
   const visibleLayerIds = layers.flatMap(theme =>
@@ -120,18 +155,23 @@ export function InteractiveMap({ layers, selectedFacility, onFacilitySelect, cla
   );
 
   // Filter facilities based on visible layers
-  const visibleFacilities = sampleFacilities.filter(f =>
+  const visibleFacilities = facilities.filter(f =>
     visibleLayerIds.includes(f.layerId)
   );
 
+  // Check if a facility is in search results
+  const isSearchResult = useCallback((facility: Facility) => {
+    return searchResults.some(r => r.id === facility.id);
+  }, [searchResults]);
+
   // Get layer color by id
-  const getLayerColor = (layerId: number): string => {
+  const getLayerColor = useCallback((layerId: number): string => {
     for (const theme of layers) {
       const layer = theme.layers.find(l => l.id === layerId);
       if (layer) return layer.color;
     }
     return '#0d9488';
-  };
+  }, [layers]);
 
   // Initialize map
   useEffect(() => {
@@ -155,6 +195,21 @@ export function InteractiveMap({ layers, selectedFacility, onFacilitySelect, cla
     };
   }, []);
 
+  // Zoom to search results when they change
+  useEffect(() => {
+    if (!mapRef.current || searchResults.length === 0) return;
+
+    const bounds = L.latLngBounds(
+      searchResults.map(f => [f.coordinates[1], f.coordinates[0]] as L.LatLngTuple)
+    );
+
+    mapRef.current.flyToBounds(bounds, {
+      padding: [80, 80],
+      maxZoom: suggestedZoom || 13,
+      duration: 1
+    });
+  }, [searchResults, suggestedZoom]);
+
   // Update markers when visible facilities change
   useEffect(() => {
     if (!mapRef.current) return;
@@ -166,35 +221,45 @@ export function InteractiveMap({ layers, selectedFacility, onFacilitySelect, cla
     // Add new markers
     visibleFacilities.forEach(facility => {
       const isHealthcare = facility.theme === 'healthcare';
-      const marker = L.marker(facility.coordinates, {
-        icon: createCustomIcon(getLayerColor(facility.layerId), isHealthcare),
+      const isHighlighted = isSearchResult(facility);
+      const marker = L.marker([facility.coordinates[1], facility.coordinates[0]], {
+        icon: createCustomIcon(getLayerColor(facility.layerId), isHealthcare, isHighlighted),
+        zIndexOffset: isHighlighted ? 1000 : 0,
       });
 
+      const distanceInfo = facility.distance 
+        ? `<p style="color: #0d9488; margin: 4px 0 0 0; font-weight: 500;">
+             📍 ${facility.distance.toFixed(1)} km away
+           </p>` 
+        : '';
+
       const popupContent = `
-        <div style="padding: 12px; min-width: 220px; font-family: system-ui, sans-serif;">
+        <div style="padding: 16px; min-width: 260px; font-family: system-ui, sans-serif;">
           <div style="display: flex; align-items: flex-start; gap: 12px;">
             <div style="
-              width: 40px;
-              height: 40px;
-              border-radius: 8px;
+              width: 48px;
+              height: 48px;
+              border-radius: 12px;
               display: flex;
               align-items: center;
               justify-content: center;
-              font-size: 18px;
+              font-size: 22px;
               background-color: ${isHealthcare ? '#ccfbf1' : '#fef3c7'};
+              flex-shrink: 0;
             ">
               ${isHealthcare ? '🏥' : '🎓'}
             </div>
             <div style="flex: 1; min-width: 0;">
-              <h4 style="font-weight: 600; font-size: 14px; margin: 0 0 4px 0; color: #1e293b;">
+              <h4 style="font-weight: 600; font-size: 15px; margin: 0 0 6px 0; color: #1e293b; line-height: 1.3;">
                 ${facility.name}
               </h4>
               <span style="
                 display: inline-block;
-                padding: 2px 8px;
-                border-radius: 12px;
+                padding: 4px 10px;
+                border-radius: 20px;
                 font-size: 11px;
-                font-weight: 500;
+                font-weight: 600;
+                letter-spacing: 0.02em;
                 background-color: ${isHealthcare ? '#ccfbf1' : '#fef3c7'};
                 color: ${isHealthcare ? '#0d9488' : '#d97706'};
               ">
@@ -202,37 +267,64 @@ export function InteractiveMap({ layers, selectedFacility, onFacilitySelect, cla
               </span>
             </div>
           </div>
-          <div style="margin-top: 12px; font-size: 13px;">
-            <p style="color: #64748b; margin: 0 0 4px 0;">
-              <strong style="color: #1e293b;">Address:</strong> ${facility.address}
-            </p>
+          <div style="margin-top: 14px; font-size: 13px; line-height: 1.5;">
             <p style="color: #64748b; margin: 0;">
-              <strong style="color: #1e293b;">Emirate:</strong> ${facility.emirate}
+              📍 ${facility.address}
             </p>
+            <p style="color: #64748b; margin: 4px 0 0 0;">
+              🏛️ ${facility.emirate}
+            </p>
+            ${distanceInfo}
           </div>
-          <button style="
-            margin-top: 12px;
-            width: 100%;
-            padding: 8px;
-            border-radius: 8px;
-            background-color: #0c4a6e;
-            color: white;
-            font-size: 13px;
-            font-weight: 500;
-            border: none;
-            cursor: pointer;
-          ">
-            View Details
-          </button>
+          <div style="display: flex; gap: 8px; margin-top: 14px;">
+            <button onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=${facility.coordinates[1]},${facility.coordinates[0]}', '_blank')" style="
+              flex: 1;
+              padding: 10px;
+              border-radius: 10px;
+              background-color: #0c4a6e;
+              color: white;
+              font-size: 13px;
+              font-weight: 500;
+              border: none;
+              cursor: pointer;
+              transition: background-color 0.2s;
+            " onmouseover="this.style.backgroundColor='#075985'" onmouseout="this.style.backgroundColor='#0c4a6e'">
+              🧭 Get Directions
+            </button>
+          </div>
         </div>
       `;
 
-      marker.bindPopup(popupContent);
+      marker.bindPopup(popupContent, {
+        maxWidth: 320,
+        className: 'custom-popup'
+      });
       marker.on('click', () => onFacilitySelect?.(facility));
       marker.addTo(mapRef.current!);
       markersRef.current.push(marker);
     });
-  }, [visibleFacilities, layers, onFacilitySelect]);
+  }, [visibleFacilities, layers, onFacilitySelect, getLayerColor, isSearchResult]);
+
+  // Handle selected facility
+  useEffect(() => {
+    if (!mapRef.current || !selectedFacility) return;
+
+    mapRef.current.flyTo(
+      [selectedFacility.coordinates[1], selectedFacility.coordinates[0]],
+      15,
+      { duration: 0.8 }
+    );
+
+    // Find and open the popup for the selected facility
+    const marker = markersRef.current.find(m => {
+      const latlng = m.getLatLng();
+      return latlng.lat === selectedFacility.coordinates[1] && 
+             latlng.lng === selectedFacility.coordinates[0];
+    });
+    if (marker) {
+      marker.openPopup();
+    }
+  }, [selectedFacility]);
 
   const handleZoomIn = () => {
     mapRef.current?.zoomIn();
@@ -250,11 +342,54 @@ export function InteractiveMap({ layers, selectedFacility, onFacilitySelect, cla
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          mapRef.current?.flyTo(
-            [position.coords.latitude, position.coords.longitude],
-            14,
-            { duration: 1 }
-          );
+          const { latitude, longitude } = position.coords;
+          
+          // Remove existing user marker
+          if (userMarkerRef.current) {
+            userMarkerRef.current.remove();
+          }
+
+          // Add user location marker
+          const userIcon = L.divIcon({
+            className: 'user-location-marker',
+            html: `
+              <div style="position: relative;">
+                <div style="
+                  position: absolute;
+                  width: 40px;
+                  height: 40px;
+                  top: -12px;
+                  left: -12px;
+                  border-radius: 50%;
+                  background: #3b82f633;
+                  animation: userPulse 2s infinite;
+                "></div>
+                <div style="
+                  width: 16px;
+                  height: 16px;
+                  background: #3b82f6;
+                  border-radius: 50%;
+                  border: 3px solid white;
+                  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.5);
+                "></div>
+              </div>
+              <style>
+                @keyframes userPulse {
+                  0% { transform: scale(1); opacity: 0.8; }
+                  50% { transform: scale(1.5); opacity: 0; }
+                  100% { transform: scale(1); opacity: 0; }
+                }
+              </style>
+            `,
+            iconSize: [16, 16],
+            iconAnchor: [8, 8],
+          });
+
+          userMarkerRef.current = L.marker([latitude, longitude], { icon: userIcon })
+            .addTo(mapRef.current!)
+            .bindPopup('📍 Your Location');
+
+          mapRef.current?.flyTo([latitude, longitude], 14, { duration: 1 });
         },
         (error) => {
           console.error('Error getting location:', error);
@@ -290,8 +425,18 @@ export function InteractiveMap({ layers, selectedFacility, onFacilitySelect, cla
         onFullscreen={handleFullscreen}
       />
 
+      {/* Search results indicator */}
+      {searchResults.length > 0 && (
+        <div className="absolute top-4 left-4 z-[1000] bg-card rounded-xl shadow-lg border border-border px-4 py-2 flex items-center gap-2 animate-fade-in">
+          <Layers className="w-4 h-4 text-primary" />
+          <span className="text-sm font-medium text-foreground">
+            {searchResults.length} facilities found
+          </span>
+        </div>
+      )}
+
       {/* Gradient overlay at bottom */}
-      <div className="absolute bottom-0 left-0 right-0 h-20 pointer-events-none bg-gradient-to-t from-background/10 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none bg-gradient-to-t from-background/20 to-transparent" />
     </div>
   );
 }

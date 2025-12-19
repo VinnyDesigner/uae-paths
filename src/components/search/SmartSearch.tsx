@@ -1,25 +1,48 @@
 import { useState, useRef, useEffect } from 'react';
-import { Search, MapPin, X, Loader2 } from 'lucide-react';
+import { Search, MapPin, X, Loader2, Sparkles, Navigation } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { searchSuggestions } from '@/data/layers';
+import { Button } from '@/components/ui/button';
 
 interface SmartSearchProps {
   onSearch: (query: string) => void;
+  onLocateMe?: () => void;
   isSearching?: boolean;
   className?: string;
   size?: 'default' | 'large';
+  placeholder?: string;
 }
 
-export function SmartSearch({ onSearch, isSearching = false, className, size = 'default' }: SmartSearchProps) {
+const aiSuggestions = [
+  { text: 'Nearest hospital', icon: '🏥', category: 'Emergency' },
+  { text: 'Schools in Abu Dhabi', icon: '🎓', category: 'Education' },
+  { text: 'Pharmacies near me', icon: '💊', category: 'Healthcare' },
+  { text: 'Clinics in Dubai', icon: '🩺', category: 'Healthcare' },
+  { text: 'Private schools Abu Dhabi', icon: '📚', category: 'Education' },
+  { text: 'Hospitals in Sharjah', icon: '🏥', category: 'Healthcare' },
+  { text: 'Nearest nursery', icon: '👶', category: 'Education' },
+  { text: 'Healthcare centers near me', icon: '🏨', category: 'Healthcare' },
+];
+
+export function SmartSearch({ 
+  onSearch, 
+  onLocateMe,
+  isSearching = false, 
+  className, 
+  size = 'default',
+  placeholder = "Search for nearest healthcare, schools, or wellness centers..."
+}: SmartSearchProps) {
   const [query, setQuery] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const filteredSuggestions = searchSuggestions.filter(s =>
-    s.text.toLowerCase().includes(query.toLowerCase())
-  );
+  const filteredSuggestions = query.trim() 
+    ? aiSuggestions.filter(s =>
+        s.text.toLowerCase().includes(query.toLowerCase()) ||
+        s.category.toLowerCase().includes(query.toLowerCase())
+      )
+    : aiSuggestions;
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -68,16 +91,23 @@ export function SmartSearch({ onSearch, isSearching = false, className, size = '
     <div ref={containerRef} className={cn("relative w-full", className)}>
       <div
         className={cn(
-          "relative flex items-center bg-card border border-border rounded-full shadow-card transition-all duration-200",
-          showSuggestions && "shadow-card-hover border-primary/30",
+          "relative flex items-center bg-card border border-border rounded-2xl shadow-lg transition-all duration-300",
+          showSuggestions && "shadow-xl border-primary/40 ring-2 ring-primary/20",
           isLarge ? "h-14 md:h-16" : "h-12"
         )}
       >
-        <div className={cn("flex items-center justify-center text-muted-foreground", isLarge ? "pl-5 md:pl-6" : "pl-4")}>
+        {/* AI indicator */}
+        <div className={cn(
+          "flex items-center justify-center text-primary",
+          isLarge ? "pl-5 md:pl-6" : "pl-4"
+        )}>
           {isSearching ? (
-            <Loader2 className={cn("animate-spin", isLarge ? "w-5 h-5 md:w-6 md:h-6" : "w-5 h-5")} />
+            <Loader2 className={cn("animate-spin text-primary", isLarge ? "w-5 h-5 md:w-6 md:h-6" : "w-5 h-5")} />
           ) : (
-            <Search className={cn(isLarge ? "w-5 h-5 md:w-6 md:h-6" : "w-5 h-5")} />
+            <div className="relative">
+              <Search className={cn("text-muted-foreground", isLarge ? "w-5 h-5 md:w-6 md:h-6" : "w-5 h-5")} />
+              <Sparkles className="absolute -top-1 -right-1 w-3 h-3 text-primary animate-pulse" />
+            </div>
           )}
         </div>
         
@@ -92,7 +122,7 @@ export function SmartSearch({ onSearch, isSearching = false, className, size = '
           }}
           onFocus={() => setShowSuggestions(true)}
           onKeyDown={handleKeyDown}
-          placeholder="Try 'nearest hospital', 'schools in Abu Dhabi'"
+          placeholder={placeholder}
           className={cn(
             "flex-1 bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground",
             isLarge ? "px-4 text-base md:text-lg" : "px-3 text-sm"
@@ -108,44 +138,78 @@ export function SmartSearch({ onSearch, isSearching = false, className, size = '
           </button>
         )}
 
+        {onLocateMe && (
+          <button
+            onClick={onLocateMe}
+            className="p-2 text-muted-foreground hover:text-primary transition-colors"
+            title="Use my location"
+          >
+            <Navigation className="w-4 h-4" />
+          </button>
+        )}
+
         <button
           onClick={() => handleSubmit()}
           disabled={!query.trim() || isSearching}
           className={cn(
-            "gradient-primary text-primary-foreground rounded-full font-medium transition-all hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed",
+            "gradient-primary text-primary-foreground rounded-xl font-medium transition-all hover:shadow-lg hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100",
             isLarge ? "h-10 md:h-12 px-5 md:px-8 mr-2 text-sm md:text-base" : "h-9 px-5 mr-1.5 text-sm"
           )}
         >
-          Search
+          {isSearching ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            "Search"
+          )}
         </button>
       </div>
 
-      {/* Suggestions Dropdown */}
+      {/* AI-Powered Suggestions Dropdown */}
       {showSuggestions && filteredSuggestions.length > 0 && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-card border border-border rounded-xl shadow-lg overflow-hidden z-50 animate-fade-in">
+        <div className="absolute top-full left-0 right-0 mt-2 bg-card border border-border rounded-xl shadow-xl overflow-hidden z-50 animate-fade-in">
           <div className="p-2">
-            <p className="px-3 py-2 text-xs text-muted-foreground font-medium uppercase tracking-wide">
-              Suggested Searches
-            </p>
-            {filteredSuggestions.map((suggestion, index) => (
-              <button
-                key={suggestion.text}
-                onClick={() => handleSubmit(suggestion.text)}
-                className={cn(
-                  "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-colors",
-                  index === selectedIndex
-                    ? "bg-primary text-primary-foreground"
-                    : "text-foreground hover:bg-secondary"
-                )}
-              >
-                <MapPin className="w-4 h-4 opacity-60" />
-                <span className="text-sm">{suggestion.text}</span>
-              </button>
-            ))}
+            <div className="flex items-center gap-2 px-3 py-2">
+              <Sparkles className="w-4 h-4 text-primary" />
+              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
+                AI-Powered Suggestions
+              </p>
+            </div>
+            <div className="max-h-64 overflow-y-auto">
+              {filteredSuggestions.map((suggestion, index) => (
+                <button
+                  key={suggestion.text}
+                  onClick={() => handleSubmit(suggestion.text)}
+                  className={cn(
+                    "w-full flex items-center gap-3 px-3 py-3 rounded-lg text-left transition-all",
+                    index === selectedIndex
+                      ? "bg-primary text-primary-foreground"
+                      : "text-foreground hover:bg-secondary"
+                  )}
+                >
+                  <span className="text-lg">{suggestion.icon}</span>
+                  <div className="flex-1">
+                    <span className="text-sm font-medium">{suggestion.text}</span>
+                    <span className={cn(
+                      "ml-2 text-xs px-2 py-0.5 rounded-full",
+                      index === selectedIndex 
+                        ? "bg-primary-foreground/20 text-primary-foreground" 
+                        : "bg-secondary text-muted-foreground"
+                    )}>
+                      {suggestion.category}
+                    </span>
+                  </div>
+                  <MapPin className={cn(
+                    "w-4 h-4",
+                    index === selectedIndex ? "text-primary-foreground/60" : "text-muted-foreground/60"
+                  )} />
+                </button>
+              ))}
+            </div>
           </div>
-          <div className="px-4 py-3 bg-secondary/50 border-t border-border">
+          <div className="px-4 py-3 bg-secondary/50 border-t border-border flex items-center gap-2">
+            <Sparkles className="w-3 h-3 text-primary" />
             <p className="text-xs text-muted-foreground">
-              Search supports public healthcare and education datasets only.
+              AI understands natural language queries like "nearest hospital" or "schools in Abu Dhabi"
             </p>
           </div>
         </div>

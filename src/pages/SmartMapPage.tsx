@@ -122,7 +122,7 @@ export default function SmartMapPage() {
             )}
             
             {/* Filters Section */}
-            <div className="bg-white/30 dark:bg-white/5 rounded-xl p-4 border border-white/20 dark:border-white/10">
+            <div className="bg-white/30 dark:bg-white/5 rounded-xl pt-3 pb-4 px-4 border border-white/20 dark:border-white/10">
               <h4 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
                 <Filter className="w-4 h-4 text-primary" />
                 Filters

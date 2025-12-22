@@ -328,26 +328,8 @@ function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFu
         </div>
       </div>
 
-      {/* Mobile: Single unified control rail - bottom right */}
+      {/* Mobile: Single unified control rail - bottom right (no zoom controls) */}
       <div className="md:hidden absolute bottom-20 right-4 z-[1000] flex flex-col gap-2.5 pointer-events-auto safe-area-inset-bottom">
-        {/* Zoom Control Pill */}
-        <div className="flex flex-col bg-card rounded-xl shadow-lg border border-border overflow-hidden">
-          <button
-            onClick={onZoomIn}
-            aria-label="Zoom In"
-            className="p-2.5 hover:bg-secondary active:scale-95 transition-all duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center"
-          >
-            <ZoomIn className="w-5 h-5 text-foreground" />
-          </button>
-          <div className="h-px bg-border" />
-          <button
-            onClick={onZoomOut}
-            aria-label="Zoom Out"
-            className="p-2.5 hover:bg-secondary active:scale-95 transition-all duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center"
-          >
-            <ZoomOut className="w-5 h-5 text-foreground" />
-          </button>
-        </div>
 
         {/* Locate Me */}
         <button

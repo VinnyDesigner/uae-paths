@@ -65,75 +65,93 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Explore by Category - Rich Visual Section */}
-        <section className="py-16 md:py-20 bg-gradient-to-b from-background via-secondary/30 to-background">
-          <div className="container mx-auto px-4">
-            {/* Section Title with accent */}
-            <div className="text-center mb-12">
-              <h2 className="font-heading text-lg md:text-xl font-bold text-foreground mb-2">
+        {/* Explore by Category - Premium Visual Section */}
+        <section className="py-16 md:py-20 lg:py-24 relative overflow-hidden">
+          {/* Subtle gradient background */}
+          <div className="absolute inset-0 bg-gradient-to-b from-secondary/20 via-secondary/40 to-secondary/20" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent" />
+          
+          <div className="container mx-auto px-4 relative">
+            {/* Section Title - Premium styling */}
+            <div className="text-center mb-10 md:mb-14">
+              <h2 className="font-heading text-xl md:text-2xl lg:text-3xl font-bold text-foreground mb-3">
                 Explore by Category
               </h2>
-              <div className="w-12 h-0.5 bg-primary/40 mx-auto rounded-full" />
+              <p className="text-sm md:text-base text-muted-foreground/70 max-w-md mx-auto mb-4">
+                Choose a theme to start exploring public facilities
+              </p>
+              <div className="w-16 h-1 bg-gradient-to-r from-transparent via-primary/50 to-transparent mx-auto rounded-full" />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-xl mx-auto">
-              {categories.map((category) => {
-                const isHealthcare = category.colorClass === 'healthcare';
-                return (
-                  <div
-                    key={category.title}
-                    className={cn(
-                      "rounded-2xl p-5 transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5 border border-border/30",
-                      isHealthcare ? "bg-healthcare-light" : "bg-education-light"
-                    )}
-                  >
-                    <div className="flex items-center gap-3 mb-4">
-                      {/* Icon with soft container */}
+            {/* Glass container behind cards */}
+            <div className="max-w-2xl mx-auto">
+              <div className="bg-background/40 backdrop-blur-sm rounded-3xl p-6 md:p-8 border border-border/30 shadow-lg">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 md:gap-6">
+                  {categories.map((category) => {
+                    const isHealthcare = category.colorClass === 'healthcare';
+                    return (
                       <div
+                        key={category.title}
                         className={cn(
-                          "w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm",
-                          isHealthcare ? "gradient-healthcare" : "gradient-education"
+                          "rounded-2xl p-6 transition-all duration-300 border border-border/20",
+                          "shadow-md hover:shadow-xl hover:-translate-y-1",
+                          "group cursor-pointer",
+                          isHealthcare 
+                            ? "bg-healthcare-light hover:border-healthcare/30" 
+                            : "bg-education-light hover:border-education/30"
                         )}
                       >
-                        <category.icon
-                          className={cn(
-                            "w-5 h-5",
-                            isHealthcare ? "text-healthcare-foreground" : "text-education-foreground"
-                          )}
-                        />
-                      </div>
-                      <h3 className="font-heading text-sm font-bold text-foreground">
-                        {category.title}
-                      </h3>
-                    </div>
+                        {/* Icon + Title row */}
+                        <div className="flex items-center gap-4 mb-5">
+                          {/* Premium icon badge */}
+                          <div
+                            className={cn(
+                              "w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0",
+                              "shadow-md ring-1 ring-white/20",
+                              isHealthcare ? "gradient-healthcare" : "gradient-education"
+                            )}
+                          >
+                            <category.icon
+                              className={cn(
+                                "w-6 h-6 drop-shadow-sm",
+                                isHealthcare ? "text-healthcare-foreground" : "text-education-foreground"
+                              )}
+                            />
+                          </div>
+                          <h3 className="font-heading text-base md:text-lg font-bold text-foreground leading-tight">
+                            {category.title}
+                          </h3>
+                        </div>
 
-                    {/* Chips - Soft backgrounds with spacing */}
-                    <div className="flex flex-wrap gap-2 mb-5">
-                      {category.chips.slice(0, 3).map((chip) => (
-                        <span
-                          key={chip}
-                          className="px-2.5 py-1 bg-background/70 rounded-full text-xs text-muted-foreground/80 border border-border/20"
+                        {/* Chips - Secondary visual */}
+                        <div className="flex flex-wrap gap-2 mb-6">
+                          {category.chips.slice(0, 3).map((chip) => (
+                            <span
+                              key={chip}
+                              className="px-3 py-1.5 bg-background/60 backdrop-blur-sm rounded-full text-xs text-muted-foreground border border-border/30 shadow-sm"
+                            >
+                              {chip}
+                            </span>
+                          ))}
+                        </div>
+
+                        {/* CTA Button - Premium polish */}
+                        <Button
+                          variant={isHealthcare ? "healthcare" : "education"}
+                          size="default"
+                          asChild
+                          className="w-full h-11 transition-all duration-300 hover:shadow-md group/btn"
                         >
-                          {chip}
-                        </span>
-                      ))}
-                    </div>
-
-                    {/* CTA - With arrow animation */}
-                    <Button
-                      variant={isHealthcare ? "healthcare" : "education"}
-                      size="sm"
-                      asChild
-                      className="w-full transition-all duration-200 hover:shadow-sm group"
-                    >
-                      <Link to="/map">
-                        Explore
-                        <ArrowRight className="w-3.5 h-3.5 ml-1.5 transition-transform duration-200 group-hover:translate-x-0.5" />
-                      </Link>
-                    </Button>
-                  </div>
-                );
-              })}
+                          <Link to="/map">
+                            Explore
+                            <ArrowRight className="w-4 h-4 ml-2 transition-transform duration-300 group-hover/btn:translate-x-1" />
+                          </Link>
+                        </Button>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
           </div>
         </section>

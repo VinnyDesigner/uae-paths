@@ -1,12 +1,10 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Menu, X, Sparkles, Layers, Filter, Map, MapPin } from 'lucide-react';
+import { Menu, X, Sparkles, Filter, Map, MapPin } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { SmartSearch } from '@/components/search/SmartSearch';
 import { InteractiveMap } from '@/components/map/InteractiveMap';
 import { DirectionsPanel } from '@/components/map/DirectionsPanel';
-
-import { BaseMapSelector } from '@/components/map/BaseMapSelector';
 import { MapLegendOverlay } from '@/components/map/MapLegendOverlay';
 import { InlineFilters } from '@/components/map/InlineFilters';
 import { LayerTogglePanel } from '@/components/map/LayerTogglePanel';
@@ -195,21 +193,9 @@ export default function SmartMapPage() {
               />
             </div>
             
-            {/* Base Map & Legend Section */}
-            <div className="bg-white/30 dark:bg-white/5 rounded-xl p-4 border border-white/20 dark:border-white/10 space-y-4">
-              {/* Base Map */}
-              <div>
-                <h4 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
-                  <Layers className="w-4 h-4 text-primary" />
-                  Base Map
-                </h4>
-                <BaseMapSelector selectedMap={baseMapId} onMapChange={setBaseMapId} variant="panel" />
-              </div>
-              
-              {/* Legend */}
-              <div className="border-t border-white/20 dark:border-white/10 pt-4">
-                <MapLegendOverlay layers={layers} />
-              </div>
+            {/* Legend Section */}
+            <div className="bg-white/30 dark:bg-white/5 rounded-xl p-4 border border-white/20 dark:border-white/10">
+              <MapLegendOverlay layers={layers} />
             </div>
           </div>
         </div>
@@ -233,6 +219,7 @@ export default function SmartMapPage() {
             onFacilitySelect={handleFacilityClick}
             suggestedZoom={searchIntent?.suggestedZoom}
             baseMapId={baseMapId}
+            onBaseMapChange={setBaseMapId}
             className="h-full w-full"
           />
 
@@ -240,10 +227,7 @@ export default function SmartMapPage() {
           {/* Kept empty for potential future controls */}
 
           {/* Mobile Bottom Controls */}
-          <div className="lg:hidden absolute bottom-20 left-4 right-4 z-10 flex items-center justify-between gap-2">
-            <div className="flex gap-2">
-              <BaseMapSelector selectedMap={baseMapId} onMapChange={setBaseMapId} />
-            </div>
+          <div className="lg:hidden absolute bottom-20 left-4 right-4 z-10 flex items-center justify-end">
             <Button
               variant="default"
               className="shadow-lg"

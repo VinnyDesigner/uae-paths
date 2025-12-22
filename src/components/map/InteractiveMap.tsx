@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { ZoomIn, ZoomOut, Maximize, LocateFixed, Home } from 'lucide-react';
+import { ZoomIn, ZoomOut, Maximize, LocateFixed, Home, Map, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ThemeGroup, Facility } from '@/types/map';
 import { baseMaps, BaseMapOption } from './BaseMapSelector';
@@ -81,13 +81,17 @@ interface MapControlsProps {
   onResetView: () => void;
   onLocateMe: () => void;
   onFullscreen: () => void;
+  selectedBaseMap: string;
+  onBaseMapChange: (mapId: string) => void;
 }
 
-function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFullscreen }: MapControlsProps) {
+function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFullscreen, selectedBaseMap, onBaseMapChange }: MapControlsProps) {
+  const [baseMapOpen, setBaseMapOpen] = useState(false);
+
   return (
     <>
       {/* Right-side unified control stack */}
-      <div className="absolute top-4 right-4 bottom-24 z-[1000] flex flex-col justify-between pointer-events-none">
+      <div className="absolute top-4 right-4 z-[1000] flex flex-col gap-2 pointer-events-none">
         {/* Top controls group: Reset, Locate, Fullscreen */}
         <div className="flex flex-col gap-2 pointer-events-auto">
           <button
@@ -114,8 +118,11 @@ function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFu
             <Maximize className="w-5 h-5 text-foreground" />
           </button>
         </div>
+      </div>
 
-        {/* Bottom: Combined Zoom Control Pill */}
+      {/* Bottom-right controls: Zoom + Base Map */}
+      <div className="absolute bottom-8 right-4 z-[1000] flex flex-col gap-2 items-end pointer-events-none">
+        {/* Zoom Control Pill */}
         <div className="flex flex-col bg-card rounded-xl shadow-lg border border-border overflow-hidden pointer-events-auto">
           <button
             onClick={onZoomIn}
@@ -133,6 +140,71 @@ function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFu
             <ZoomOut className="w-5 h-5 text-foreground" />
           </button>
         </div>
+
+        {/* Base Map Control */}
+        <div className="relative pointer-events-auto">
+          <button
+            onClick={() => setBaseMapOpen(!baseMapOpen)}
+            className="bg-card rounded-xl shadow-lg border border-border p-3 hover:bg-secondary hover:scale-105 active:scale-95 transition-all duration-200"
+            title="Change Base Map"
+          >
+            <Map className="w-5 h-5 text-foreground" />
+          </button>
+
+          {/* Base Map Selector Panel */}
+          {baseMapOpen && (
+            <>
+              <div 
+                className="fixed inset-0 z-[999]" 
+                onClick={() => setBaseMapOpen(false)} 
+              />
+              <div className="absolute bottom-full right-0 mb-2 bg-card/95 backdrop-blur-xl rounded-xl shadow-xl border border-border overflow-hidden z-[1000] animate-fade-in p-3 w-[280px]">
+                <p className="text-xs text-muted-foreground font-medium px-1 pb-2 uppercase tracking-wide">
+                  Base Map
+                </p>
+                <div className="grid grid-cols-3 gap-2">
+                  {baseMaps.map((map) => (
+                    <button
+                      key={map.id}
+                      onClick={() => {
+                        onBaseMapChange(map.id);
+                        setBaseMapOpen(false);
+                      }}
+                      className={cn(
+                        "relative group rounded-lg overflow-hidden border-2 transition-all",
+                        selectedBaseMap === map.id
+                          ? "border-primary ring-2 ring-primary/30"
+                          : "border-transparent hover:border-primary/50"
+                      )}
+                    >
+                      <div className="aspect-square relative">
+                        <img
+                          src={map.previewImage}
+                          alt={map.name}
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                        />
+                        <div className={cn(
+                          "absolute inset-0 bg-gradient-to-t from-black/60 to-transparent",
+                          "flex items-end justify-center pb-1"
+                        )}>
+                          <span className="text-[10px] font-medium text-white truncate px-1">
+                            {map.name}
+                          </span>
+                        </div>
+                        {selectedBaseMap === map.id && (
+                          <div className="absolute top-1 right-1 w-4 h-4 bg-primary rounded-full flex items-center justify-center">
+                            <Check className="w-2.5 h-2.5 text-primary-foreground" />
+                          </div>
+                        )}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </>
   );
@@ -147,6 +219,7 @@ interface InteractiveMapProps {
   onGetDirections?: (facility: Facility) => void;
   suggestedZoom?: number;
   baseMapId?: string;
+  onBaseMapChange?: (mapId: string) => void;
   className?: string;
 }
 
@@ -163,6 +236,7 @@ export function InteractiveMap({
   onGetDirections,
   suggestedZoom,
   baseMapId = 'default',
+  onBaseMapChange,
   className 
 }: InteractiveMapProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -510,6 +584,8 @@ export function InteractiveMap({
         onResetView={handleResetView}
         onLocateMe={handleLocateMe}
         onFullscreen={handleFullscreen}
+        selectedBaseMap={baseMapId}
+        onBaseMapChange={onBaseMapChange || (() => {})}
       />
 
       {/* Gradient overlay at bottom */}

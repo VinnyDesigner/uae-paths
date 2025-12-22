@@ -52,12 +52,12 @@ export default function HomePage() {
                 Find healthcare and education services across the UAE
               </p>
 
-              {/* Search Container - Overflow visible for suggestions */}
-              <div className="max-w-2xl mx-auto animate-fade-up delay-200 mb-16" style={{ overflow: 'visible' }}>
+              {/* Search Container - Tight spacing */}
+              <div className="max-w-2xl mx-auto animate-fade-up delay-200 mb-6" style={{ overflow: 'visible' }}>
                 <div className="bg-card/60 backdrop-blur-sm rounded-3xl p-3 md:p-4 shadow-lg border border-border/40" style={{ overflow: 'visible' }}>
                   <SmartSearch onSearch={handleSearch} size="large" />
                 </div>
-                <p className="text-xs text-muted-foreground/50 mt-4 animate-fade-up delay-300">
+                <p className="text-xs text-muted-foreground/50 mt-3 animate-fade-up delay-300">
                   Press Enter to explore the map
                 </p>
               </div>

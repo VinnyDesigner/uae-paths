@@ -153,24 +153,29 @@ export function SmartSearch({
           )}
         />
 
-        {query && (
-          <button
-            onClick={clearSearch}
-            className="p-2 text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        )}
+        <div className="flex items-center gap-1 pr-3">
+          {query && (
+            <button
+              onClick={clearSearch}
+              className="p-1.5 text-muted-foreground hover:text-foreground transition-colors rounded-full hover:bg-secondary"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          )}
 
-        {onLocateMe && (
-          <button
-            onClick={onLocateMe}
-            className="p-2 text-muted-foreground hover:text-primary transition-colors"
-            title="Use my location"
-          >
-            <Navigation className="w-4 h-4" />
-          </button>
-        )}
+          {onLocateMe && (
+            <>
+              <div className="w-px h-5 bg-border mx-1" />
+              <button
+                onClick={onLocateMe}
+                className="p-1.5 text-primary hover:text-primary/80 transition-colors rounded-full hover:bg-primary/10"
+                title="Use my location"
+              >
+                <Navigation className={cn("w-4 h-4", isLarge && "w-5 h-5")} />
+              </button>
+            </>
+          )}
+        </div>
 
       </div>
 

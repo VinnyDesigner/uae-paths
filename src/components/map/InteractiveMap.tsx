@@ -86,40 +86,41 @@ interface MapControlsProps {
 function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFullscreen }: MapControlsProps) {
   return (
     <>
-      {/* Top-right controls: Reset, Locate, Fullscreen */}
-      <div className="absolute top-4 right-4 z-[1000] flex flex-col gap-2">
-        <button
-          onClick={onResetView}
-          className="bg-card rounded-xl shadow-lg border border-border p-3 hover:bg-secondary hover:scale-105 active:scale-95 transition-all duration-200"
-          title="Reset to UAE"
-        >
-          <Home className="w-5 h-5 text-foreground" />
-        </button>
-        
-        <button
-          onClick={onLocateMe}
-          className="bg-card rounded-xl shadow-lg border border-border p-3 hover:bg-primary hover:text-primary-foreground hover:scale-105 active:scale-95 transition-all duration-200"
-          title="Locate me"
-        >
-          <LocateFixed className="w-5 h-5" />
-        </button>
-        
-        <button
-          onClick={onFullscreen}
-          className="bg-card rounded-xl shadow-lg border border-border p-3 hover:bg-secondary hover:scale-105 active:scale-95 transition-all duration-200"
-          title="Fullscreen"
-        >
-          <Maximize className="w-5 h-5 text-foreground" />
-        </button>
-      </div>
+      {/* Right-side unified control stack */}
+      <div className="absolute top-4 right-4 bottom-24 z-[1000] flex flex-col justify-between pointer-events-none">
+        {/* Top controls group: Reset, Locate, Fullscreen */}
+        <div className="flex flex-col gap-2 pointer-events-auto">
+          <button
+            onClick={onResetView}
+            className="bg-card rounded-xl shadow-lg border border-border p-3 hover:bg-secondary hover:scale-105 active:scale-95 transition-all duration-200"
+            title="Reset to UAE"
+          >
+            <Home className="w-5 h-5 text-foreground" />
+          </button>
+          
+          <button
+            onClick={onLocateMe}
+            className="bg-card rounded-xl shadow-lg border border-border p-3 hover:bg-primary hover:text-primary-foreground hover:scale-105 active:scale-95 transition-all duration-200"
+            title="Locate me"
+          >
+            <LocateFixed className="w-5 h-5" />
+          </button>
+          
+          <button
+            onClick={onFullscreen}
+            className="bg-card rounded-xl shadow-lg border border-border p-3 hover:bg-secondary hover:scale-105 active:scale-95 transition-all duration-200"
+            title="Fullscreen"
+          >
+            <Maximize className="w-5 h-5 text-foreground" />
+          </button>
+        </div>
 
-      {/* Bottom-right: Combined Zoom Control */}
-      <div className="absolute bottom-20 right-4 z-[1000]">
-        <div className="flex flex-col bg-card rounded-xl shadow-lg border border-border overflow-hidden">
+        {/* Bottom: Combined Zoom Control Pill */}
+        <div className="flex flex-col bg-card rounded-xl shadow-lg border border-border overflow-hidden pointer-events-auto">
           <button
             onClick={onZoomIn}
             aria-label="Zoom In"
-            className="p-3 hover:bg-secondary hover:scale-105 active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+            className="p-3 hover:bg-secondary active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
           >
             <ZoomIn className="w-5 h-5 text-foreground" />
           </button>
@@ -127,7 +128,7 @@ function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFu
           <button
             onClick={onZoomOut}
             aria-label="Zoom Out"
-            className="p-3 hover:bg-secondary hover:scale-105 active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+            className="p-3 hover:bg-secondary active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
           >
             <ZoomOut className="w-5 h-5 text-foreground" />
           </button>

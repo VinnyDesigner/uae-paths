@@ -384,10 +384,14 @@ export function MobileBottomSheet({
               return (
                 <button
                   key={layer.id}
-                  onClick={() => onLayerToggle(selectedTheme.id, layer.id)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onLayerToggle(selectedTheme.id, layer.id);
+                  }}
                   className={cn(
-                    "w-full grid items-center gap-3 p-3 rounded-xl transition-all duration-150 min-h-[60px]",
-                    "active:scale-[0.98]",
+                    "w-full grid items-center gap-3 p-3 rounded-xl min-h-[60px]",
+                    "transition-colors duration-75 ease-out",
+                    "active:scale-[0.98] active:transition-transform active:duration-75",
                     layer.visible 
                       ? "bg-white/60 dark:bg-white/10 border border-white/50 dark:border-white/20 shadow-sm" 
                       : "bg-white/20 dark:bg-white/5 border border-transparent",
@@ -398,15 +402,15 @@ export function MobileBottomSheet({
                   {/* Layer Icon */}
                   <div 
                     className={cn(
-                      "w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-150",
+                      "w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-75",
                       layer.visible ? "shadow-sm" : "opacity-60"
                     )}
                     style={{ backgroundColor: `${layerColor.base}15` }}
                   >
                     <LayerIcon 
                       className={cn(
-                        "w-5 h-5 transition-all duration-150",
-                        layer.visible ? "scale-100" : "scale-[0.98]"
+                        "w-5 h-5 transition-transform duration-75",
+                        layer.visible ? "scale-100" : "scale-[0.95]"
                       )}
                       style={{ color: layerColor.base }}
                     />
@@ -415,23 +419,23 @@ export function MobileBottomSheet({
                   {/* Layer Name + Description */}
                   <div className="text-left min-w-0">
                     <span className={cn(
-                      "block text-sm font-medium truncate transition-colors",
+                      "block text-sm font-medium truncate",
                       layer.visible ? "text-foreground" : "text-foreground/80"
                     )}>
                       {layer.name}
                     </span>
                     <p className={cn(
-                      "text-xs truncate transition-colors",
+                      "text-xs truncate",
                       layer.visible ? "text-muted-foreground" : "text-muted-foreground/70"
                     )}>
                       {layer.description}
                     </p>
                   </div>
 
-                  {/* Toggle Indicator */}
+                  {/* Toggle Indicator - Instant */}
                   <div
                     className={cn(
-                      "w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-150",
+                      "w-10 h-10 rounded-lg flex items-center justify-center transition-colors duration-75",
                       layer.visible ? "shadow-sm" : "bg-muted/20"
                     )}
                     style={{
@@ -440,10 +444,10 @@ export function MobileBottomSheet({
                   >
                     <div
                       className={cn(
-                        "w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-150",
+                        "w-6 h-6 rounded-full flex items-center justify-center transition-all duration-75",
                         layer.visible
-                          ? "border-transparent"
-                          : "border-muted-foreground/25"
+                          ? "border-0"
+                          : "border-2 border-muted-foreground/25"
                       )}
                       style={{
                         backgroundColor: layer.visible ? layerColor.base : 'transparent',

@@ -4,7 +4,7 @@ import { Menu, X, Sparkles, Layers, Filter, Map } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { SmartSearch } from '@/components/search/SmartSearch';
 import { InteractiveMap } from '@/components/map/InteractiveMap';
-import { ResultsPanel } from '@/components/map/ResultsPanel';
+
 import { BaseMapSelector } from '@/components/map/BaseMapSelector';
 import { MapLegendOverlay } from '@/components/map/MapLegendOverlay';
 import { InlineFilters } from '@/components/map/InlineFilters';
@@ -229,17 +229,6 @@ export default function SmartMapPage() {
             </Button>
           </div>
 
-          {/* Results Panel */}
-          {searchResults.length > 0 && (
-            <div className="absolute bottom-0 left-0 right-0 z-10">
-              <ResultsPanel
-                results={searchResults}
-                searchQuery={searchIntent?.responseMessage || ''}
-                onFacilityClick={handleFacilityClick}
-                onClose={handleClearResults}
-              />
-            </div>
-          )}
       </main>
 
       {/* Mobile Bottom Sheet */}

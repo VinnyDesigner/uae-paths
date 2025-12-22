@@ -76,7 +76,7 @@ export function LayerFlyout({
   const [flyoutPosition, setFlyoutPosition] = useState({ top: 0, height: 0, left: 0 });
   const [togglingLayerId, setTogglingLayerId] = useState<number | null>(null);
 
-  // Calculate flyout position: starts at 30% from sidebar top, ends at sidebar bottom
+  // Calculate flyout position: starts at 15% from sidebar top, ends at sidebar bottom
   const calculatePosition = useCallback(() => {
     const gap = 12; // gap between sidebar and flyout
     const flyoutWidth = 340;
@@ -88,8 +88,8 @@ export function LayerFlyout({
     const sidebarRight = sidebarRect?.right ?? 336;
     const sidebarHeight = sidebarBottom - sidebarTop;
 
-    // Flyout starts at 30% from the top of the sidebar
-    let flyoutTop = sidebarTop + (sidebarHeight * 0.30);
+    // Flyout starts at 15% from the top of the sidebar
+    let flyoutTop = sidebarTop + (sidebarHeight * 0.15);
     
     // Ensure minimum height of 320px is available
     const availableHeight = sidebarBottom - flyoutTop;

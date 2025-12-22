@@ -115,13 +115,19 @@ export function DirectionsPanel({ facility, onClose, className }: DirectionsPane
   return (
     <div 
       className={cn(
-        "bg-card rounded-2xl border border-border shadow-xl overflow-hidden animate-scale-in",
-        "w-full max-w-md",
+        // Base styles
+        "bg-card border border-border shadow-xl overflow-hidden animate-scale-in flex flex-col",
+        // Mobile & Desktop: floating card
+        "w-full max-w-md rounded-2xl",
+        // Tablet (768px - 1024px): full-screen modal
+        "md:max-lg:fixed md:max-lg:inset-0 md:max-lg:w-screen md:max-lg:h-screen",
+        "md:max-lg:max-w-full md:max-lg:rounded-none md:max-lg:shadow-none md:max-lg:border-0",
+        "md:max-lg:z-50",
         className
       )}
     >
-      {/* Header */}
-      <div className="relative bg-gradient-to-r from-primary to-primary/80 p-4">
+      {/* Header - Sticky */}
+      <div className="relative bg-gradient-to-r from-primary to-primary/80 p-4 flex-shrink-0 sticky top-0 z-10">
         <div className="flex items-start gap-3">
           <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center flex-shrink-0">
             <Navigation className="w-5 h-5 text-white" />
@@ -141,8 +147,8 @@ export function DirectionsPanel({ facility, onClose, className }: DirectionsPane
         </div>
       </div>
 
-      {/* Content */}
-      <div className="p-4 space-y-4">
+      {/* Scrollable Content */}
+      <div className="flex-1 overflow-y-auto overscroll-contain p-4 space-y-4">
         {/* Start Point */}
         <div className="space-y-2">
           <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Start Point</label>
@@ -245,8 +251,14 @@ export function DirectionsPanel({ facility, onClose, className }: DirectionsPane
         )}
       </div>
 
-      {/* Actions */}
-      <div className="p-4 pt-0 space-y-3">
+      {/* Actions - Sticky Footer */}
+      <div 
+        className={cn(
+          "p-4 space-y-3 flex-shrink-0 bg-card border-t border-border/50",
+          // Safe area padding for tablet full-screen mode
+          "md:max-lg:pb-[calc(1rem+env(safe-area-inset-bottom))]"
+        )}
+      >
         {/* Primary Actions */}
         <div className="flex gap-2">
           <Button

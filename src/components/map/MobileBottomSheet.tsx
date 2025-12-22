@@ -39,12 +39,12 @@ export function MobileBottomSheet({
   const startY = useRef(0);
   const contentRef = useRef<HTMLDivElement>(null);
 
-  // Sheet heights based on state
+  // Sheet heights based on state - max 85% to leave breathing room
   const getSheetHeight = (state: SheetState) => {
     switch (state) {
       case 'peek': return '35vh';
       case 'half': return '55vh';
-      case 'full': return '90vh';
+      case 'full': return '85vh';
     }
   };
 

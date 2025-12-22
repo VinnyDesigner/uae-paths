@@ -26,9 +26,11 @@ export function ResultsPanel({ results, searchQuery, onFacilityClick, onClose, c
           <h3 className="font-heading font-semibold text-foreground text-sm">
             Search Results
           </h3>
-          <p className="text-xs text-muted-foreground">
-            {results.length} facilities found {searchQuery && `for "${searchQuery}"`}
-          </p>
+          {searchQuery && (
+            <p className="text-xs text-muted-foreground">
+              {searchQuery}
+            </p>
+          )}
         </div>
         <button
           onClick={onClose}

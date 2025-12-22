@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { 
   ChevronRight, 
   Heart, 
@@ -67,6 +67,8 @@ export function SidePanelLayers({
   className 
 }: SidePanelLayersProps) {
   const [selectedTheme, setSelectedTheme] = useState<ThemeGroup | null>(null);
+  const [clickedRect, setClickedRect] = useState<DOMRect | null>(null);
+  const categoryRefs = useRef<Map<number, HTMLButtonElement>>(new Map());
   const { toast } = useToast();
 
   const getVisibleLayerCount = (theme: ThemeGroup) => {
@@ -86,7 +88,7 @@ export function SidePanelLayers({
     return IconComponent ? <IconComponent className="w-5 h-5" /> : null;
   };
 
-  const handleSelectAll = (themeId: number) => {
+  const handleSelectAll = useCallback((themeId: number) => {
     const theme = layers.find(t => t.id === themeId);
     if (!theme) return;
     
@@ -103,9 +105,9 @@ export function SidePanelLayers({
       description: `${theme.name} layers enabled (${theme.layers.length})`,
       duration: 1500,
     });
-  };
+  }, [layers, onSelectAll, onLayerToggle, toast]);
 
-  const handleClearAll = (themeId: number) => {
+  const handleClearAll = useCallback((themeId: number) => {
     const theme = layers.find(t => t.id === themeId);
     if (!theme) return;
     
@@ -122,19 +124,31 @@ export function SidePanelLayers({
       description: `${theme.name} layers cleared`,
       duration: 1500,
     });
-  };
+  }, [layers, onClearAll, onLayerToggle, toast]);
 
-  const handleCategoryClick = (theme: ThemeGroup) => {
+  const handleCategoryClick = useCallback((theme: ThemeGroup, buttonElement: HTMLButtonElement | null) => {
+    if (buttonElement) {
+      setClickedRect(buttonElement.getBoundingClientRect());
+    }
     setSelectedTheme(theme);
-  };
+  }, []);
 
-  const handleCloseFlyout = () => {
+  const handleCloseFlyout = useCallback(() => {
     setSelectedTheme(null);
-  };
+    setClickedRect(null);
+  }, []);
+
+  const setRef = useCallback((themeId: number) => (el: HTMLButtonElement | null) => {
+    if (el) {
+      categoryRefs.current.set(themeId, el);
+    } else {
+      categoryRefs.current.delete(themeId);
+    }
+  }, []);
 
   return (
     <div className={cn("relative", className)} data-sidebar-layers>
-      <div className="space-y-5">
+      <div className="space-y-4">
         {layers.map((theme) => {
           const visibleCount = getVisibleLayerCount(theme);
           const totalCount = theme.layers.length;
@@ -163,20 +177,22 @@ export function SidePanelLayers({
                     : "bg-gradient-to-r from-education/5 to-transparent"
                 )}
               >
-                {/* Row 1: Icon + Title + Chevron - Single baseline */}
+                {/* Row 1: Icon + Title + Chevron - Grid layout for perfect alignment */}
                 <button
-                  onClick={() => handleCategoryClick(theme)}
+                  ref={setRef(theme.id)}
+                  onClick={(e) => handleCategoryClick(theme, e.currentTarget)}
                   className={cn(
-                    "w-full flex items-center gap-3 group/row",
+                    "w-full grid gap-3 group/row",
                     "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 rounded-lg",
                     "-mx-1 px-1 py-1"
                   )}
+                  style={{ gridTemplateColumns: '40px 1fr 40px' }}
                   aria-label={`Open ${theme.name} layers`}
                 >
                   {/* Fixed 40x40 icon container */}
                   <div
                     className={cn(
-                      "w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm transition-transform duration-200",
+                      "w-10 h-10 rounded-xl flex items-center justify-center shadow-sm transition-transform duration-200",
                       "group-hover/row:scale-105",
                       isHealthcare 
                         ? "bg-primary/15 text-primary" 
@@ -186,15 +202,15 @@ export function SidePanelLayers({
                     {getThemeIcon(theme.icon)}
                   </div>
                   
-                  {/* Title - vertically centered */}
-                  <span className="flex-1 text-left text-base font-semibold text-foreground leading-tight truncate">
+                  {/* Title - vertically centered, single line with ellipsis */}
+                  <span className="flex items-center text-left text-base font-semibold text-foreground leading-tight truncate">
                     {theme.name}
                   </span>
                   
-                  {/* Right Chevron - vertically centered */}
+                  {/* Right Chevron - vertically centered in 40x40 container */}
                   <div
                     className={cn(
-                      "w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 transition-all duration-200",
+                      "w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-200",
                       "group-hover/row:bg-white/30 dark:group-hover/row:bg-white/10",
                       isSelected && "bg-primary/10"
                     )}
@@ -212,8 +228,11 @@ export function SidePanelLayers({
                 {/* Subtle divider */}
                 <div className="h-px bg-border/30 mt-3 mb-3" />
 
-                {/* Row 2: Visibility Count (left) | Actions (right) - Single baseline */}
-                <div className="flex items-center justify-between h-8">
+                {/* Row 2: Visibility Count (left) | Actions (right) - Grid layout */}
+                <div 
+                  className="grid items-center h-8"
+                  style={{ gridTemplateColumns: '1fr auto auto' }}
+                >
                   {/* Left: Visibility status */}
                   <span className="text-[13px] leading-8 text-muted-foreground whitespace-nowrap">
                     <span className="font-medium text-foreground">{visibleCount}</span>
@@ -298,7 +317,7 @@ export function SidePanelLayers({
         })}
       </div>
 
-      {/* Layer Flyout - Opens to the right */}
+      {/* Layer Flyout - Opens to the right with dynamic positioning */}
       <LayerFlyout
         theme={selectedTheme}
         isOpen={!!selectedTheme}
@@ -307,6 +326,7 @@ export function SidePanelLayers({
         onSelectAll={handleSelectAll}
         onClearAll={handleClearAll}
         highlightedLayerId={highlightedLayerId}
+        clickedElementRect={clickedRect}
       />
     </div>
   );

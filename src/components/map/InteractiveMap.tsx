@@ -129,8 +129,8 @@ function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFu
 
   return (
     <>
-      {/* Desktop: Top-right controls (Reset, Locate, Fullscreen) */}
-      <div className="hidden md:flex absolute top-4 right-4 z-[1000] flex-col gap-2 pointer-events-none">
+      {/* Desktop only: Top-right controls (Reset, Fullscreen) - Hidden on tablet */}
+      <div className="hidden lg:flex absolute top-4 right-4 z-[1000] flex-col gap-2 pointer-events-none">
         <div className="flex flex-col gap-2 pointer-events-auto">
           <button
             onClick={onResetView}
@@ -139,15 +139,6 @@ function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFu
             aria-label="Reset map view"
           >
             <Home className="w-5 h-5 text-foreground" />
-          </button>
-          
-          <button
-            onClick={onLocateMe}
-            className="bg-card rounded-xl shadow-lg border border-border p-3 hover:bg-primary hover:text-primary-foreground hover:scale-105 active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-            title="Locate me"
-            aria-label="Find my location"
-          >
-            <LocateFixed className="w-5 h-5" />
           </button>
           
           <button
@@ -161,7 +152,7 @@ function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFu
         </div>
       </div>
 
-      {/* Desktop: Bottom-right controls (Legend, Zoom, BaseMap) */}
+      {/* Desktop/Tablet: Bottom-right controls (Legend, Locate, Zoom, BaseMap) */}
       <div className="hidden md:flex absolute bottom-8 right-4 z-[1000] items-end gap-2 pointer-events-none">
         {/* Legend Control */}
         <div className="relative pointer-events-auto">
@@ -238,10 +229,20 @@ function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFu
           )}
         </div>
 
-        {/* Zoom + Base Map Controls Stack */}
-        <div className="flex flex-col gap-2 items-end">
-          {/* Zoom Control Pill - Hidden on tablet and mobile */}
-          <div className="hidden lg:flex flex-col bg-card rounded-xl shadow-lg border border-border overflow-hidden pointer-events-auto">
+        {/* Locate Me + Zoom + Base Map Controls Stack */}
+        <div className="flex flex-col gap-2 items-end pointer-events-auto">
+          {/* Locate Me - visible on tablet and desktop */}
+          <button
+            onClick={onLocateMe}
+            className="bg-card rounded-xl shadow-lg border border-border p-3 hover:bg-primary hover:text-primary-foreground hover:scale-105 active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            title="Locate me"
+            aria-label="Find my location"
+          >
+            <LocateFixed className="w-5 h-5" />
+          </button>
+
+          {/* Zoom Control Pill - Hidden on tablet and mobile, only desktop */}
+          <div className="hidden lg:flex flex-col bg-card rounded-xl shadow-lg border border-border overflow-hidden">
             <button
               onClick={onZoomIn}
               aria-label="Zoom In"

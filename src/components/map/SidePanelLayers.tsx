@@ -69,7 +69,9 @@ export function SidePanelLayers({
   // Get sidebar bounds on mount and resize
   useEffect(() => {
     const updateSidebarRect = () => {
-      const sidebar = document.querySelector('.lg\\:flex.flex-col.w-80.absolute');
+      // Find the sidebar by data attribute or class
+      const sidebar = containerRef.current?.closest('[data-sidebar-panel]') || 
+                      document.querySelector('[data-sidebar-panel]');
       if (sidebar) {
         setSidebarRect(sidebar.getBoundingClientRect());
       }
@@ -147,7 +149,9 @@ export function SidePanelLayers({
   }, [layers, onClearAll, onLayerToggle, toast]);
 
   const handleCategoryClick = useCallback((theme: ThemeGroup, cardElement: HTMLDivElement | null) => {
-    const sidebar = document.querySelector('.lg\\:flex.flex-col.w-80.absolute');
+    // Find sidebar panel
+    const sidebar = containerRef.current?.closest('[data-sidebar-panel]') || 
+                    document.querySelector('[data-sidebar-panel]');
     if (sidebar) {
       setSidebarRect(sidebar.getBoundingClientRect());
     }

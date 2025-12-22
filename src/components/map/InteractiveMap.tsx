@@ -129,8 +129,8 @@ function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFu
 
   return (
     <>
-      {/* Desktop only: Top-right controls (Reset, Fullscreen) - Hidden on tablet */}
-      <div className="hidden lg:flex absolute top-4 right-4 z-[1000] flex-col gap-2 pointer-events-none">
+      {/* Desktop only: Top-right controls (Reset, Fullscreen) - Hidden on tablet - z-20 for map controls */}
+      <div className="hidden lg:flex absolute top-4 right-4 z-20 flex-col gap-2 pointer-events-none">
         <div className="flex flex-col gap-2 pointer-events-auto">
           <button
             onClick={onResetView}
@@ -152,8 +152,8 @@ function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFu
         </div>
       </div>
 
-      {/* Desktop/Tablet: Bottom-right controls (Legend, Locate, Zoom, BaseMap) */}
-      <div className="hidden md:flex absolute bottom-8 right-4 z-[1000] items-end gap-2 pointer-events-none">
+      {/* Desktop/Tablet: Bottom-right controls (Legend, Locate, Zoom, BaseMap) - z-20 for map controls */}
+      <div className="hidden md:flex absolute bottom-8 right-4 z-20 items-end gap-2 pointer-events-none">
         {/* Legend Control */}
         <div className="relative pointer-events-auto">
           <button
@@ -181,7 +181,7 @@ function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFu
                 className="fixed inset-0 z-[999]" 
                 onClick={() => setLegendOpen(false)} 
               />
-              <div className="absolute bottom-full right-0 mb-2 bg-card/95 backdrop-blur-xl rounded-xl shadow-xl border border-border overflow-hidden z-[1000] animate-fade-in w-[240px]">
+              <div className="absolute bottom-full right-0 mb-2 bg-card/95 backdrop-blur-xl rounded-xl shadow-xl border border-border overflow-hidden z-30 animate-fade-in w-[240px]">
                 <div className="px-3 py-2.5 border-b border-border">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
@@ -279,7 +279,7 @@ function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFu
                   className="fixed inset-0 z-[999]" 
                   onClick={() => setBaseMapOpen(false)} 
                 />
-                <div className="absolute bottom-full right-0 mb-2 bg-card/95 backdrop-blur-xl rounded-xl shadow-xl border border-border overflow-hidden z-[1000] animate-fade-in p-3 w-[280px]">
+                <div className="absolute bottom-full right-0 mb-2 bg-card/95 backdrop-blur-xl rounded-xl shadow-xl border border-border overflow-hidden z-30 animate-fade-in p-3 w-[280px]">
                   <p className="text-xs text-muted-foreground font-medium px-1 pb-2 uppercase tracking-wide">
                     Base Map
                   </p>
@@ -330,7 +330,7 @@ function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFu
       </div>
 
       {/* Mobile: Single unified control rail - bottom right (no zoom controls) */}
-      <div className="md:hidden absolute bottom-20 right-4 z-[1000] flex flex-col gap-2.5 pointer-events-auto safe-area-inset-bottom">
+      <div className="md:hidden absolute bottom-20 right-4 z-20 flex flex-col gap-2.5 pointer-events-auto safe-area-inset-bottom">
 
         {/* Locate Me */}
         <button
@@ -367,7 +367,7 @@ function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFu
                 className="fixed inset-0 z-[999]" 
                 onClick={() => setLegendOpen(false)} 
               />
-              <div className="absolute bottom-full right-0 mb-2 bg-card/95 backdrop-blur-xl rounded-xl shadow-xl border border-border overflow-hidden z-[1000] animate-fade-in w-[200px]">
+              <div className="absolute bottom-full right-0 mb-2 bg-card/95 backdrop-blur-xl rounded-xl shadow-xl border border-border overflow-hidden z-30 animate-fade-in w-[200px]">
                 <div className="px-3 py-2 border-b border-border">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-semibold text-foreground">Legend</span>
@@ -433,7 +433,7 @@ function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFu
                 className="fixed inset-0 z-[999]" 
                 onClick={() => setBaseMapOpen(false)} 
               />
-              <div className="absolute bottom-full right-0 mb-2 bg-card/95 backdrop-blur-xl rounded-xl shadow-xl border border-border overflow-hidden z-[1000] animate-fade-in p-2 w-[180px]">
+              <div className="absolute bottom-full right-0 mb-2 bg-card/95 backdrop-blur-xl rounded-xl shadow-xl border border-border overflow-hidden z-30 animate-fade-in p-2 w-[180px]">
                 <div className="grid grid-cols-2 gap-1.5">
                   {baseMaps.map((map) => (
                     <button

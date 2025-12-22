@@ -34,7 +34,7 @@ export function MapLayerControl({ layers, onLayerToggle, className }: MapLayerCo
   const activeLayerCount = layers.flatMap(t => t.layers).filter(l => l.visible).length;
 
   return (
-    <div className={cn("absolute bottom-24 right-4 z-[1000]", className)}>
+    <div className={cn("absolute bottom-24 right-4 z-20", className)}>
       {/* Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}

@@ -127,11 +127,6 @@ export function SmartSearch({
         )}>
           {isSearching ? (
             <Loader2 className={cn("animate-spin text-primary", isLarge ? "w-5 h-5 md:w-6 md:h-6" : "w-5 h-5")} />
-          ) : showHospitalIcon ? (
-            <div className="relative">
-              <Building2 className={cn("text-primary", isLarge ? "w-5 h-5 md:w-6 md:h-6" : "w-5 h-5")} />
-              <Sparkles className="absolute -top-1 -right-1 w-3 h-3 text-primary animate-pulse" />
-            </div>
           ) : (
             <div className="relative">
               <Search className={cn("text-muted-foreground", isLarge ? "w-5 h-5 md:w-6 md:h-6" : "w-5 h-5")} />

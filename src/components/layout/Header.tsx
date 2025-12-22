@@ -13,17 +13,28 @@ const navItems = [
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const isMapPage = location.pathname === '/map';
 
   return (
-    <header className="sticky top-0 z-50 w-full glass-strong">
-      <div className="container mx-auto px-4">
-        <div className="flex h-16 items-center justify-between">
-          {/* Logo */}
+    <header className={cn(
+      "sticky top-0 z-50 w-full glass-strong",
+      // Compact height on mobile for map page
+      isMapPage ? "h-12 md:h-auto" : ""
+    )}>
+      <div className="container mx-auto px-3 md:px-4">
+        <div className={cn(
+          "flex items-center justify-between",
+          isMapPage ? "h-12 md:h-16" : "h-16"
+        )}>
+          {/* Logo - Smaller on mobile map page */}
           <Link to="/" className="flex items-center group">
             <img 
               src={sdiLogo} 
               alt="Abu Dhabi Spatial Data" 
-              className="h-12 w-auto object-contain"
+              className={cn(
+                "w-auto object-contain",
+                isMapPage ? "h-8 md:h-12" : "h-12"
+              )}
             />
           </Link>
 
@@ -51,13 +62,14 @@ export function Header() {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2 rounded-lg hover:bg-secondary transition-colors"
+            className="md:hidden p-2 -mr-1 rounded-lg hover:bg-secondary transition-colors min-h-[40px] min-w-[40px] flex items-center justify-center"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
           >
             {mobileMenuOpen ? (
-              <X className="w-6 h-6 text-foreground" />
+              <X className="w-5 h-5 text-foreground" />
             ) : (
-              <Menu className="w-6 h-6 text-foreground" />
+              <Menu className="w-5 h-5 text-foreground" />
             )}
           </button>
         </div>
@@ -65,8 +77,8 @@ export function Header() {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden absolute top-16 left-0 right-0 bg-card border-b border-border shadow-lg animate-fade-in">
-          <nav className="container mx-auto px-4 py-4 flex flex-col gap-2">
+        <div className="md:hidden absolute top-full left-0 right-0 bg-card border-b border-border shadow-lg animate-fade-in z-50">
+          <nav className="container mx-auto px-4 py-3 flex flex-col gap-1">
             {navItems.map((item) => {
               const isActive = location.pathname === item.path;
               return (
@@ -75,7 +87,7 @@ export function Header() {
                   to={item.path}
                   onClick={() => setMobileMenuOpen(false)}
                   className={cn(
-                    "flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all",
+                    "flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all min-h-[48px]",
                     isActive
                       ? "bg-primary text-primary-foreground"
                       : "text-foreground hover:bg-secondary"

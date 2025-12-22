@@ -115,23 +115,23 @@ export function SmartSearch({
     <div ref={containerRef} className={cn("relative w-full", className)} style={{ overflow: 'visible' }}>
       <div
         className={cn(
-          "relative flex items-center bg-card border border-border rounded-2xl shadow-lg transition-all duration-300",
+          "relative flex items-center bg-card border border-border rounded-xl md:rounded-2xl shadow-lg transition-all duration-300",
           showSuggestions && "shadow-xl border-primary/50 ring-2 ring-primary/20",
           !showSuggestions && "hover:shadow-xl hover:border-border/80",
-          isLarge ? "h-14 md:h-16" : "h-12"
+          isLarge ? "h-14 md:h-16" : "h-11 md:h-12"
         )}
       >
         {/* Search/Hospital indicator */}
         <div className={cn(
-          "flex items-center justify-center",
-          isLarge ? "pl-5 md:pl-6" : "pl-4"
+          "flex items-center justify-center flex-shrink-0",
+          isLarge ? "pl-4 md:pl-6" : "pl-3 md:pl-4"
         )}>
           {isSearching ? (
-            <Loader2 className={cn("animate-spin text-primary", isLarge ? "w-5 h-5 md:w-6 md:h-6" : "w-5 h-5")} />
+            <Loader2 className={cn("animate-spin text-primary", isLarge ? "w-5 h-5" : "w-4 h-4 md:w-5 md:h-5")} />
           ) : (
             <div className="relative">
-              <Search className={cn("text-muted-foreground", isLarge ? "w-5 h-5 md:w-6 md:h-6" : "w-5 h-5")} />
-              <Sparkles className="absolute -top-1 -right-1 w-3 h-3 text-primary animate-pulse" />
+              <Search className={cn("text-muted-foreground", isLarge ? "w-5 h-5" : "w-4 h-4 md:w-5 md:h-5")} />
+              <Sparkles className="absolute -top-1 -right-1 w-2.5 h-2.5 md:w-3 md:h-3 text-primary animate-pulse" />
             </div>
           )}
         </div>
@@ -150,15 +150,17 @@ export function SmartSearch({
           placeholder={dynamicPlaceholder}
           className={cn(
             "flex-1 min-w-0 bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground truncate",
-            isLarge ? "pl-4 pr-2 text-base md:text-lg" : "pl-3 pr-2 text-sm"
+            isLarge ? "pl-3 md:pl-4 pr-2 text-sm md:text-lg" : "pl-2 md:pl-3 pr-2 text-sm"
           )}
+          aria-label="Search facilities"
         />
 
-        <div className="flex items-center gap-1 pr-3">
+        <div className="flex items-center gap-0.5 md:gap-1 pr-2 md:pr-3 flex-shrink-0">
           {query && (
             <button
               onClick={clearSearch}
-              className="p-1.5 text-muted-foreground hover:text-foreground transition-colors rounded-full hover:bg-secondary"
+              className="p-1.5 text-muted-foreground hover:text-foreground transition-colors rounded-full hover:bg-secondary min-h-[36px] min-w-[36px] flex items-center justify-center"
+              aria-label="Clear search"
             >
               <X className="w-4 h-4" />
             </button>
@@ -166,11 +168,12 @@ export function SmartSearch({
 
           {onLocateMe && (
             <>
-              <div className="w-px h-5 bg-border mx-1" />
+              <div className="w-px h-5 bg-border mx-0.5 md:mx-1 hidden sm:block" />
               <button
                 onClick={onLocateMe}
-                className="p-1.5 text-primary hover:text-primary/80 transition-colors rounded-full hover:bg-primary/10"
+                className="p-1.5 text-primary hover:text-primary/80 transition-colors rounded-full hover:bg-primary/10 min-h-[36px] min-w-[36px] flex items-center justify-center"
                 title="Use my location"
+                aria-label="Use my location"
               >
                 <Navigation className={cn("w-4 h-4", isLarge && "w-5 h-5")} />
               </button>

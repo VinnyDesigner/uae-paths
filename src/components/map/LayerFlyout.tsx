@@ -76,32 +76,40 @@ export function LayerFlyout({
   const [flyoutPosition, setFlyoutPosition] = useState({ top: 0, height: 0, left: 0 });
   const [togglingLayerId, setTogglingLayerId] = useState<number | null>(null);
 
-  // Calculate flyout position: starts at Map Layers section top, ends at sidebar bottom
+  // Calculate flyout position: starts at 30% from sidebar top, ends at sidebar bottom
   const calculatePosition = useCallback(() => {
     const gap = 12; // gap between sidebar and flyout
     const flyoutWidth = 340;
+    const minFlyoutHeight = 320; // minimum visible height
 
     // Sidebar bounds (viewport space)
     const sidebarTop = sidebarRect?.top ?? 80;
     const sidebarBottom = sidebarRect?.bottom ?? (window.innerHeight - 16);
     const sidebarRight = sidebarRect?.right ?? 336;
+    const sidebarHeight = sidebarBottom - sidebarTop;
 
-    // Top aligned to Map Layers heading/top
-    const sectionTop = sectionRect?.top ?? sidebarTop;
+    // Flyout starts at 30% from the top of the sidebar
+    let flyoutTop = sidebarTop + (sidebarHeight * 0.30);
+    
+    // Ensure minimum height of 320px is available
+    const availableHeight = sidebarBottom - flyoutTop;
+    if (availableHeight < minFlyoutHeight) {
+      // Clamp top upward to ensure minimum height
+      flyoutTop = Math.max(sidebarTop, sidebarBottom - minFlyoutHeight);
+    }
 
     const unclampedLeft = sidebarRight + gap;
     const maxLeft = Math.max(16, window.innerWidth - flyoutWidth - 16);
     const left = Math.min(unclampedLeft, maxLeft);
 
-    const top = Math.max(sidebarTop, sectionTop);
-    const height = Math.max(0, sidebarBottom - top);
+    const height = Math.max(minFlyoutHeight, sidebarBottom - flyoutTop);
 
     return {
-      top,
+      top: flyoutTop,
       height,
       left,
     };
-  }, [sectionRect, sidebarRect]);
+  }, [sidebarRect]);
 
   useEffect(() => {
     if (isOpen) {
@@ -163,8 +171,16 @@ export function LayerFlyout({
     <div
       ref={flyoutRef}
       className={cn(
-        "fixed w-[340px] bg-white/98 dark:bg-card/98 backdrop-blur-xl",
-        "border border-white/60 dark:border-white/15 rounded-2xl shadow-2xl",
+        "fixed w-[340px]",
+        // Glass/frosted effect background
+        "bg-white/[0.72] dark:bg-card/80",
+        "backdrop-blur-[20px] backdrop-saturate-150",
+        // Border and shadow for depth
+        "border border-white/55 dark:border-white/20",
+        "rounded-2xl",
+        "shadow-[0_8px_32px_rgba(0,0,0,0.12),0_2px_8px_rgba(0,0,0,0.08)]",
+        "dark:shadow-[0_8px_32px_rgba(0,0,0,0.4),0_2px_8px_rgba(0,0,0,0.2)]",
+        // Animation
         "transition-all duration-200 ease-out",
         "flex flex-col overflow-hidden",
         isOpen

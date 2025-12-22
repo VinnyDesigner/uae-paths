@@ -148,125 +148,126 @@ export function SidePanelLayers({
               key={theme.id}
               className="bg-white/30 dark:bg-white/5 rounded-xl border border-white/20 dark:border-white/10 overflow-hidden"
             >
-              {/* Theme Header */}
-              <div className="flex items-center justify-between px-3 sm:px-4 py-3 gap-2">
-                <button
-                  onClick={() => toggleGroup(theme.id)}
-                  className={cn(
-                    "flex items-center gap-2 sm:gap-3 transition-all flex-1 min-w-0",
-                    "hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 rounded-md"
-                  )}
-                  aria-expanded={isExpanded}
-                  aria-label={`${theme.name} section, ${visibleCount} layers visible`}
-                >
-                  <div
-                    className={cn(
-                      "w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center flex-shrink-0",
-                      isHealthcare 
-                        ? "bg-primary/20 text-primary" 
-                        : "bg-education/20 text-education"
-                    )}
-                  >
-                    {getThemeIcon(theme.icon)}
-                  </div>
-                  <div className="text-left min-w-0 flex-1">
-                    <h4 className="text-sm font-semibold text-foreground truncate">{theme.name}</h4>
-                    <p className="text-xs text-muted-foreground">
-                      {visibleCount} layer{visibleCount !== 1 ? 's' : ''} visible
-                    </p>
-                  </div>
-                </button>
-                
-                {/* Actions - Desktop: inline buttons, Mobile: dropdown */}
-                <div className="flex items-center gap-1 flex-shrink-0">
-                  {/* Desktop inline actions */}
-                  <div className="hidden sm:flex items-center gap-1">
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <button
-                          onClick={() => handleSelectAll(theme)}
-                          disabled={allVisible}
-                          className={cn(
-                            "text-xs px-2.5 py-1.5 rounded-md transition-all min-h-[36px] font-medium",
-                            "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1",
-                            allVisible
-                              ? "text-muted-foreground/50 cursor-not-allowed"
-                              : "text-primary hover:bg-primary/10 active:bg-primary/20"
-                          )}
-                          aria-label={`Select all ${theme.name} layers`}
-                        >
-                          Select All
-                        </button>
-                      </TooltipTrigger>
-                      <TooltipContent side="bottom" className="text-xs">
-                        Enable all layers
-                      </TooltipContent>
-                    </Tooltip>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <button
-                          onClick={() => handleClearAll(theme)}
-                          disabled={noneVisible}
-                          className={cn(
-                            "text-xs px-2.5 py-1.5 rounded-md transition-all min-h-[36px] font-medium",
-                            "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1",
-                            noneVisible
-                              ? "text-muted-foreground/50 cursor-not-allowed"
-                              : "text-muted-foreground hover:bg-muted/50 hover:text-foreground active:bg-muted"
-                          )}
-                          aria-label={`Clear all ${theme.name} layers`}
-                        >
-                          Clear All
-                        </button>
-                      </TooltipTrigger>
-                      <TooltipContent side="bottom" className="text-xs">
-                        Hide all layers
-                      </TooltipContent>
-                    </Tooltip>
-                  </div>
-
-                  {/* Mobile dropdown menu */}
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <button 
-                        className="sm:hidden p-2 rounded-md hover:bg-white/20 dark:hover:bg-white/10 min-h-[40px] min-w-[40px] flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                        aria-label="Layer actions"
-                      >
-                        <MoreHorizontal className="w-4 h-4 text-muted-foreground" />
-                      </button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-44">
-                      <DropdownMenuItem 
-                        onClick={() => handleSelectAll(theme)}
-                        disabled={allVisible}
-                        className="gap-2 min-h-[44px]"
-                      >
-                        <CheckCircle2 className="w-4 h-4" />
-                        Select All
-                      </DropdownMenuItem>
-                      <DropdownMenuItem 
-                        onClick={() => handleClearAll(theme)}
-                        disabled={noneVisible}
-                        className="gap-2 min-h-[44px]"
-                      >
-                        <XCircle className="w-4 h-4" />
-                        Clear All
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-
+              {/* Theme Header - 2 Row Structure */}
+              <div className="px-3 sm:px-4 py-3">
+                {/* Row 1: Section Identity */}
+                <div className="flex items-center justify-between gap-3">
                   <button
                     onClick={() => toggleGroup(theme.id)}
-                    className="p-2 rounded-md hover:bg-white/20 dark:hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary min-h-[40px] min-w-[40px] flex items-center justify-center"
+                    className={cn(
+                      "flex items-center gap-3 transition-all flex-1 min-w-0",
+                      "hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 rounded-md -ml-1 pl-1"
+                    )}
+                    aria-expanded={isExpanded}
+                    aria-label={`${theme.name} section`}
+                  >
+                    {/* Fixed size icon container */}
+                    <div
+                      className={cn(
+                        "w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0",
+                        isHealthcare 
+                          ? "bg-primary/20 text-primary" 
+                          : "bg-education/20 text-education"
+                      )}
+                    >
+                      {getThemeIcon(theme.icon)}
+                    </div>
+                    {/* Title only - no status here */}
+                    <h4 className="text-base font-semibold text-foreground truncate">
+                      {theme.name}
+                    </h4>
+                  </button>
+                  
+                  {/* Chevron - always top right */}
+                  <button
+                    onClick={() => toggleGroup(theme.id)}
+                    className="p-2 rounded-md hover:bg-white/20 dark:hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary min-h-[40px] min-w-[40px] flex items-center justify-center flex-shrink-0"
                     aria-label={isExpanded ? 'Collapse section' : 'Expand section'}
                   >
                     <ChevronDown
                       className={cn(
-                        "w-4 h-4 text-muted-foreground transition-transform duration-200 motion-reduce:transition-none",
+                        "w-5 h-5 text-muted-foreground transition-transform duration-200 motion-reduce:transition-none",
                         isExpanded && "rotate-180"
                       )}
                     />
                   </button>
+                </div>
+
+                {/* Divider */}
+                <div className="h-px bg-border/50 my-2.5" />
+
+                {/* Row 2: Status & Actions */}
+                <div className="flex items-center justify-between gap-2">
+                  {/* Left: Status text */}
+                  <p className="text-xs text-muted-foreground whitespace-nowrap">
+                    {visibleCount} layer{visibleCount !== 1 ? 's' : ''} visible
+                  </p>
+
+                  {/* Right: Actions - Desktop inline, Mobile dropdown */}
+                  <div className="flex items-center gap-1 flex-shrink-0">
+                    {/* Desktop inline actions */}
+                    <div className="hidden sm:flex items-center gap-1">
+                      <button
+                        onClick={() => handleSelectAll(theme)}
+                        disabled={allVisible}
+                        className={cn(
+                          "text-xs px-3 py-1.5 rounded-md transition-all min-h-[32px] font-medium",
+                          "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1",
+                          allVisible
+                            ? "text-muted-foreground/40 cursor-not-allowed"
+                            : "text-primary hover:bg-primary/10 active:bg-primary/20"
+                        )}
+                        aria-label={`Select all ${theme.name} layers`}
+                      >
+                        Select All
+                      </button>
+                      <span className="text-border">·</span>
+                      <button
+                        onClick={() => handleClearAll(theme)}
+                        disabled={noneVisible}
+                        className={cn(
+                          "text-xs px-3 py-1.5 rounded-md transition-all min-h-[32px] font-medium",
+                          "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1",
+                          noneVisible
+                            ? "text-muted-foreground/40 cursor-not-allowed"
+                            : "text-muted-foreground hover:bg-muted/50 hover:text-foreground active:bg-muted"
+                        )}
+                        aria-label={`Clear all ${theme.name} layers`}
+                      >
+                        Clear All
+                      </button>
+                    </div>
+
+                    {/* Mobile dropdown menu */}
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <button 
+                          className="sm:hidden p-2 rounded-md hover:bg-white/20 dark:hover:bg-white/10 min-h-[40px] min-w-[40px] flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                          aria-label="Layer actions"
+                        >
+                          <MoreHorizontal className="w-4 h-4 text-muted-foreground" />
+                        </button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-44 bg-card border border-border shadow-lg z-50">
+                        <DropdownMenuItem 
+                          onClick={() => handleSelectAll(theme)}
+                          disabled={allVisible}
+                          className="gap-2 min-h-[44px]"
+                        >
+                          <CheckCircle2 className="w-4 h-4" />
+                          Select All
+                        </DropdownMenuItem>
+                        <DropdownMenuItem 
+                          onClick={() => handleClearAll(theme)}
+                          disabled={noneVisible}
+                          className="gap-2 min-h-[44px]"
+                        >
+                          <XCircle className="w-4 h-4" />
+                          Clear All
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
                 </div>
               </div>
 

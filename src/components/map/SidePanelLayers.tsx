@@ -203,80 +203,84 @@ export function SidePanelLayers({
                 </div>
 
                 {/* Subtle divider */}
-                <div className="h-px bg-border/30 my-3" />
+                <div className="h-px bg-border/30 mt-3 mb-2.5" />
 
-                {/* Row 2: Status & Actions */}
-                <div className="flex items-center justify-between gap-3">
+                {/* Row 2: Status & Actions - Single baseline row */}
+                <div className="flex items-center h-8">
                   {/* Left: Status text */}
-                  <span className="text-sm text-muted-foreground whitespace-nowrap">
-                    <span className="font-medium text-foreground">{visibleCount}</span> of {totalCount} visible
+                  <span className="text-[13px] leading-8 text-muted-foreground">
+                    <span className="font-medium text-foreground">{visibleCount}</span>
+                    <span className="mx-0.5">of</span>
+                    <span>{totalCount}</span>
+                    <span className="ml-1">visible</span>
                   </span>
 
-                  {/* Right: Actions */}
-                  <div className="flex items-center gap-1 flex-shrink-0">
-                    {/* Desktop/Tablet inline actions */}
-                    <div className="hidden sm:flex items-center gap-0.5">
-                      <button
+                  {/* Spacer */}
+                  <div className="flex-1" />
+
+                  {/* Right: Actions - Same baseline */}
+                  {/* Desktop/Tablet inline actions */}
+                  <div className="hidden sm:flex items-center h-8">
+                    <button
+                      onClick={() => handleSelectAll(theme)}
+                      disabled={allVisible}
+                      className={cn(
+                        "text-[13px] leading-8 px-2.5 rounded-md transition-all font-medium",
+                        "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1",
+                        allVisible
+                          ? "text-muted-foreground/40 cursor-not-allowed"
+                          : "text-primary hover:bg-primary/10 active:scale-95"
+                      )}
+                      aria-label={`Select all ${theme.name} layers`}
+                    >
+                      Select All
+                    </button>
+                    <span className="text-border/40 text-[13px] leading-8 mx-1">|</span>
+                    <button
+                      onClick={() => handleClearAll(theme)}
+                      disabled={noneVisible}
+                      className={cn(
+                        "text-[13px] leading-8 px-2.5 rounded-md transition-all font-medium",
+                        "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1",
+                        noneVisible
+                          ? "text-muted-foreground/40 cursor-not-allowed"
+                          : "text-muted-foreground hover:bg-muted/50 hover:text-foreground active:scale-95"
+                      )}
+                      aria-label={`Clear all ${theme.name} layers`}
+                    >
+                      Clear All
+                    </button>
+                  </div>
+
+                  {/* Mobile dropdown menu */}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button 
+                        className="sm:hidden p-2 rounded-lg hover:bg-white/30 dark:hover:bg-white/10 h-8 w-8 flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-primary transition-colors"
+                        aria-label="Layer actions"
+                      >
+                        <MoreHorizontal className="w-4 h-4 text-muted-foreground" />
+                      </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-48 bg-card border border-border shadow-xl z-50">
+                      <DropdownMenuItem 
                         onClick={() => handleSelectAll(theme)}
                         disabled={allVisible}
-                        className={cn(
-                          "text-sm px-3 py-1.5 rounded-lg transition-all font-medium whitespace-nowrap",
-                          "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1",
-                          allVisible
-                            ? "text-muted-foreground/40 cursor-not-allowed"
-                            : "text-primary hover:bg-primary/10 active:scale-95"
-                        )}
-                        aria-label={`Select all ${theme.name} layers`}
+                        className="gap-2.5 min-h-[44px]"
                       >
+                        <CheckCircle2 className="w-4 h-4" />
                         Select All
-                      </button>
-                      <span className="text-border/50 mx-0.5">|</span>
-                      <button
+                      </DropdownMenuItem>
+                      <DropdownMenuItem 
                         onClick={() => handleClearAll(theme)}
                         disabled={noneVisible}
-                        className={cn(
-                          "text-sm px-3 py-1.5 rounded-lg transition-all font-medium whitespace-nowrap",
-                          "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1",
-                          noneVisible
-                            ? "text-muted-foreground/40 cursor-not-allowed"
-                            : "text-muted-foreground hover:bg-muted/50 hover:text-foreground active:scale-95"
-                        )}
-                        aria-label={`Clear all ${theme.name} layers`}
+                        className="gap-2.5 min-h-[44px]"
                       >
+                        <XCircle className="w-4 h-4" />
                         Clear All
-                      </button>
-                    </div>
-
-                    {/* Mobile dropdown menu */}
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <button 
-                          className="sm:hidden p-2.5 rounded-lg hover:bg-white/30 dark:hover:bg-white/10 min-h-[44px] min-w-[44px] flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-primary transition-colors"
-                          aria-label="Layer actions"
-                        >
-                          <MoreHorizontal className="w-5 h-5 text-muted-foreground" />
-                        </button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-48 bg-card border border-border shadow-xl z-50">
-                        <DropdownMenuItem 
-                          onClick={() => handleSelectAll(theme)}
-                          disabled={allVisible}
-                          className="gap-2.5 min-h-[44px]"
-                        >
-                          <CheckCircle2 className="w-4 h-4" />
-                          Select All
-                        </DropdownMenuItem>
-                        <DropdownMenuItem 
-                          onClick={() => handleClearAll(theme)}
-                          disabled={noneVisible}
-                          className="gap-2.5 min-h-[44px]"
-                        >
-                          <XCircle className="w-4 h-4" />
-                          Clear All
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
               </div>
 

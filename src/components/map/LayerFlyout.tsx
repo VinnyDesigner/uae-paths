@@ -40,6 +40,7 @@ interface LayerFlyoutProps {
   onClearAll: (themeId: number) => void;
   highlightedLayerId?: number | null;
   clickedElementRect?: DOMRect | null;
+  sidebarRect?: DOMRect | null;
 }
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -69,49 +70,53 @@ export function LayerFlyout({
   onClearAll,
   highlightedLayerId,
   clickedElementRect,
+  sidebarRect,
 }: LayerFlyoutProps) {
   const flyoutRef = useRef<HTMLDivElement>(null);
-  const [flyoutPosition, setFlyoutPosition] = useState({ top: 0, maxHeight: 0 });
+  const [flyoutPosition, setFlyoutPosition] = useState({ top: 0, maxHeight: 0, left: 0 });
 
-  // Calculate flyout position based on clicked element
+  // Calculate flyout position based on clicked element AND sidebar bounds
   const calculatePosition = useCallback(() => {
+    // Get sidebar bounds - this is the key constraint
+    const sidebarTop = sidebarRect?.top ?? 80;
+    const sidebarBottom = sidebarRect?.bottom ?? window.innerHeight - 16;
+    const sidebarRight = sidebarRect?.right ?? 336;
+    const sidebarHeight = sidebarBottom - sidebarTop;
+
+    // Safe padding inside bounds
+    const safePadding = 8;
+    const minFlyoutHeight = 200;
+    
+    // Left position: just after sidebar with gap
+    const leftPosition = sidebarRight + 12;
+
+    // If no clicked element, start from sidebar top
     if (!clickedElementRect) {
-      // Default position if no rect
-      const headerHeight = 64;
-      const padding = 16;
       return {
-        top: headerHeight + padding,
-        maxHeight: window.innerHeight - headerHeight - padding * 2,
+        top: sidebarTop + safePadding,
+        maxHeight: sidebarHeight - safePadding * 2,
+        left: leftPosition,
       };
     }
 
-    const headerHeight = 64;
-    const safeTop = headerHeight + 16;
-    const safeBottom = 16;
-    const viewportHeight = window.innerHeight;
-    
-    // Estimate flyout height (header ~120px + list items ~70px each)
-    const estimatedItemHeight = 72;
-    const estimatedHeaderHeight = 140;
-    const estimatedListHeight = (theme?.layers.length || 8) * estimatedItemHeight;
-    const estimatedFlyoutHeight = Math.min(
-      estimatedHeaderHeight + estimatedListHeight,
-      viewportHeight - safeTop - safeBottom
-    );
-
-    // Start from clicked element's top
+    // Start from clicked element's top position
     let targetTop = clickedElementRect.top;
 
-    // Clamp to viewport bounds
-    const minTop = safeTop;
-    const maxTop = viewportHeight - estimatedFlyoutHeight - safeBottom;
+    // Clamp to sidebar bounds
+    const minTop = sidebarTop + safePadding;
+    const maxTop = sidebarBottom - minFlyoutHeight - safePadding;
     
     targetTop = Math.max(minTop, Math.min(targetTop, maxTop));
 
-    const maxHeight = viewportHeight - targetTop - safeBottom;
+    // Max height: cannot extend below sidebar bottom
+    const maxHeight = sidebarBottom - targetTop - safePadding;
 
-    return { top: targetTop, maxHeight };
-  }, [clickedElementRect, theme?.layers.length]);
+    return { 
+      top: targetTop, 
+      maxHeight: Math.max(minFlyoutHeight, maxHeight),
+      left: leftPosition,
+    };
+  }, [clickedElementRect, sidebarRect]);
 
   // Update position when opening or clicked element changes
   useEffect(() => {
@@ -166,14 +171,11 @@ export function LayerFlyout({
   const noneVisible = theme.layers.every(l => !l.visible);
   const isHealthcare = theme.colorClass === 'healthcare';
 
-  // Position: sidebar width (320px / w-80) + left offset (16px) + small gap
-  const leftPosition = 320 + 16 + 8; // 344px from left edge
-
   return (
     <div
       ref={flyoutRef}
       className={cn(
-        "fixed w-[380px] bg-white/95 dark:bg-card/95 backdrop-blur-xl",
+        "fixed w-[360px] bg-white/95 dark:bg-card/95 backdrop-blur-xl",
         "border border-white/30 dark:border-white/10 rounded-2xl shadow-2xl z-[1002]",
         "transition-all duration-250 ease-out",
         "flex flex-col overflow-hidden",
@@ -182,7 +184,7 @@ export function LayerFlyout({
           : "opacity-0 -translate-x-4 pointer-events-none"
       )}
       style={{ 
-        left: `${leftPosition}px`,
+        left: `${flyoutPosition.left}px`,
         top: `${flyoutPosition.top}px`,
         maxHeight: `${flyoutPosition.maxHeight}px`,
       }}
@@ -193,7 +195,7 @@ export function LayerFlyout({
       {/* Flyout Header - Sticky */}
       <div 
         className={cn(
-          "px-4 py-4 border-b border-white/20 dark:border-white/10 flex-shrink-0",
+          "px-4 py-3.5 border-b border-white/20 dark:border-white/10 flex-shrink-0",
           isHealthcare 
             ? "bg-gradient-to-r from-primary/10 to-transparent" 
             : "bg-gradient-to-r from-education/10 to-transparent"
@@ -204,27 +206,27 @@ export function LayerFlyout({
           <button
             onClick={onClose}
             className={cn(
-              "w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0",
+              "w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0",
               "bg-white/50 dark:bg-white/10 hover:bg-white/70 dark:hover:bg-white/20",
               "transition-all active:scale-95",
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             )}
             aria-label="Go back to categories"
           >
-            <ArrowLeft className="w-5 h-5 text-foreground" />
+            <ArrowLeft className="w-4 h-4 text-foreground" />
           </button>
-          <h3 className="flex-1 text-base font-semibold text-foreground truncate">
+          <h3 className="flex-1 text-sm font-semibold text-foreground truncate">
             {theme.name}
           </h3>
         </div>
 
         {/* Subtle divider */}
-        <div className="h-px bg-border/30 mt-3 mb-3" />
+        <div className="h-px bg-border/30 mt-3 mb-2.5" />
 
         {/* Row 2: Visibility Count (left) | Actions (right) - aligned baseline */}
-        <div className="flex items-center justify-between h-8">
+        <div className="flex items-center justify-between h-7">
           {/* Left: Visibility status */}
-          <span className="text-[13px] leading-8 text-muted-foreground whitespace-nowrap">
+          <span className="text-xs leading-7 text-muted-foreground whitespace-nowrap">
             <span className="font-medium text-foreground">{visibleCount}</span>
             <span className="mx-1">of</span>
             <span>{totalCount}</span>
@@ -232,34 +234,34 @@ export function LayerFlyout({
           </span>
 
           {/* Right: Action buttons */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             <button
               onClick={() => onSelectAll(theme.id)}
               disabled={allVisible}
               className={cn(
-                "flex items-center gap-1.5 px-3 h-8 rounded-lg text-sm font-medium transition-all",
+                "flex items-center gap-1 px-2.5 h-7 rounded-lg text-xs font-medium transition-all",
                 "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1",
                 allVisible
                   ? "bg-muted/30 text-muted-foreground/40 cursor-not-allowed"
                   : "bg-primary/10 text-primary hover:bg-primary/20 active:scale-95"
               )}
             >
-              <CheckCircle2 className="w-3.5 h-3.5" />
+              <CheckCircle2 className="w-3 h-3" />
               Select All
             </button>
             <button
               onClick={() => onClearAll(theme.id)}
               disabled={noneVisible}
               className={cn(
-                "flex items-center gap-1.5 px-3 h-8 rounded-lg text-sm font-medium transition-all",
+                "flex items-center gap-1 px-2.5 h-7 rounded-lg text-xs font-medium transition-all",
                 "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1",
                 noneVisible
                   ? "bg-muted/30 text-muted-foreground/40 cursor-not-allowed"
                   : "bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground active:scale-95"
               )}
             >
-              <XCircle className="w-3.5 h-3.5" />
-              Clear All
+              <XCircle className="w-3 h-3" />
+              Clear
             </button>
           </div>
         </div>
@@ -267,7 +269,7 @@ export function LayerFlyout({
 
       {/* Scrollable Layer List */}
       <TooltipProvider delayDuration={300}>
-        <div className="flex-1 overflow-y-auto p-4 space-y-3 overscroll-contain">
+        <div className="flex-1 overflow-y-auto p-3 space-y-2 overscroll-contain">
           {theme.layers.map((layer) => {
             const isHighlighted = highlightedLayerId === layer.id;
             const LayerIcon = iconMap[layer.icon];
@@ -280,7 +282,7 @@ export function LayerFlyout({
                   <button
                     onClick={() => onLayerToggle(theme.id, layer.id)}
                     className={cn(
-                      "w-full flex items-center gap-3 px-3 py-3.5 rounded-xl text-left group",
+                      "w-full flex items-center gap-2.5 px-2.5 py-2.5 rounded-xl text-left group",
                       "transition-all duration-150 ease-out motion-reduce:transition-none",
                       "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1",
                       isHighlighted && "ring-2 ring-primary ring-offset-1 ring-offset-background",
@@ -294,7 +296,7 @@ export function LayerFlyout({
                     {/* Left: Layer Icon with tinted background */}
                     <div
                       className={cn(
-                        "w-10 h-10 flex-shrink-0 rounded-lg flex items-center justify-center",
+                        "w-9 h-9 flex-shrink-0 rounded-lg flex items-center justify-center",
                         "transition-all duration-150 ease-out motion-reduce:transition-none",
                         layer.visible 
                           ? "shadow-sm" 
@@ -312,10 +314,10 @@ export function LayerFlyout({
                         style={{ color: layerColor }}
                       >
                         {LayerIcon ? (
-                          <LayerIcon className="w-5 h-5" />
+                          <LayerIcon className="w-4 h-4" />
                         ) : (
                           <div
-                            className="w-5 h-5 rounded"
+                            className="w-4 h-4 rounded"
                             style={{ backgroundColor: layerColor }}
                           />
                         )}
@@ -325,13 +327,13 @@ export function LayerFlyout({
                     {/* Center: Text Container */}
                     <div className="flex-1 min-w-0 pr-1">
                       <span className={cn(
-                        "block text-sm font-medium truncate transition-colors",
+                        "block text-sm font-medium truncate transition-colors leading-tight",
                         layer.visible ? "text-foreground" : "text-foreground/80"
                       )}>
                         {layer.name}
                       </span>
                       <p className={cn(
-                        "text-xs truncate transition-colors",
+                        "text-[11px] truncate transition-colors leading-tight mt-0.5",
                         layer.visible ? "text-muted-foreground" : "text-muted-foreground/70"
                       )}>
                         {layer.description}
@@ -341,7 +343,7 @@ export function LayerFlyout({
                     {/* Right: Toggle Indicator */}
                     <div
                       className={cn(
-                        "flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-lg",
+                        "flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-lg",
                         "transition-all duration-150 ease-out motion-reduce:transition-none",
                         layer.visible
                           ? "shadow-sm"
@@ -353,7 +355,7 @@ export function LayerFlyout({
                     >
                       <div
                         className={cn(
-                          "w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-150 ease-out",
+                          "w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-150 ease-out",
                           layer.visible
                             ? "border-transparent"
                             : "border-muted-foreground/25 group-hover:border-muted-foreground/40"
@@ -363,15 +365,15 @@ export function LayerFlyout({
                         }}
                       >
                         {layer.visible ? (
-                          <Check className="w-3.5 h-3.5 text-white" />
+                          <Check className="w-3 h-3 text-white" />
                         ) : (
-                          <Circle className="w-3 h-3 text-muted-foreground/30 group-hover:text-muted-foreground/50" />
+                          <Circle className="w-2.5 h-2.5 text-muted-foreground/30 group-hover:text-muted-foreground/50" />
                         )}
                       </div>
                     </div>
                   </button>
                 </TooltipTrigger>
-                <TooltipContent side="right" className="text-xs max-w-[220px] p-3">
+                <TooltipContent side="right" className="text-xs max-w-[200px] p-2.5">
                   <p className="font-medium mb-0.5">{layer.name}</p>
                   <p className="text-muted-foreground">{layer.description}</p>
                 </TooltipContent>

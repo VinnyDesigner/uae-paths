@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { 
   ChevronRight, 
   Heart, 
@@ -68,8 +68,37 @@ export function SidePanelLayers({
 }: SidePanelLayersProps) {
   const [selectedTheme, setSelectedTheme] = useState<ThemeGroup | null>(null);
   const [clickedRect, setClickedRect] = useState<DOMRect | null>(null);
+  const [sidebarRect, setSidebarRect] = useState<DOMRect | null>(null);
   const categoryRefs = useRef<Map<number, HTMLButtonElement>>(new Map());
+  const containerRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+
+  // Get sidebar bounds on mount and resize
+  useEffect(() => {
+    const updateSidebarRect = () => {
+      // Find the main sidebar container (the absolute positioned panel)
+      const sidebar = document.querySelector('.lg\\:flex.flex-col.w-80.absolute');
+      if (sidebar) {
+        setSidebarRect(sidebar.getBoundingClientRect());
+      }
+    };
+
+    updateSidebarRect();
+    window.addEventListener('resize', updateSidebarRect);
+    
+    // Also update when scrolling the sidebar content
+    const scrollContainer = containerRef.current?.closest('.overflow-y-auto');
+    if (scrollContainer) {
+      scrollContainer.addEventListener('scroll', updateSidebarRect);
+    }
+
+    return () => {
+      window.removeEventListener('resize', updateSidebarRect);
+      if (scrollContainer) {
+        scrollContainer.removeEventListener('scroll', updateSidebarRect);
+      }
+    };
+  }, []);
 
   const getVisibleLayerCount = (theme: ThemeGroup) => {
     return theme.layers.filter(l => l.visible).length;
@@ -127,6 +156,12 @@ export function SidePanelLayers({
   }, [layers, onClearAll, onLayerToggle, toast]);
 
   const handleCategoryClick = useCallback((theme: ThemeGroup, buttonElement: HTMLButtonElement | null) => {
+    // Update sidebar rect before opening flyout
+    const sidebar = document.querySelector('.lg\\:flex.flex-col.w-80.absolute');
+    if (sidebar) {
+      setSidebarRect(sidebar.getBoundingClientRect());
+    }
+    
     if (buttonElement) {
       setClickedRect(buttonElement.getBoundingClientRect());
     }
@@ -147,7 +182,7 @@ export function SidePanelLayers({
   }, []);
 
   return (
-    <div className={cn("relative", className)} data-sidebar-layers>
+    <div ref={containerRef} className={cn("relative", className)} data-sidebar-layers>
       <div className="space-y-4">
         {layers.map((theme) => {
           const visibleCount = getVisibleLayerCount(theme);
@@ -317,7 +352,7 @@ export function SidePanelLayers({
         })}
       </div>
 
-      {/* Layer Flyout - Opens to the right with dynamic positioning */}
+      {/* Layer Flyout - Opens to the right with dynamic positioning matching sidebar bounds */}
       <LayerFlyout
         theme={selectedTheme}
         isOpen={!!selectedTheme}
@@ -327,6 +362,7 @@ export function SidePanelLayers({
         onClearAll={handleClearAll}
         highlightedLayerId={highlightedLayerId}
         clickedElementRect={clickedRect}
+        sidebarRect={sidebarRect}
       />
     </div>
   );

@@ -64,28 +64,35 @@ export function SidePanelLayers({
   const [sidebarRect, setSidebarRect] = useState<DOMRect | null>(null);
   const categoryRefs = useRef<Map<number, HTMLDivElement>>(new Map());
   const containerRef = useRef<HTMLDivElement>(null);
-  const sectionHeaderRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
   // Get sidebar and section bounds on mount and resize
   useEffect(() => {
     const updateRects = () => {
-      // Find the sidebar by data attribute
-      const sidebar = containerRef.current?.closest('[data-sidebar-panel]') || 
-                      document.querySelector('[data-sidebar-panel]');
+      const sidebar =
+        containerRef.current?.closest('[data-sidebar-panel]') ||
+        document.querySelector('[data-sidebar-panel]');
+
       if (sidebar) {
         setSidebarRect(sidebar.getBoundingClientRect());
-      }
-      
-      // Get the Map Layers section header position
-      if (sectionHeaderRef.current) {
-        setSectionRect(sectionHeaderRef.current.getBoundingClientRect());
+
+        // Map Layers section anchor: the heading element in SmartMapPage
+        const header = sidebar.querySelector('[data-map-layers-header]') as HTMLElement | null;
+        if (header) {
+          setSectionRect(header.getBoundingClientRect());
+        }
+      } else {
+        // Fallback (shouldn't happen)
+        const header = document.querySelector('[data-map-layers-header]') as HTMLElement | null;
+        if (header) {
+          setSectionRect(header.getBoundingClientRect());
+        }
       }
     };
 
     updateRects();
     window.addEventListener('resize', updateRects);
-    
+
     const scrollContainer = containerRef.current?.closest('.overflow-y-auto');
     if (scrollContainer) {
       scrollContainer.addEventListener('scroll', updateRects);
@@ -156,14 +163,19 @@ export function SidePanelLayers({
 
   const handleCategoryClick = useCallback((theme: ThemeGroup) => {
     // Update rects before opening flyout
-    const sidebar = containerRef.current?.closest('[data-sidebar-panel]') || 
-                    document.querySelector('[data-sidebar-panel]');
+    const sidebar =
+      containerRef.current?.closest('[data-sidebar-panel]') ||
+      document.querySelector('[data-sidebar-panel]');
+
     if (sidebar) {
       setSidebarRect(sidebar.getBoundingClientRect());
+      const header = sidebar.querySelector('[data-map-layers-header]') as HTMLElement | null;
+      if (header) setSectionRect(header.getBoundingClientRect());
+    } else {
+      const header = document.querySelector('[data-map-layers-header]') as HTMLElement | null;
+      if (header) setSectionRect(header.getBoundingClientRect());
     }
-    if (sectionHeaderRef.current) {
-      setSectionRect(sectionHeaderRef.current.getBoundingClientRect());
-    }
+
     setSelectedTheme(theme);
   }, []);
 
@@ -181,9 +193,6 @@ export function SidePanelLayers({
 
   return (
     <div ref={containerRef} className={cn("relative", className)} data-sidebar-layers>
-      {/* Section header anchor - used for flyout positioning */}
-      <div ref={sectionHeaderRef} className="absolute top-0 left-0 w-0 h-0" aria-hidden="true" />
-      
       <div className="space-y-3">
         {layers.map((theme) => {
           const visibleCount = getVisibleLayerCount(theme);

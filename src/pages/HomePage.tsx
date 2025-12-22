@@ -36,11 +36,11 @@ export default function HomePage() {
 
       <main className="flex-1">
         {/* Hero Section - Search Focused */}
-        <section className="relative py-16 md:py-24 lg:py-28 overflow-hidden bg-hero-gradient">
+        <section className="relative py-16 md:py-24 lg:py-28 bg-hero-gradient" style={{ overflow: 'visible' }}>
           <div className="absolute inset-0 pointer-events-none bg-plus-pattern opacity-20" />
 
-          <div className="container mx-auto px-4 relative">
-            <div className="max-w-3xl mx-auto text-center">
+          <div className="container mx-auto px-4 relative" style={{ overflow: 'visible' }}>
+            <div className="max-w-3xl mx-auto text-center" style={{ overflow: 'visible' }}>
               {/* Title with contrast */}
               <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold mb-2 animate-fade-up">
                 <span className="text-foreground">Smart Map</span>
@@ -52,9 +52,9 @@ export default function HomePage() {
                 Find healthcare and education services across the UAE
               </p>
 
-              {/* Search Container - Soft framed block */}
-              <div className="max-w-2xl mx-auto animate-fade-up delay-200">
-                <div className="bg-card/60 backdrop-blur-sm rounded-3xl p-3 md:p-4 shadow-lg border border-border/40">
+              {/* Search Container - Overflow visible for suggestions */}
+              <div className="max-w-2xl mx-auto animate-fade-up delay-200 mb-16" style={{ overflow: 'visible' }}>
+                <div className="bg-card/60 backdrop-blur-sm rounded-3xl p-3 md:p-4 shadow-lg border border-border/40" style={{ overflow: 'visible' }}>
                   <SmartSearch onSearch={handleSearch} size="large" />
                 </div>
                 <p className="text-xs text-muted-foreground/50 mt-4 animate-fade-up delay-300">

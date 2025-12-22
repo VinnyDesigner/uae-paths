@@ -112,7 +112,7 @@ export function SmartSearch({
   const isLarge = size === 'large';
 
   return (
-    <div ref={containerRef} className={cn("relative w-full", className)}>
+    <div ref={containerRef} className={cn("relative w-full", className)} style={{ overflow: 'visible' }}>
       <div
         className={cn(
           "relative flex items-center bg-card border border-border rounded-2xl shadow-lg transition-all duration-300",
@@ -180,9 +180,12 @@ export function SmartSearch({
 
       </div>
 
-      {/* AI-Powered Suggestions Dropdown */}
+      {/* AI-Powered Suggestions - In document flow when visible */}
       {showSuggestions && filteredSuggestions.length > 0 && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-card border border-border rounded-xl shadow-xl overflow-hidden z-[100] animate-fade-in">
+        <div 
+          className="relative mt-2 bg-card border border-border rounded-xl shadow-xl z-50 animate-fade-in"
+          style={{ overflow: 'visible' }}
+        >
           <div className="p-2">
             <div className="flex items-center gap-2 px-3 py-2">
               <Sparkles className="w-4 h-4 text-primary" />
@@ -222,7 +225,7 @@ export function SmartSearch({
               ))}
             </div>
           </div>
-          <div className="px-4 py-3 bg-secondary/50 border-t border-border flex items-center gap-2">
+          <div className="px-4 py-3 bg-secondary/50 border-t border-border rounded-b-xl flex items-center gap-2">
             <Sparkles className="w-3 h-3 text-primary" />
             <p className="text-xs text-muted-foreground">
               AI understands natural language queries like "nearest hospital" or "schools in Abu Dhabi"

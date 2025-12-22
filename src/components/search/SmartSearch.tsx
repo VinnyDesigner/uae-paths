@@ -116,7 +116,8 @@ export function SmartSearch({
       <div
         className={cn(
           "relative flex items-center bg-card border border-border rounded-2xl shadow-lg transition-all duration-300",
-          showSuggestions && "shadow-xl border-primary/40 ring-2 ring-primary/20",
+          showSuggestions && "shadow-xl border-primary/50 ring-2 ring-primary/20",
+          !showSuggestions && "hover:shadow-xl hover:border-border/80",
           isLarge ? "h-14 md:h-16" : "h-12"
         )}
       >

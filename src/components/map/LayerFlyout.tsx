@@ -280,10 +280,14 @@ export function LayerFlyout({
               <Tooltip key={layer.id}>
                 <TooltipTrigger asChild>
                   <button
-                    onClick={() => onLayerToggle(theme.id, layer.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onLayerToggle(theme.id, layer.id);
+                    }}
                     className={cn(
                       "w-full flex items-center gap-2.5 px-2.5 py-2.5 rounded-xl text-left group",
-                      "transition-all duration-150 ease-out motion-reduce:transition-none",
+                      "transition-colors duration-75 ease-out",
+                      "active:scale-[0.98] active:transition-transform active:duration-75",
                       "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1",
                       isHighlighted && "ring-2 ring-primary ring-offset-1 ring-offset-background",
                       layer.visible
@@ -297,7 +301,7 @@ export function LayerFlyout({
                     <div
                       className={cn(
                         "w-9 h-9 flex-shrink-0 rounded-lg flex items-center justify-center",
-                        "transition-all duration-150 ease-out motion-reduce:transition-none",
+                        "transition-all duration-75 ease-out",
                         layer.visible 
                           ? "shadow-sm" 
                           : "opacity-60 group-hover:opacity-80"
@@ -308,8 +312,8 @@ export function LayerFlyout({
                     >
                       <div 
                         className={cn(
-                          "transition-all duration-150 ease-out motion-reduce:transition-none",
-                          layer.visible ? "opacity-100 scale-100" : "opacity-70 scale-[0.98] group-hover:scale-100"
+                          "transition-transform duration-75 ease-out",
+                          layer.visible ? "scale-100" : "scale-[0.95] group-hover:scale-100"
                         )}
                         style={{ color: layerColor }}
                       >
@@ -327,24 +331,24 @@ export function LayerFlyout({
                     {/* Center: Text Container */}
                     <div className="flex-1 min-w-0 pr-1">
                       <span className={cn(
-                        "block text-sm font-medium truncate transition-colors leading-tight",
+                        "block text-sm font-medium truncate leading-tight",
                         layer.visible ? "text-foreground" : "text-foreground/80"
                       )}>
                         {layer.name}
                       </span>
                       <p className={cn(
-                        "text-[11px] truncate transition-colors leading-tight mt-0.5",
+                        "text-[11px] truncate leading-tight mt-0.5",
                         layer.visible ? "text-muted-foreground" : "text-muted-foreground/70"
                       )}>
                         {layer.description}
                       </p>
                     </div>
                     
-                    {/* Right: Toggle Indicator */}
+                    {/* Right: Toggle Indicator - Instant state change */}
                     <div
                       className={cn(
                         "flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-lg",
-                        "transition-all duration-150 ease-out motion-reduce:transition-none",
+                        "transition-colors duration-75 ease-out",
                         layer.visible
                           ? "shadow-sm"
                           : "bg-muted/20 group-hover:bg-muted/40"
@@ -355,10 +359,10 @@ export function LayerFlyout({
                     >
                       <div
                         className={cn(
-                          "w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-150 ease-out",
+                          "w-5 h-5 rounded-full flex items-center justify-center transition-all duration-75 ease-out",
                           layer.visible
-                            ? "border-transparent"
-                            : "border-muted-foreground/25 group-hover:border-muted-foreground/40"
+                            ? "border-0 scale-100"
+                            : "border-2 border-muted-foreground/25 group-hover:border-muted-foreground/40 scale-100"
                         )}
                         style={{
                           backgroundColor: layer.visible ? layerColor : 'transparent',

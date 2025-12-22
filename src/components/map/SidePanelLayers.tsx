@@ -62,14 +62,13 @@ export function SidePanelLayers({
   const [selectedTheme, setSelectedTheme] = useState<ThemeGroup | null>(null);
   const [clickedRect, setClickedRect] = useState<DOMRect | null>(null);
   const [sidebarRect, setSidebarRect] = useState<DOMRect | null>(null);
-  const categoryRefs = useRef<Map<number, HTMLButtonElement>>(new Map());
+  const categoryRefs = useRef<Map<number, HTMLDivElement>>(new Map());
   const containerRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
   // Get sidebar bounds on mount and resize
   useEffect(() => {
     const updateSidebarRect = () => {
-      // Find the main sidebar container
       const sidebar = document.querySelector('.lg\\:flex.flex-col.w-80.absolute');
       if (sidebar) {
         setSidebarRect(sidebar.getBoundingClientRect());
@@ -147,14 +146,14 @@ export function SidePanelLayers({
     });
   }, [layers, onClearAll, onLayerToggle, toast]);
 
-  const handleCategoryClick = useCallback((theme: ThemeGroup, buttonElement: HTMLButtonElement | null) => {
+  const handleCategoryClick = useCallback((theme: ThemeGroup, cardElement: HTMLDivElement | null) => {
     const sidebar = document.querySelector('.lg\\:flex.flex-col.w-80.absolute');
     if (sidebar) {
       setSidebarRect(sidebar.getBoundingClientRect());
     }
     
-    if (buttonElement) {
-      setClickedRect(buttonElement.getBoundingClientRect());
+    if (cardElement) {
+      setClickedRect(cardElement.getBoundingClientRect());
     }
     setSelectedTheme(theme);
   }, []);
@@ -164,7 +163,7 @@ export function SidePanelLayers({
     setClickedRect(null);
   }, []);
 
-  const setRef = useCallback((themeId: number) => (el: HTMLButtonElement | null) => {
+  const setRef = useCallback((themeId: number) => (el: HTMLDivElement | null) => {
     if (el) {
       categoryRefs.current.set(themeId, el);
     } else {
@@ -186,6 +185,7 @@ export function SidePanelLayers({
           return (
             <div
               key={theme.id}
+              ref={setRef(theme.id)}
               className={cn(
                 "rounded-2xl border overflow-hidden transition-all duration-200",
                 "bg-white/50 dark:bg-white/5 backdrop-blur-sm",
@@ -204,22 +204,21 @@ export function SidePanelLayers({
                     : "bg-gradient-to-br from-education/8 via-transparent to-transparent"
                 )}
               >
-                {/* Row 1: Icon + Title + Chevron */}
+                {/* Row 1: 3-Column Grid - Icon (44px) | Title (flex) | Chevron (40px) */}
                 <button
-                  ref={setRef(theme.id)}
-                  onClick={(e) => handleCategoryClick(theme, e.currentTarget)}
+                  onClick={() => handleCategoryClick(theme, categoryRefs.current.get(theme.id) || null)}
                   className={cn(
-                    "w-full flex items-center gap-3 group/row",
+                    "w-full grid grid-cols-[44px_1fr_40px] items-center gap-2 group/row",
                     "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 rounded-xl",
                     "-mx-1 px-1 py-1"
                   )}
                   aria-label={`Open ${theme.name} layers`}
                 >
-                  {/* Icon container with category tint - 40x40px */}
+                  {/* Icon container - Fixed 44x44px */}
                   <div
                     className={cn(
-                      "w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0",
-                      "transition-all duration-200 group-hover/row:scale-105",
+                      "w-11 h-11 rounded-xl flex items-center justify-center",
+                      "transition-all duration-150 group-hover/row:scale-105",
                       isHealthcare 
                         ? "bg-primary/12 text-primary shadow-sm shadow-primary/10" 
                         : "bg-education/12 text-education shadow-sm shadow-education/10"
@@ -228,23 +227,23 @@ export function SidePanelLayers({
                     {getThemeIcon(theme.icon)}
                   </div>
                   
-                  {/* Title - flex-1 for proper truncation */}
-                  <span className="flex-1 text-left text-[15px] font-semibold text-foreground leading-tight truncate">
+                  {/* Title - Flexible with proper truncation */}
+                  <span className="text-left text-[15px] font-semibold text-foreground leading-snug line-clamp-2">
                     {theme.name}
                   </span>
                   
-                  {/* Chevron - 40x40px container for alignment */}
+                  {/* Chevron - Fixed 40x40px */}
                   <div
                     className={cn(
-                      "w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0",
-                      "transition-all duration-200",
+                      "w-10 h-10 rounded-xl flex items-center justify-center",
+                      "transition-all duration-150",
                       "group-hover/row:bg-white/40 dark:group-hover/row:bg-white/10",
                       isSelected && "bg-primary/10"
                     )}
                   >
                     <ChevronRight
                       className={cn(
-                        "w-5 h-5 transition-all duration-200 ease-out",
+                        "w-5 h-5 transition-all duration-150 ease-out",
                         "group-hover/row:translate-x-0.5",
                         isSelected ? "text-primary translate-x-0.5" : "text-muted-foreground"
                       )}
@@ -255,8 +254,8 @@ export function SidePanelLayers({
                 {/* Divider */}
                 <div className="h-px bg-border/40 my-3" />
 
-                {/* Row 2: Status (left) | Actions (right) */}
-                <div className="flex items-center justify-between h-8">
+                {/* Row 2: Status (left) | Actions (right) - Equal height alignment */}
+                <div className="grid grid-cols-2 items-center h-8">
                   {/* Left: Visibility counter */}
                   <div className="flex items-center gap-1.5">
                     <span className="text-sm font-semibold text-foreground">{visibleCount}</span>
@@ -264,7 +263,7 @@ export function SidePanelLayers({
                   </div>
 
                   {/* Right: Select All | Clear All */}
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center justify-end gap-1">
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
@@ -272,7 +271,7 @@ export function SidePanelLayers({
                       }}
                       disabled={allVisible}
                       className={cn(
-                        "flex items-center gap-1 px-2 h-7 rounded-lg text-xs font-medium transition-all",
+                        "flex items-center gap-1 px-2 h-7 rounded-lg text-xs font-medium transition-all duration-120",
                         "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary",
                         allVisible
                           ? "text-muted-foreground/40 cursor-not-allowed"
@@ -291,7 +290,7 @@ export function SidePanelLayers({
                       }}
                       disabled={noneVisible}
                       className={cn(
-                        "flex items-center gap-1 px-2 h-7 rounded-lg text-xs font-medium transition-all",
+                        "flex items-center gap-1 px-2 h-7 rounded-lg text-xs font-medium transition-all duration-120",
                         "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary",
                         noneVisible
                           ? "text-muted-foreground/40 cursor-not-allowed"

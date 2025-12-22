@@ -73,45 +73,55 @@ export function LayerFlyout({
   sidebarRect,
 }: LayerFlyoutProps) {
   const flyoutRef = useRef<HTMLDivElement>(null);
-  const [flyoutPosition, setFlyoutPosition] = useState({ top: 0, maxHeight: 0, left: 0 });
+  const [flyoutPosition, setFlyoutPosition] = useState({ top: 0, height: 0, left: 0 });
+  const [togglingLayerId, setTogglingLayerId] = useState<number | null>(null);
 
-  // Calculate flyout position to match sidebar bounds exactly
+  // Calculate flyout position: starts at clicked card top, ends at sidebar bottom
   const calculatePosition = useCallback(() => {
-    const safePadding = 12;
-    const minFlyoutHeight = 240;
+    const safePadding = 8;
+    const minFlyoutHeight = 200;
     
     // Get sidebar bounds
     const sidebarTop = sidebarRect?.top ?? 80;
     const sidebarBottom = sidebarRect?.bottom ?? window.innerHeight - 16;
     const sidebarRight = sidebarRect?.right ?? 336;
 
-    // Left position: right after sidebar with gap
-    const leftPosition = sidebarRight + 12;
+    // Left position: right after sidebar with small gap
+    const leftPosition = sidebarRight + 8;
 
     // If no clicked element, align with sidebar top
     if (!clickedElementRect) {
+      const height = sidebarBottom - sidebarTop - safePadding * 2;
       return {
         top: sidebarTop + safePadding,
-        maxHeight: sidebarBottom - sidebarTop - safePadding * 2,
+        height: Math.max(minFlyoutHeight, height),
         left: leftPosition,
       };
     }
 
-    // Start from clicked element's position
+    // Start from clicked card's position
     let targetTop = clickedElementRect.top;
 
-    // Clamp to sidebar bounds
+    // Clamp to not go above sidebar
     const minTop = sidebarTop + safePadding;
-    const maxTop = sidebarBottom - minFlyoutHeight - safePadding;
-    
-    targetTop = Math.max(minTop, Math.min(targetTop, maxTop));
+    targetTop = Math.max(minTop, targetTop);
 
-    // Max height: MUST end at sidebar bottom
-    const maxHeight = sidebarBottom - targetTop - safePadding;
+    // Height: MUST end exactly at sidebar bottom
+    const height = sidebarBottom - targetTop - safePadding;
+
+    // If height would be too small, shift up
+    if (height < minFlyoutHeight) {
+      const adjustedTop = sidebarBottom - minFlyoutHeight - safePadding;
+      return { 
+        top: Math.max(minTop, adjustedTop), 
+        height: minFlyoutHeight,
+        left: leftPosition,
+      };
+    }
 
     return { 
       top: targetTop, 
-      maxHeight: Math.max(minFlyoutHeight, maxHeight),
+      height: height,
       left: leftPosition,
     };
   }, [clickedElementRect, sidebarRect]);
@@ -156,6 +166,14 @@ export function LayerFlyout({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen, onClose]);
 
+  // Handle layer toggle with animation feedback
+  const handleLayerToggle = useCallback((themeId: number, layerId: number) => {
+    setTogglingLayerId(layerId);
+    onLayerToggle(themeId, layerId);
+    // Clear animation state after animation completes
+    setTimeout(() => setTogglingLayerId(null), 150);
+  }, [onLayerToggle]);
+
   if (!theme) return null;
 
   const visibleCount = theme.layers.filter(l => l.visible).length;
@@ -168,8 +186,8 @@ export function LayerFlyout({
     <div
       ref={flyoutRef}
       className={cn(
-        "fixed w-[340px] bg-white/95 dark:bg-card/95 backdrop-blur-xl",
-        "border border-white/40 dark:border-white/10 rounded-2xl shadow-2xl z-30",
+        "fixed w-[360px] bg-white/95 dark:bg-card/95 backdrop-blur-xl",
+        "border border-white/40 dark:border-white/10 rounded-2xl shadow-2xl z-[35]",
         "transition-all duration-200 ease-out",
         "flex flex-col overflow-hidden",
         isOpen 
@@ -179,7 +197,7 @@ export function LayerFlyout({
       style={{ 
         left: `${flyoutPosition.left}px`,
         top: `${flyoutPosition.top}px`,
-        maxHeight: `${flyoutPosition.maxHeight}px`,
+        height: `${flyoutPosition.height}px`,
       }}
       role="dialog"
       aria-modal="true"
@@ -230,7 +248,7 @@ export function LayerFlyout({
               onClick={() => onSelectAll(theme.id)}
               disabled={allVisible}
               className={cn(
-                "flex items-center gap-1 px-2.5 h-7 rounded-lg text-xs font-medium transition-all",
+                "flex items-center gap-1 px-2.5 h-7 rounded-lg text-xs font-medium transition-all duration-120",
                 "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary",
                 allVisible
                   ? "bg-muted/30 text-muted-foreground/40 cursor-not-allowed"
@@ -244,7 +262,7 @@ export function LayerFlyout({
               onClick={() => onClearAll(theme.id)}
               disabled={noneVisible}
               className={cn(
-                "flex items-center gap-1 px-2.5 h-7 rounded-lg text-xs font-medium transition-all",
+                "flex items-center gap-1 px-2.5 h-7 rounded-lg text-xs font-medium transition-all duration-120",
                 "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary",
                 noneVisible
                   ? "bg-muted/30 text-muted-foreground/40 cursor-not-allowed"
@@ -263,6 +281,7 @@ export function LayerFlyout({
         <div className="flex-1 overflow-y-auto p-3 space-y-1.5 overscroll-contain">
           {theme.layers.map((layer) => {
             const isHighlighted = highlightedLayerId === layer.id;
+            const isToggling = togglingLayerId === layer.id;
             const LayerIcon = iconMap[layer.icon];
             const categoryColor = getCategoryColor(layer.name);
             const layerColor = categoryColor.base;
@@ -273,14 +292,15 @@ export function LayerFlyout({
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      onLayerToggle(theme.id, layer.id);
+                      handleLayerToggle(theme.id, layer.id);
                     }}
                     className={cn(
                       "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left group",
-                      "transition-all duration-100 ease-out",
+                      "transition-all duration-120 ease-out",
                       "active:scale-[0.98]",
                       "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1",
                       isHighlighted && "ring-2 ring-primary ring-offset-1 ring-offset-background",
+                      isToggling && "scale-[0.98]",
                       layer.visible
                         ? "bg-white/70 dark:bg-white/10 border border-white/60 dark:border-white/20 shadow-sm"
                         : "bg-white/30 dark:bg-white/5 border border-transparent hover:bg-white/50 dark:hover:bg-white/10 hover:border-white/40"
@@ -292,7 +312,7 @@ export function LayerFlyout({
                     <div
                       className={cn(
                         "w-9 h-9 flex-shrink-0 rounded-lg flex items-center justify-center",
-                        "transition-all duration-100",
+                        "transition-all duration-120",
                         layer.visible 
                           ? "shadow-sm" 
                           : "opacity-60 group-hover:opacity-80"
@@ -301,7 +321,7 @@ export function LayerFlyout({
                     >
                       <div 
                         className={cn(
-                          "transition-transform duration-100",
+                          "transition-transform duration-120",
                           layer.visible ? "scale-100" : "scale-95 group-hover:scale-100"
                         )}
                         style={{ color: layerColor }}
@@ -320,24 +340,24 @@ export function LayerFlyout({
                     {/* Text */}
                     <div className="flex-1 min-w-0">
                       <span className={cn(
-                        "block text-sm font-medium truncate",
+                        "block text-sm font-medium truncate transition-colors duration-120",
                         layer.visible ? "text-foreground" : "text-foreground/75"
                       )}>
                         {layer.name}
                       </span>
                       <p className={cn(
-                        "text-[11px] truncate mt-0.5",
+                        "text-[11px] truncate mt-0.5 transition-colors duration-120",
                         layer.visible ? "text-muted-foreground" : "text-muted-foreground/60"
                       )}>
                         {layer.description}
                       </p>
                     </div>
                     
-                    {/* Toggle indicator */}
+                    {/* Toggle indicator with animation */}
                     <div
                       className={cn(
                         "flex-shrink-0 flex items-center justify-center w-7 h-7 rounded-lg",
-                        "transition-all duration-100",
+                        "transition-all duration-120",
                         layer.visible
                           ? "shadow-sm"
                           : "bg-muted/20 group-hover:bg-muted/30"
@@ -348,17 +368,21 @@ export function LayerFlyout({
                     >
                       <div
                         className={cn(
-                          "w-5 h-5 rounded-full flex items-center justify-center transition-all duration-100",
+                          "w-5 h-5 rounded-full flex items-center justify-center transition-all duration-120",
                           layer.visible
                             ? "border-0"
-                            : "border-2 border-muted-foreground/20 group-hover:border-muted-foreground/30"
+                            : "border-2 border-muted-foreground/20 group-hover:border-muted-foreground/30",
+                          isToggling && "scale-90"
                         )}
                         style={{
                           backgroundColor: layer.visible ? layerColor : 'transparent',
                         }}
                       >
                         {layer.visible ? (
-                          <Check className="w-3 h-3 text-white" />
+                          <Check className={cn(
+                            "w-3 h-3 text-white transition-transform duration-120",
+                            isToggling && "scale-110"
+                          )} />
                         ) : (
                           <Circle className="w-2 h-2 text-muted-foreground/25 group-hover:text-muted-foreground/40" />
                         )}

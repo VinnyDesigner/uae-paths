@@ -187,16 +187,6 @@ export default function SmartMapPage() {
               </div>
             </div>
           </div>
-          
-          {/* Search Results Count */}
-          {searchResults.length > 0 && (
-            <div className="px-4 py-3 bg-primary/20 backdrop-blur-sm border-t border-white/20 dark:border-white/10 flex items-center gap-2">
-              <Layers className="w-4 h-4 text-primary" />
-              <span className="text-sm font-medium text-foreground">
-                {searchResults.length} facilities found
-              </span>
-            </div>
-          )}
         </div>
 
         {/* Mobile Search Bar Overlay */}

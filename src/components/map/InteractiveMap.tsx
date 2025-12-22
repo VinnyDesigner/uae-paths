@@ -240,8 +240,8 @@ function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFu
 
         {/* Zoom + Base Map Controls Stack */}
         <div className="flex flex-col gap-2 items-end">
-          {/* Zoom Control Pill */}
-          <div className="flex flex-col bg-card rounded-xl shadow-lg border border-border overflow-hidden pointer-events-auto">
+          {/* Zoom Control Pill - Hidden on tablet and mobile */}
+          <div className="hidden lg:flex flex-col bg-card rounded-xl shadow-lg border border-border overflow-hidden pointer-events-auto">
             <button
               onClick={onZoomIn}
               aria-label="Zoom In"

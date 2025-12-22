@@ -147,13 +147,14 @@ export function SidePanelLayers({
             <div
               key={theme.id}
               className={cn(
-                "bg-white/40 dark:bg-white/5 rounded-2xl border overflow-hidden shadow-sm transition-all duration-200",
+                "bg-white/40 dark:bg-white/5 rounded-2xl border overflow-hidden transition-all duration-200",
+                "hover:shadow-md hover:border-white/40 dark:hover:border-white/15",
                 isSelected 
-                  ? "border-primary/50 ring-2 ring-primary/20" 
-                  : "border-white/30 dark:border-white/10"
+                  ? "border-primary/50 ring-2 ring-primary/20 shadow-md" 
+                  : "border-white/30 dark:border-white/10 shadow-sm"
               )}
             >
-              {/* Section Header - Category Row */}
+              {/* Card Content */}
               <div 
                 className={cn(
                   "p-4",
@@ -162,69 +163,66 @@ export function SidePanelLayers({
                     : "bg-gradient-to-r from-education/5 to-transparent"
                 )}
               >
-                {/* Row 1: Section Identity - Clickable to open flyout */}
-                <div className="flex items-center justify-between gap-3">
-                  <button
-                    onClick={() => handleCategoryClick(theme)}
+                {/* Row 1: Icon + Title + Chevron - Single baseline */}
+                <button
+                  onClick={() => handleCategoryClick(theme)}
+                  className={cn(
+                    "w-full flex items-center gap-3 group/row",
+                    "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 rounded-lg",
+                    "-mx-1 px-1 py-1"
+                  )}
+                  aria-label={`Open ${theme.name} layers`}
+                >
+                  {/* Fixed 40x40 icon container */}
+                  <div
                     className={cn(
-                      "flex items-center gap-3 transition-all flex-1 min-w-0",
-                      "hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 rounded-lg"
+                      "w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm transition-transform duration-200",
+                      "group-hover/row:scale-105",
+                      isHealthcare 
+                        ? "bg-primary/15 text-primary" 
+                        : "bg-education/15 text-education"
                     )}
-                    aria-label={`Open ${theme.name} layers`}
                   >
-                    {/* Fixed 44x44 icon container with tinted background */}
-                    <div
-                      className={cn(
-                        "w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm",
-                        isHealthcare 
-                          ? "bg-primary/15 text-primary" 
-                          : "bg-education/15 text-education"
-                      )}
-                    >
-                      {getThemeIcon(theme.icon)}
-                    </div>
-                    {/* Title */}
-                    <span className="text-base font-semibold text-foreground leading-tight">
-                      {theme.name}
-                    </span>
-                  </button>
+                    {getThemeIcon(theme.icon)}
+                  </div>
                   
-                  {/* Right Arrow - Opens flyout */}
-                  <button
-                    onClick={() => handleCategoryClick(theme)}
+                  {/* Title - vertically centered */}
+                  <span className="flex-1 text-left text-base font-semibold text-foreground leading-tight truncate">
+                    {theme.name}
+                  </span>
+                  
+                  {/* Right Chevron - vertically centered */}
+                  <div
                     className={cn(
-                      "p-2.5 -mr-1 rounded-lg hover:bg-white/30 dark:hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary min-h-[44px] min-w-[44px] flex items-center justify-center flex-shrink-0 transition-all",
+                      "w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 transition-all duration-200",
+                      "group-hover/row:bg-white/30 dark:group-hover/row:bg-white/10",
                       isSelected && "bg-primary/10"
                     )}
-                    aria-label={`Open ${theme.name} layers panel`}
                   >
                     <ChevronRight
                       className={cn(
                         "w-5 h-5 transition-all duration-200 ease-out",
+                        "group-hover/row:translate-x-0.5",
                         isSelected ? "text-primary translate-x-0.5" : "text-muted-foreground"
                       )}
                     />
-                  </button>
-                </div>
+                  </div>
+                </button>
 
                 {/* Subtle divider */}
-                <div className="h-px bg-border/30 mt-3 mb-2.5" />
+                <div className="h-px bg-border/30 mt-3 mb-3" />
 
-                {/* Row 2: Status & Actions - Single baseline row */}
-                <div className="flex items-center h-8">
-                  {/* Left: Status text */}
-                  <span className="text-[13px] leading-8 text-muted-foreground">
+                {/* Row 2: Visibility Count (left) | Actions (right) - Single baseline */}
+                <div className="flex items-center justify-between h-8">
+                  {/* Left: Visibility status */}
+                  <span className="text-[13px] leading-8 text-muted-foreground whitespace-nowrap">
                     <span className="font-medium text-foreground">{visibleCount}</span>
-                    <span className="mx-0.5">of</span>
+                    <span className="mx-1">of</span>
                     <span>{totalCount}</span>
                     <span className="ml-1">visible</span>
                   </span>
 
-                  {/* Spacer */}
-                  <div className="flex-1" />
-
-                  {/* Right: Actions - Same baseline */}
-                  {/* Desktop/Tablet inline actions */}
+                  {/* Right: Actions - Desktop/Tablet */}
                   <div className="hidden sm:flex items-center h-8">
                     <button
                       onClick={(e) => {
@@ -243,7 +241,7 @@ export function SidePanelLayers({
                     >
                       Select All
                     </button>
-                    <span className="text-border/40 text-[13px] leading-8 mx-1">|</span>
+                    <span className="text-border/50 text-[13px] leading-8 mx-0.5 select-none">|</span>
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
@@ -263,7 +261,7 @@ export function SidePanelLayers({
                     </button>
                   </div>
 
-                  {/* Mobile dropdown menu */}
+                  {/* Right: Actions - Mobile dropdown */}
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <button 

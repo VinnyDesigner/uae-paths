@@ -194,62 +194,116 @@ export function MobileBottomSheet({
                   key={theme.id} 
                   className="bg-secondary/50 rounded-xl overflow-hidden border border-border/50"
                 >
-                  {/* Category Header - Level 1 */}
-                  <button
-                    onClick={() => handleCategoryClick(theme.id)}
-                    className="w-full flex items-center gap-3 p-4 min-h-[60px] text-left hover:bg-secondary/80 active:bg-secondary transition-colors"
-                  >
-                    {/* Category Icon */}
-                    <div 
-                      className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                      style={{ backgroundColor: `${categoryColor.base}15` }}
+                  {/* Category Card - Two Row Layout */}
+                  <div className="p-4">
+                    {/* Row 1: Icon + Title + Chevron - Single baseline */}
+                    <button
+                      onClick={() => handleCategoryClick(theme.id)}
+                      className="w-full flex items-center gap-3 group/row"
                     >
-                      <CategoryIcon 
-                        className="w-5 h-5" 
-                        style={{ color: categoryColor.base }}
-                      />
-                    </div>
-
-                    {/* Category Info */}
-                    <div className="flex-1 min-w-0">
-                      <div className="font-medium text-foreground text-sm">{theme.name}</div>
-                      <div className="text-xs text-muted-foreground mt-0.5">
-                        {visibleCount} of {totalCount} visible
+                      {/* Fixed 40x40 icon container */}
+                      <div 
+                        className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-transform duration-200 group-active/row:scale-95"
+                        style={{ backgroundColor: `${categoryColor.base}15` }}
+                      >
+                        <CategoryIcon 
+                          className="w-5 h-5" 
+                          style={{ color: categoryColor.base }}
+                        />
                       </div>
-                    </div>
 
-                    {/* Status Indicator */}
-                    <div className="flex items-center gap-2">
-                      {allSelected && (
-                        <div 
-                          className="w-6 h-6 rounded-full flex items-center justify-center"
-                          style={{ backgroundColor: `${categoryColor.base}20` }}
-                        >
-                          <CheckCircle2 
-                            className="w-4 h-4" 
-                            style={{ color: categoryColor.base }}
+                      {/* Title - vertically centered */}
+                      <span className="flex-1 text-left text-base font-semibold text-foreground leading-tight truncate">
+                        {theme.name}
+                      </span>
+
+                      {/* Right: Status + Chevron */}
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        {allSelected && (
+                          <div 
+                            className="w-6 h-6 rounded-full flex items-center justify-center"
+                            style={{ backgroundColor: `${categoryColor.base}20` }}
+                          >
+                            <CheckCircle2 
+                              className="w-4 h-4" 
+                              style={{ color: categoryColor.base }}
+                            />
+                          </div>
+                        )}
+                        {someSelected && (
+                          <div 
+                            className="px-2 py-0.5 rounded-full text-xs font-medium"
+                            style={{ 
+                              backgroundColor: `${categoryColor.base}15`,
+                              color: categoryColor.base 
+                            }}
+                          >
+                            {visibleCount}
+                          </div>
+                        )}
+                        <div className={cn(
+                          "w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200",
+                          isExpanded ? "bg-primary/10" : "group-hover/row:bg-secondary"
+                        )}>
+                          <ChevronRight 
+                            className={cn(
+                              "w-5 h-5 text-muted-foreground transition-transform duration-200",
+                              isExpanded && "rotate-90 text-primary"
+                            )} 
                           />
                         </div>
-                      )}
-                      {someSelected && (
-                        <div 
-                          className="px-2 py-0.5 rounded-full text-xs font-medium"
-                          style={{ 
-                            backgroundColor: `${categoryColor.base}15`,
-                            color: categoryColor.base 
+                      </div>
+                    </button>
+
+                    {/* Subtle divider */}
+                    <div className="h-px bg-border/30 mt-3 mb-3" />
+
+                    {/* Row 2: Visibility Count (left) | Actions (right) */}
+                    <div className="flex items-center justify-between h-8">
+                      {/* Left: Visibility status */}
+                      <span className="text-[13px] leading-8 text-muted-foreground whitespace-nowrap">
+                        <span className="font-medium text-foreground">{visibleCount}</span>
+                        <span className="mx-1">of</span>
+                        <span>{totalCount}</span>
+                        <span className="ml-1">visible</span>
+                      </span>
+
+                      {/* Right: Action buttons */}
+                      <div className="flex items-center h-8">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onSelectAll(theme.id);
                           }}
+                          disabled={allSelected}
+                          className={cn(
+                            "text-[13px] leading-8 px-2 rounded-md font-medium transition-all",
+                            allSelected
+                              ? "text-muted-foreground/40 cursor-not-allowed"
+                              : "text-primary active:scale-95"
+                          )}
                         >
-                          {visibleCount}
-                        </div>
-                      )}
-                      <div className={cn(
-                        "transition-transform duration-200",
-                        isExpanded && "rotate-90"
-                      )}>
-                        <ChevronRight className="w-5 h-5 text-muted-foreground" />
+                          Select All
+                        </button>
+                        <span className="text-border/50 text-[13px] leading-8 mx-0.5 select-none">|</span>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onClearAll(theme.id);
+                          }}
+                          disabled={visibleCount === 0}
+                          className={cn(
+                            "text-[13px] leading-8 px-2 rounded-md font-medium transition-all",
+                            visibleCount === 0
+                              ? "text-muted-foreground/40 cursor-not-allowed"
+                              : "text-muted-foreground active:scale-95"
+                          )}
+                        >
+                          Clear All
+                        </button>
                       </div>
                     </div>
-                  </button>
+                  </div>
 
                   {/* Layer Items - Level 2 (Expanded) */}
                   <div className={cn(

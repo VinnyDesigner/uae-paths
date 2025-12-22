@@ -1,4 +1,8 @@
 import { ThemeGroup, Facility } from '@/types/map';
+import { categoryColors } from '@/lib/mapColors';
+
+// Helper to get color from unified system
+const getColor = (typeName: string) => categoryColors[typeName]?.base || '#64748b';
 
 export const healthcareLayers: ThemeGroup = {
   id: 350,
@@ -7,14 +11,14 @@ export const healthcareLayers: ThemeGroup = {
   icon: 'Heart',
   colorClass: 'healthcare',
   layers: [
-    { id: 330, name: 'Hospitals', description: 'Major hospitals and medical centers', visible: true, color: '#0d9488', icon: 'Building2' },
-    { id: 328, name: 'Clinics', description: 'Medical clinics and outpatient facilities', visible: false, color: '#14b8a6', icon: 'Stethoscope' },
-    { id: 217, name: 'Diagnostic Centers', description: 'Medical testing and diagnostics', visible: false, color: '#2dd4bf', icon: 'Microscope' },
-    { id: 332, name: 'Pharmacies', description: 'Pharmacies and drug stores', visible: false, color: '#5eead4', icon: 'Pill' },
-    { id: 329, name: 'Healthcare Centers', description: 'Primary healthcare centers', visible: false, color: '#99f6e4', icon: 'HeartPulse' },
-    { id: 196, name: 'Ambulance Stations', description: 'Emergency ambulance stations', visible: false, color: '#0f766e', icon: 'Siren' },
-    { id: 234, name: 'Rehabilitation Centres', description: 'Physical therapy and rehabilitation', visible: false, color: '#115e59', icon: 'Accessibility' },
-    { id: 235, name: 'Mobile Health Units', description: 'Mobile healthcare services', visible: false, color: '#134e4a', icon: 'Truck' },
+    { id: 330, name: 'Hospitals', description: 'Major hospitals and medical centers', visible: true, color: getColor('Hospitals'), icon: 'Building2' },
+    { id: 328, name: 'Clinics', description: 'Medical clinics and outpatient facilities', visible: false, color: getColor('Clinics'), icon: 'Stethoscope' },
+    { id: 217, name: 'Diagnostic Centers', description: 'Medical testing and diagnostics', visible: false, color: getColor('Diagnostic Centers'), icon: 'Microscope' },
+    { id: 332, name: 'Pharmacies', description: 'Pharmacies and drug stores', visible: false, color: getColor('Pharmacies'), icon: 'Pill' },
+    { id: 329, name: 'Healthcare Centers', description: 'Primary healthcare centers', visible: false, color: getColor('Healthcare Centers'), icon: 'HeartPulse' },
+    { id: 196, name: 'Ambulance Stations', description: 'Emergency ambulance stations', visible: false, color: getColor('Ambulance Stations'), icon: 'Siren' },
+    { id: 234, name: 'Rehabilitation Centres', description: 'Physical therapy and rehabilitation', visible: false, color: getColor('Rehabilitation Centres'), icon: 'Accessibility' },
+    { id: 235, name: 'Mobile Health Units', description: 'Mobile healthcare services', visible: false, color: getColor('Mobile Health Units'), icon: 'Truck' },
   ],
 };
 
@@ -25,11 +29,11 @@ export const educationLayers: ThemeGroup = {
   icon: 'GraduationCap',
   colorClass: 'education',
   layers: [
-    { id: 211, name: 'Public Schools', description: 'Government public schools', visible: true, color: '#38B6FF', icon: 'School' },
-    { id: 212, name: 'Private Schools', description: 'Private educational institutions', visible: false, color: '#5CC8FF', icon: 'Building' },
-    { id: 208, name: 'Charter Schools', description: 'Charter and specialized schools', visible: false, color: '#7ED4FF', icon: 'BookOpen' },
-    { id: 209, name: 'Nurseries', description: 'Early childhood education centers', visible: false, color: '#A1E0FF', icon: 'Baby' },
-    { id: 210, name: 'POD Centers', description: 'Professional Outreach for Development', visible: false, color: '#1E9EE8', icon: 'Users' },
+    { id: 211, name: 'Public Schools', description: 'Government public schools', visible: true, color: getColor('Public Schools'), icon: 'School' },
+    { id: 212, name: 'Private Schools', description: 'Private educational institutions', visible: false, color: getColor('Private Schools'), icon: 'Building' },
+    { id: 208, name: 'Charter Schools', description: 'Charter and specialized schools', visible: false, color: getColor('Charter Schools'), icon: 'BookOpen' },
+    { id: 209, name: 'Nurseries', description: 'Early childhood education centers', visible: false, color: getColor('Nurseries'), icon: 'Baby' },
+    { id: 210, name: 'POD Centers', description: 'Professional Outreach for Development', visible: false, color: getColor('POD Centers'), icon: 'Users' },
   ],
 };
 

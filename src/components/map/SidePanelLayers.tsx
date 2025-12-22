@@ -125,7 +125,7 @@ export function SidePanelLayers({ layers, onLayerToggle, highlightedLayerId, cla
                 isExpanded ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
               )}
             >
-              <div className="px-3 pb-3 space-y-1">
+              <div className="px-3 pb-3 space-y-2">
                 {theme.layers.map((layer) => {
                   const isHighlighted = highlightedLayerId === layer.id;
                   return (
@@ -133,42 +133,47 @@ export function SidePanelLayers({ layers, onLayerToggle, highlightedLayerId, cla
                       key={layer.id}
                       onClick={() => onLayerToggle(theme.id, layer.id)}
                       className={cn(
-                        "w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition-all text-left group",
+                        "w-full flex items-center gap-3 px-3 py-3 min-h-[56px] rounded-lg transition-all text-left group",
                         isHighlighted && "ring-2 ring-primary ring-offset-1 ring-offset-background",
                         layer.visible
                           ? "bg-primary/15 border border-primary/30"
                           : "bg-white/20 dark:bg-white/5 border border-transparent hover:bg-white/40 dark:hover:bg-white/10"
                       )}
                     >
-                    <div className="flex items-center gap-3">
+                      {/* Left: Layer Icon - Fixed width */}
                       <div
-                        className="w-6 h-6 rounded-md flex items-center justify-center"
+                        className="w-8 h-8 flex-shrink-0 rounded-md flex items-center justify-center"
                         style={{ backgroundColor: layer.color + '30' }}
                       >
                         <div
-                          className="w-3 h-3 rounded-sm"
+                          className="w-4 h-4 rounded-sm"
                           style={{ backgroundColor: layer.color }}
                         />
                       </div>
-                      <div>
-                        <span className="text-sm text-foreground">{layer.name}</span>
-                        <p className="text-xs text-muted-foreground line-clamp-1">
+                      
+                      {/* Center: Text Container - Flexible, truncates */}
+                      <div className="flex-1 min-w-0">
+                        <span className="block text-sm font-medium text-foreground truncate">
+                          {layer.name}
+                        </span>
+                        <p className="text-xs text-muted-foreground truncate">
                           {layer.description}
                         </p>
                       </div>
-                    </div>
-                    <div className={cn(
-                      "flex items-center justify-center w-6 h-6 rounded-md transition-all",
-                      layer.visible 
-                        ? "bg-primary/20 text-primary" 
-                        : "bg-muted/50 text-muted-foreground group-hover:bg-muted"
-                    )}>
-                      {layer.visible ? (
-                        <Eye className="w-3.5 h-3.5" />
-                      ) : (
-                        <EyeOff className="w-3.5 h-3.5" />
-                      )}
-                    </div>
+                      
+                      {/* Right: Action Icon - Fixed width */}
+                      <div className={cn(
+                        "flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-md transition-all",
+                        layer.visible 
+                          ? "bg-primary/20 text-primary" 
+                          : "bg-muted/50 text-muted-foreground group-hover:bg-muted"
+                      )}>
+                        {layer.visible ? (
+                          <Eye className="w-4 h-4" />
+                        ) : (
+                          <EyeOff className="w-4 h-4" />
+                        )}
+                      </div>
                     </button>
                   );
                 })}

@@ -186,7 +186,7 @@ export default function SmartMapPage() {
           </div>
           
           {/* Scrollable Content Area - Only this scrolls */}
-          <div className="relative z-10 p-4 pt-3 space-y-4 overflow-y-auto flex-1 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-white/30 hover:scrollbar-thumb-white/50">
+          <div className="relative z-10 p-4 pt-3 space-y-4 overflow-y-auto overflow-x-visible flex-1 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-white/30 hover:scrollbar-thumb-white/50">
             {/* Result Count - Shows only when search results exist */}
             {searchResults.length > 0 && (
               <div className="flex items-center gap-1.5 text-xs text-muted-foreground px-1">
@@ -204,8 +204,8 @@ export default function SmartMapPage() {
               <InlineFilters filters={filters} onFilterChange={setFilters} className="flex-col gap-3" />
             </div>
             
-            {/* Map Layers Section */}
-            <div>
+            {/* Map Layers Section - Relative positioned for flyout */}
+            <div className="relative">
               <h4 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2 px-1">
                 <Map className="w-4 h-4 text-primary" />
                 Map Layers

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { 
-  ChevronDown, 
+  ChevronRight, 
   Heart, 
   GraduationCap,
   Building2,
@@ -16,8 +16,6 @@ import {
   BookOpen,
   Baby,
   Users,
-  Check,
-  Circle,
   CheckCircle2,
   XCircle,
   MoreHorizontal
@@ -25,19 +23,13 @@ import {
 import { cn } from '@/lib/utils';
 import { ThemeGroup } from '@/types/map';
 import { useToast } from '@/hooks/use-toast';
-import { getCategoryColor } from '@/lib/mapColors';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
+import { LayerFlyout } from './LayerFlyout';
 
 interface SidePanelLayersProps {
   layers: ThemeGroup[];
@@ -74,16 +66,8 @@ export function SidePanelLayers({
   highlightedLayerId, 
   className 
 }: SidePanelLayersProps) {
-  const [expandedGroups, setExpandedGroups] = useState<number[]>([350, 300]);
+  const [selectedTheme, setSelectedTheme] = useState<ThemeGroup | null>(null);
   const { toast } = useToast();
-
-  const toggleGroup = (groupId: number) => {
-    setExpandedGroups(prev =>
-      prev.includes(groupId)
-        ? prev.filter(id => id !== groupId)
-        : [...prev, groupId]
-    );
-  };
 
   const getVisibleLayerCount = (theme: ThemeGroup) => {
     return theme.layers.filter(l => l.visible).length;
@@ -102,13 +86,16 @@ export function SidePanelLayers({
     return IconComponent ? <IconComponent className="w-5 h-5" /> : null;
   };
 
-  const handleSelectAll = (theme: ThemeGroup) => {
+  const handleSelectAll = (themeId: number) => {
+    const theme = layers.find(t => t.id === themeId);
+    if (!theme) return;
+    
     if (onSelectAll) {
-      onSelectAll(theme.id);
+      onSelectAll(themeId);
     } else {
       theme.layers.forEach(layer => {
         if (!layer.visible) {
-          onLayerToggle(theme.id, layer.id);
+          onLayerToggle(themeId, layer.id);
         }
       });
     }
@@ -118,13 +105,16 @@ export function SidePanelLayers({
     });
   };
 
-  const handleClearAll = (theme: ThemeGroup) => {
+  const handleClearAll = (themeId: number) => {
+    const theme = layers.find(t => t.id === themeId);
+    if (!theme) return;
+    
     if (onClearAll) {
-      onClearAll(theme.id);
+      onClearAll(themeId);
     } else {
       theme.layers.forEach(layer => {
         if (layer.visible) {
-          onLayerToggle(theme.id, layer.id);
+          onLayerToggle(themeId, layer.id);
         }
       });
     }
@@ -134,23 +124,36 @@ export function SidePanelLayers({
     });
   };
 
+  const handleCategoryClick = (theme: ThemeGroup) => {
+    setSelectedTheme(theme);
+  };
+
+  const handleCloseFlyout = () => {
+    setSelectedTheme(null);
+  };
+
   return (
-    <TooltipProvider delayDuration={300}>
-      <div className={cn("space-y-5", className)}>
+    <div className={cn("relative", className)} data-sidebar-layers>
+      <div className="space-y-5">
         {layers.map((theme) => {
-          const isExpanded = expandedGroups.includes(theme.id);
           const visibleCount = getVisibleLayerCount(theme);
           const totalCount = theme.layers.length;
           const allVisible = getAllLayersVisible(theme);
           const noneVisible = getNoLayersVisible(theme);
           const isHealthcare = theme.colorClass === 'healthcare';
+          const isSelected = selectedTheme?.id === theme.id;
 
           return (
             <div
               key={theme.id}
-              className="bg-white/40 dark:bg-white/5 rounded-2xl border border-white/30 dark:border-white/10 overflow-hidden shadow-sm"
+              className={cn(
+                "bg-white/40 dark:bg-white/5 rounded-2xl border overflow-hidden shadow-sm transition-all duration-200",
+                isSelected 
+                  ? "border-primary/50 ring-2 ring-primary/20" 
+                  : "border-white/30 dark:border-white/10"
+              )}
             >
-              {/* Section Header - 2 Row Structure */}
+              {/* Section Header - Category Row */}
               <div 
                 className={cn(
                   "p-4",
@@ -159,16 +162,15 @@ export function SidePanelLayers({
                     : "bg-gradient-to-r from-education/5 to-transparent"
                 )}
               >
-                {/* Row 1: Section Identity */}
+                {/* Row 1: Section Identity - Clickable to open flyout */}
                 <div className="flex items-center justify-between gap-3">
                   <button
-                    onClick={() => toggleGroup(theme.id)}
+                    onClick={() => handleCategoryClick(theme)}
                     className={cn(
                       "flex items-center gap-3 transition-all flex-1 min-w-0",
                       "hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 rounded-lg"
                     )}
-                    aria-expanded={isExpanded}
-                    aria-label={`${theme.name} section`}
+                    aria-label={`Open ${theme.name} layers`}
                   >
                     {/* Fixed 44x44 icon container with tinted background */}
                     <div
@@ -187,16 +189,19 @@ export function SidePanelLayers({
                     </span>
                   </button>
                   
-                  {/* Chevron - Animated rotation */}
+                  {/* Right Arrow - Opens flyout */}
                   <button
-                    onClick={() => toggleGroup(theme.id)}
-                    className="p-2.5 -mr-1 rounded-lg hover:bg-white/30 dark:hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary min-h-[44px] min-w-[44px] flex items-center justify-center flex-shrink-0 transition-colors"
-                    aria-label={isExpanded ? 'Collapse section' : 'Expand section'}
+                    onClick={() => handleCategoryClick(theme)}
+                    className={cn(
+                      "p-2.5 -mr-1 rounded-lg hover:bg-white/30 dark:hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary min-h-[44px] min-w-[44px] flex items-center justify-center flex-shrink-0 transition-all",
+                      isSelected && "bg-primary/10"
+                    )}
+                    aria-label={`Open ${theme.name} layers panel`}
                   >
-                    <ChevronDown
+                    <ChevronRight
                       className={cn(
-                        "w-5 h-5 text-muted-foreground transition-transform duration-200 ease-out",
-                        isExpanded && "rotate-180"
+                        "w-5 h-5 transition-all duration-200 ease-out",
+                        isSelected ? "text-primary translate-x-0.5" : "text-muted-foreground"
                       )}
                     />
                   </button>
@@ -222,7 +227,10 @@ export function SidePanelLayers({
                   {/* Desktop/Tablet inline actions */}
                   <div className="hidden sm:flex items-center h-8">
                     <button
-                      onClick={() => handleSelectAll(theme)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleSelectAll(theme.id);
+                      }}
                       disabled={allVisible}
                       className={cn(
                         "text-[13px] leading-8 px-2.5 rounded-md transition-all font-medium",
@@ -237,7 +245,10 @@ export function SidePanelLayers({
                     </button>
                     <span className="text-border/40 text-[13px] leading-8 mx-1">|</span>
                     <button
-                      onClick={() => handleClearAll(theme)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleClearAll(theme.id);
+                      }}
                       disabled={noneVisible}
                       className={cn(
                         "text-[13px] leading-8 px-2.5 rounded-md transition-all font-medium",
@@ -258,13 +269,14 @@ export function SidePanelLayers({
                       <button 
                         className="sm:hidden p-2 rounded-lg hover:bg-white/30 dark:hover:bg-white/10 h-8 w-8 flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-primary transition-colors"
                         aria-label="Layer actions"
+                        onClick={(e) => e.stopPropagation()}
                       >
                         <MoreHorizontal className="w-4 h-4 text-muted-foreground" />
                       </button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-48 bg-card border border-border shadow-xl z-50">
                       <DropdownMenuItem 
-                        onClick={() => handleSelectAll(theme)}
+                        onClick={() => handleSelectAll(theme.id)}
                         disabled={allVisible}
                         className="gap-2.5 min-h-[44px]"
                       >
@@ -272,7 +284,7 @@ export function SidePanelLayers({
                         Select All
                       </DropdownMenuItem>
                       <DropdownMenuItem 
-                        onClick={() => handleClearAll(theme)}
+                        onClick={() => handleClearAll(theme.id)}
                         disabled={noneVisible}
                         className="gap-2.5 min-h-[44px]"
                       >
@@ -283,131 +295,21 @@ export function SidePanelLayers({
                   </DropdownMenu>
                 </div>
               </div>
-
-              {/* Layers List - Card-like rows with spacing */}
-              <div
-                className={cn(
-                  "overflow-hidden transition-all duration-300 ease-out motion-reduce:transition-none",
-                  isExpanded ? "max-h-[800px] opacity-100" : "max-h-0 opacity-0"
-                )}
-              >
-                <div className="px-3 pb-4 pt-1 space-y-3">
-                  {theme.layers.map((layer) => {
-                    const isHighlighted = highlightedLayerId === layer.id;
-                    const LayerIcon = iconMap[layer.icon];
-                    const categoryColor = getCategoryColor(layer.name);
-                    const layerColor = categoryColor.base;
-                    
-                    return (
-                      <Tooltip key={layer.id}>
-                        <TooltipTrigger asChild>
-                          <button
-                            onClick={() => onLayerToggle(theme.id, layer.id)}
-                            className={cn(
-                              "w-full flex items-center gap-3 px-3 py-3.5 rounded-xl text-left group",
-                              "transition-all duration-200 ease-out motion-reduce:transition-none",
-                              "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1",
-                              isHighlighted && "ring-2 ring-primary ring-offset-1 ring-offset-background",
-                              layer.visible
-                                ? "bg-white/60 dark:bg-white/10 border border-white/50 dark:border-white/20 shadow-sm"
-                                : "bg-white/20 dark:bg-white/5 border border-transparent hover:bg-white/40 dark:hover:bg-white/10 hover:border-white/30"
-                            )}
-                            aria-pressed={layer.visible}
-                            aria-label={`${layer.name}: ${layer.visible ? 'visible' : 'hidden'}`}
-                          >
-                            {/* Left: Layer Icon with tinted background */}
-                            <div
-                              className={cn(
-                                "w-10 h-10 flex-shrink-0 rounded-lg flex items-center justify-center",
-                                "transition-all duration-200 ease-out motion-reduce:transition-none",
-                                layer.visible 
-                                  ? "shadow-sm" 
-                                  : "opacity-60 group-hover:opacity-80"
-                              )}
-                              style={{ 
-                                backgroundColor: `${layerColor}15`,
-                              }}
-                            >
-                              <div 
-                                className={cn(
-                                  "transition-all duration-200 ease-out motion-reduce:transition-none",
-                                  layer.visible ? "opacity-100 scale-100" : "opacity-70 scale-95 group-hover:scale-100"
-                                )}
-                                style={{ color: layerColor }}
-                              >
-                                {LayerIcon ? (
-                                  <LayerIcon className="w-5 h-5" />
-                                ) : (
-                                  <div
-                                    className="w-5 h-5 rounded"
-                                    style={{ backgroundColor: layerColor }}
-                                  />
-                                )}
-                              </div>
-                            </div>
-                            
-                            {/* Center: Text Container */}
-                            <div className="flex-1 min-w-0 pr-1">
-                              <span className={cn(
-                                "block text-sm font-medium truncate transition-colors",
-                                layer.visible ? "text-foreground" : "text-foreground/80"
-                              )}>
-                                {layer.name}
-                              </span>
-                              <p className={cn(
-                                "text-xs truncate hidden sm:block transition-colors",
-                                layer.visible ? "text-muted-foreground" : "text-muted-foreground/70"
-                              )}>
-                                {layer.description}
-                              </p>
-                            </div>
-                            
-                            {/* Right: Toggle Indicator */}
-                            <div
-                              className={cn(
-                                "flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-lg",
-                                "transition-all duration-200 ease-out motion-reduce:transition-none",
-                                layer.visible
-                                  ? "shadow-sm"
-                                  : "bg-muted/20 group-hover:bg-muted/40"
-                              )}
-                              style={{
-                                backgroundColor: layer.visible ? `${layerColor}20` : undefined,
-                              }}
-                            >
-                              <div
-                                className={cn(
-                                  "w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-200 ease-out",
-                                  layer.visible
-                                    ? "border-transparent"
-                                    : "border-muted-foreground/25 group-hover:border-muted-foreground/40"
-                                )}
-                                style={{
-                                  backgroundColor: layer.visible ? layerColor : 'transparent',
-                                }}
-                              >
-                                {layer.visible ? (
-                                  <Check className="w-3.5 h-3.5 text-white" />
-                                ) : (
-                                  <Circle className="w-3 h-3 text-muted-foreground/30 group-hover:text-muted-foreground/50" />
-                                )}
-                              </div>
-                            </div>
-                          </button>
-                        </TooltipTrigger>
-                        <TooltipContent side="right" className="text-xs max-w-[220px] p-3">
-                          <p className="font-medium mb-0.5">{layer.name}</p>
-                          <p className="text-muted-foreground">{layer.description}</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    );
-                  })}
-                </div>
-              </div>
             </div>
           );
         })}
       </div>
-    </TooltipProvider>
+
+      {/* Layer Flyout - Opens to the right */}
+      <LayerFlyout
+        theme={selectedTheme}
+        isOpen={!!selectedTheme}
+        onClose={handleCloseFlyout}
+        onLayerToggle={onLayerToggle}
+        onSelectAll={handleSelectAll}
+        onClearAll={handleClearAll}
+        highlightedLayerId={highlightedLayerId}
+      />
+    </div>
   );
 }

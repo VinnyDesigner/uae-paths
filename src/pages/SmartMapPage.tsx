@@ -1,9 +1,10 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Menu, X, Sparkles, Layers, Filter, Map, MapPin } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { SmartSearch } from '@/components/search/SmartSearch';
 import { InteractiveMap } from '@/components/map/InteractiveMap';
+import { DirectionsPanel } from '@/components/map/DirectionsPanel';
 
 import { BaseMapSelector } from '@/components/map/BaseMapSelector';
 import { MapLegendOverlay } from '@/components/map/MapLegendOverlay';
@@ -35,6 +36,7 @@ export default function SmartMapPage() {
   const [baseMapId, setBaseMapId] = useState('default');
   const [mobileSheetOpen, setMobileSheetOpen] = useState(false);
   const [selectedFacility, setSelectedFacility] = useState<Facility | null>(null);
+  const [directionsFacility, setDirectionsFacility] = useState<Facility | null>(null);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | undefined>();
   const [highlightedLayerId, setHighlightedLayerId] = useState<number | null>(null);
 
@@ -117,6 +119,21 @@ export default function SmartMapPage() {
     clearResults();
     setHighlightedLayerId(null);
   };
+
+  // Handle directions panel opening via custom event from map popup
+  const handleOpenDirections = useCallback((event: CustomEvent<{ facilityId: string }>) => {
+    const facility = uaeFacilities.find(f => f.id === event.detail.facilityId);
+    if (facility) {
+      setDirectionsFacility(facility);
+    }
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('openDirections', handleOpenDirections as EventListener);
+    return () => {
+      window.removeEventListener('openDirections', handleOpenDirections as EventListener);
+    };
+  }, [handleOpenDirections]);
 
   return (
     <div className="h-screen flex flex-col bg-background">
@@ -299,6 +316,33 @@ export default function SmartMapPage() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Directions Panel - Desktop: right side modal, Mobile: bottom sheet */}
+      {directionsFacility && (
+        <>
+          {/* Desktop */}
+          <div className="hidden lg:block fixed top-1/2 right-8 -translate-y-1/2 z-[1100]">
+            <DirectionsPanel 
+              facility={directionsFacility} 
+              onClose={() => setDirectionsFacility(null)} 
+            />
+          </div>
+          {/* Mobile */}
+          <div className="lg:hidden fixed inset-0 z-[1100]">
+            <div 
+              className="absolute inset-0 bg-foreground/30 backdrop-blur-sm" 
+              onClick={() => setDirectionsFacility(null)} 
+            />
+            <div className="absolute bottom-0 left-0 right-0 animate-slide-in-right">
+              <DirectionsPanel 
+                facility={directionsFacility} 
+                onClose={() => setDirectionsFacility(null)}
+                className="rounded-b-none"
+              />
+            </div>
+          </div>
+        </>
       )}
 
     </div>

@@ -6,12 +6,12 @@ import { Button } from '@/components/ui/button';
 interface FacilityCardProps {
   facility: Facility;
   onClose?: () => void;
-  onNavigate?: () => void;
+  onGetDirections?: (facility: Facility) => void;
   compact?: boolean;
   className?: string;
 }
 
-export function FacilityCard({ facility, onClose, onNavigate, compact = false, className }: FacilityCardProps) {
+export function FacilityCard({ facility, onClose, onGetDirections, compact = false, className }: FacilityCardProps) {
   const isHealthcare = facility.theme === 'healthcare';
 
   if (compact) {
@@ -116,7 +116,7 @@ export function FacilityCard({ facility, onClose, onNavigate, compact = false, c
         <Button
           variant={isHealthcare ? "healthcare" : "education"}
           className="flex-1"
-          onClick={onNavigate}
+          onClick={() => onGetDirections?.(facility)}
         >
           <Navigation className="w-4 h-4 mr-2" />
           Get Directions

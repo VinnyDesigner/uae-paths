@@ -144,6 +144,7 @@ interface InteractiveMapProps {
   searchResults?: Facility[];
   selectedFacility?: Facility | null;
   onFacilitySelect?: (facility: Facility) => void;
+  onGetDirections?: (facility: Facility) => void;
   suggestedZoom?: number;
   baseMapId?: string;
   className?: string;
@@ -158,7 +159,8 @@ export function InteractiveMap({
   facilities,
   searchResults = [],
   selectedFacility, 
-  onFacilitySelect, 
+  onFacilitySelect,
+  onGetDirections,
   suggestedZoom,
   baseMapId = 'default',
   className 
@@ -362,7 +364,7 @@ export function InteractiveMap({
             ${distanceInfo}
           </div>
           <div style="display: flex; gap: 8px; margin-top: 14px;">
-            <button onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=${facility.coordinates[1]},${facility.coordinates[0]}', '_blank')" style="
+            <button onclick="window.dispatchEvent(new CustomEvent('openDirections', { detail: { facilityId: '${facility.id}' } }))" style="
               flex: 1;
               padding: 10px;
               border-radius: 10px;

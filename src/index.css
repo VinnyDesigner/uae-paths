@@ -48,6 +48,21 @@
     --healthcare-foreground: 0 0% 100%;
     --healthcare-light: 208 60% 92%;
 
+    /* Category Colors - Unified Color System */
+    --cat-hospitals: 201 97% 32%;
+    --cat-clinics: 175 84% 32%;
+    --cat-diagnostic: 189 94% 36%;
+    --cat-pharmacies: 142 76% 36%;
+    --cat-healthcare-centers: 168 76% 40%;
+    --cat-ambulance: 0 72% 51%;
+    --cat-rehab: 263 70% 50%;
+    --cat-mobile-units: 215 16% 35%;
+    --cat-public-schools: 200 100% 61%;
+    --cat-private-schools: 217 91% 60%;
+    --cat-charter-schools: 239 84% 67%;
+    --cat-nurseries: 38 92% 50%;
+    --cat-pod-centers: 258 90% 66%;
+
     /* Success, Warning, Destructive */
     --success: 208 88% 20%;
     --success-foreground: 0 0% 100%;

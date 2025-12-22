@@ -56,6 +56,22 @@ export default {
           foreground: "hsl(var(--education-foreground))",
           light: "hsl(var(--education-light))",
         },
+        // Category colors for map layers
+        category: {
+          hospitals: "hsl(var(--cat-hospitals))",
+          clinics: "hsl(var(--cat-clinics))",
+          diagnostic: "hsl(var(--cat-diagnostic))",
+          pharmacies: "hsl(var(--cat-pharmacies))",
+          healthcareCenters: "hsl(var(--cat-healthcare-centers))",
+          ambulance: "hsl(var(--cat-ambulance))",
+          rehab: "hsl(var(--cat-rehab))",
+          mobileUnits: "hsl(var(--cat-mobile-units))",
+          publicSchools: "hsl(var(--cat-public-schools))",
+          privateSchools: "hsl(var(--cat-private-schools))",
+          charterSchools: "hsl(var(--cat-charter-schools))",
+          nurseries: "hsl(var(--cat-nurseries))",
+          podCenters: "hsl(var(--cat-pod-centers))",
+        },
         success: {
           DEFAULT: "hsl(var(--success))",
           foreground: "hsl(var(--success-foreground))",

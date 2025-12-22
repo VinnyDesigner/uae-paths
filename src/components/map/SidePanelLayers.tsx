@@ -16,8 +16,6 @@ import {
   BookOpen,
   Baby,
   Users,
-  CheckCircle2,
-  XCircle,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ThemeGroup } from '@/types/map';
@@ -271,57 +269,10 @@ export function SidePanelLayers({
                   </div>
                 </button>
 
-                {/* Divider */}
-                <div className="h-px bg-border/40 my-3" />
-
-                {/* Row 2: Status (left) | Actions (right) - Equal height alignment */}
-                <div className="grid grid-cols-2 items-center h-8">
-                  {/* Left: Visibility counter */}
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-sm font-semibold text-foreground">{visibleCount}</span>
-                    <span className="text-sm text-muted-foreground">of {totalCount} visible</span>
-                  </div>
-
-                  {/* Right: Select All | Clear All */}
-                  <div className="flex items-center justify-end gap-1">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleSelectAll(theme.id);
-                      }}
-                      disabled={allVisible}
-                      className={cn(
-                        "flex items-center gap-1 px-2 h-7 rounded-lg text-xs font-medium transition-all duration-120",
-                        "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary",
-                        allVisible
-                          ? "text-muted-foreground/40 cursor-not-allowed"
-                          : "text-primary hover:bg-primary/10 active:scale-95"
-                      )}
-                      aria-label={`Select all ${theme.name} layers`}
-                    >
-                      <CheckCircle2 className="w-3.5 h-3.5" />
-                      <span className="hidden sm:inline">All</span>
-                    </button>
-                    <span className="text-muted-foreground/30 text-xs select-none">|</span>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleClearAll(theme.id);
-                      }}
-                      disabled={noneVisible}
-                      className={cn(
-                        "flex items-center gap-1 px-2 h-7 rounded-lg text-xs font-medium transition-all duration-120",
-                        "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary",
-                        noneVisible
-                          ? "text-muted-foreground/40 cursor-not-allowed"
-                          : "text-muted-foreground hover:bg-muted/50 hover:text-foreground active:scale-95"
-                      )}
-                      aria-label={`Clear all ${theme.name} layers`}
-                    >
-                      <XCircle className="w-3.5 h-3.5" />
-                      <span className="hidden sm:inline">Clear</span>
-                    </button>
-                  </div>
+                {/* Row 2: Visibility summary - clean status only */}
+                <div className="flex items-center gap-1.5 mt-2 pl-1">
+                  <span className="text-sm font-semibold text-foreground">{visibleCount}</span>
+                  <span className="text-sm text-muted-foreground">of {totalCount} visible</span>
                 </div>
               </div>
             </div>

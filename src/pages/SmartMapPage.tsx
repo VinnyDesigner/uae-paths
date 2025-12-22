@@ -125,10 +125,10 @@ export default function SmartMapPage() {
       {/* Map Area */}
       <main className="flex-1 relative h-full min-h-[500px]">
         {/* Left Panel Overlay - Desktop (Glassmorphism) */}
-        <div className="hidden lg:flex flex-col w-80 absolute top-4 left-4 bottom-4 bg-white/40 dark:bg-card/40 backdrop-blur-xl border border-white/30 dark:border-white/10 rounded-2xl shadow-2xl z-[1001] overflow-hidden">
-          {/* Sticky Search Section */}
-          <div className="sticky top-0 z-10 p-4 pb-3 bg-white/60 dark:bg-card/60 backdrop-blur-xl border-b border-white/20 dark:border-white/10 shadow-sm">
-            <div className="bg-white/50 dark:bg-white/5 rounded-xl p-3 border border-white/20 dark:border-white/10 transition-all hover:bg-white/60 dark:hover:bg-white/10" style={{ overflow: 'visible' }}>
+        <div className="hidden lg:flex flex-col w-80 absolute top-4 left-4 bottom-4 bg-white/40 dark:bg-card/40 backdrop-blur-xl border border-white/30 dark:border-white/10 rounded-2xl shadow-2xl z-[1001]">
+          {/* Sticky Search Stack - Non-scrolling, contains search + suggestions overlay */}
+          <div className="relative z-20 p-4 pb-3 bg-white/60 dark:bg-card/60 backdrop-blur-xl border-b border-white/20 dark:border-white/10 shadow-sm rounded-t-2xl" style={{ overflow: 'visible' }}>
+            <div className="relative bg-white/50 dark:bg-white/5 rounded-xl p-3 border border-white/20 dark:border-white/10 transition-all hover:bg-white/60 dark:hover:bg-white/10" style={{ overflow: 'visible' }}>
               <SmartSearch 
                 onSearch={handleSearch} 
                 onLocateMe={handleLocateMe} 
@@ -146,8 +146,8 @@ export default function SmartMapPage() {
             )}
           </div>
           
-          {/* Scrollable Content */}
-          <div className="p-4 pt-3 space-y-4 overflow-y-auto flex-1 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-white/30 hover:scrollbar-thumb-white/50">
+          {/* Scrollable Content Area - Only this scrolls */}
+          <div className="relative z-10 p-4 pt-3 space-y-4 overflow-y-auto flex-1 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-white/30 hover:scrollbar-thumb-white/50">
             {/* Filters Section */}
             <div className="bg-white/30 dark:bg-white/5 rounded-xl pt-3 pb-4 px-4 border border-white/20 dark:border-white/10">
               <h4 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">

@@ -180,11 +180,10 @@ export function SmartSearch({
 
       </div>
 
-      {/* AI-Powered Suggestions - In document flow when visible */}
+      {/* AI-Powered Suggestions - Absolute positioned to overlay content */}
       {showSuggestions && filteredSuggestions.length > 0 && (
         <div 
-          className="relative mt-2 bg-card border border-border rounded-xl shadow-xl z-50 animate-fade-in"
-          style={{ overflow: 'visible' }}
+          className="absolute left-0 right-0 top-full mt-2 bg-card border border-border rounded-xl shadow-2xl z-[9999] animate-fade-in"
         >
           <div className="p-2">
             <div className="flex items-center gap-2 px-3 py-2">
@@ -193,8 +192,8 @@ export function SmartSearch({
                 AI-Powered Suggestions
               </p>
             </div>
-            <div className="max-h-64 overflow-y-auto">
-              {filteredSuggestions.map((suggestion, index) => (
+            <div className="max-h-64 overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted">
+              {filteredSuggestions.slice(0, 6).map((suggestion, index) => (
                 <button
                   key={suggestion.text}
                   onClick={() => handleSubmit(suggestion.text)}

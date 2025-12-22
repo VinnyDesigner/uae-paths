@@ -6,6 +6,9 @@
 
 @layer base {
   :root {
+    /* Layout */
+    --header-height: 64px;
+    
     /* SDI Government Blue Palette */
     --background: 210 20% 98%;
     --foreground: 215 25% 15%;

@@ -53,13 +53,13 @@ export default function HomePage() {
                 Find healthcare and education services across the UAE
               </p>
 
-              {/* Search Bar - Wider & Dominant */}
-              <div className="max-w-2xl mx-auto mb-6 animate-fade-up delay-200">
+              {/* Search Bar Container - Reserves space for dropdown */}
+              <div className="max-w-2xl mx-auto mb-8 animate-fade-up delay-200">
                 <SmartSearch onSearch={handleSearch} size="large" />
               </div>
 
-              {/* CTAs */}
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 animate-fade-up delay-300">
+              {/* CTAs - Separate from search container with proper spacing */}
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-6 animate-fade-up delay-300">
                 <Button variant="accent" size="lg" asChild className="rounded-lg px-8">
                   <Link to="/map">
                     <MapPin className="w-4 h-4 mr-2" />

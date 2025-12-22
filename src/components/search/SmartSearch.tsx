@@ -181,7 +181,7 @@ export function SmartSearch({
 
       {/* AI-Powered Suggestions Dropdown */}
       {showSuggestions && filteredSuggestions.length > 0 && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-card border border-border rounded-xl shadow-xl overflow-hidden z-50 animate-fade-in">
+        <div className="absolute top-full left-0 right-0 mt-2 bg-card border border-border rounded-xl shadow-xl overflow-hidden z-[100] animate-fade-in">
           <div className="p-2">
             <div className="flex items-center gap-2 px-3 py-2">
               <Sparkles className="w-4 h-4 text-primary" />

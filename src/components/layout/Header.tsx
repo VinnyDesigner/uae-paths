@@ -18,7 +18,6 @@ export function Header() {
   return (
     <header className={cn(
       "sticky top-0 z-50 w-full glass-strong",
-      // Compact height on mobile for map page
       isMapPage ? "h-12 md:h-auto" : ""
     )}>
       <div className="container mx-auto px-3 md:px-4">
@@ -26,7 +25,7 @@ export function Header() {
           "flex items-center justify-between",
           isMapPage ? "h-12 md:h-16" : "h-16"
         )}>
-          {/* Logo - Smaller on mobile map page */}
+          {/* Logo */}
           <Link to="/" className="flex items-center group">
             <img 
               src={sdiLogo} 
@@ -62,9 +61,10 @@ export function Header() {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2 -mr-1 rounded-lg hover:bg-secondary transition-colors min-h-[40px] min-w-[40px] flex items-center justify-center"
+            className="md:hidden p-2 -mr-1 rounded-lg hover:bg-secondary transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={mobileMenuOpen}
           >
             {mobileMenuOpen ? (
               <X className="w-5 h-5 text-foreground" />
@@ -75,30 +75,49 @@ export function Header() {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu - Restructured with clear zones */}
       {mobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-card border-b border-border shadow-lg animate-fade-in z-50">
-          <nav className="container mx-auto px-4 py-3 flex flex-col gap-1">
-            {navItems.map((item) => {
-              const isActive = location.pathname === item.path;
-              return (
-                <Link
-                  key={item.name}
-                  to={item.path}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={cn(
-                    "flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all min-h-[48px]",
-                    isActive
-                      ? "bg-primary text-primary-foreground"
-                      : "text-foreground hover:bg-secondary"
-                  )}
-                >
-                  <item.icon className="w-5 h-5" />
-                  {item.name}
-                </Link>
-              );
-            })}
+        <div className="md:hidden absolute top-full left-0 right-0 bg-card border-b border-border shadow-xl z-50 animate-fade-in">
+          {/* Zone 1: Brand confirmation + Close - Already in header bar */}
+          
+          {/* Zone 2: Navigation */}
+          <nav className="px-4 py-4">
+            {/* Navigation Items with clear separation */}
+            <div className="space-y-2">
+              {navItems.map((item, index) => {
+                const isActive = location.pathname === item.path;
+                return (
+                  <div key={item.name}>
+                    {/* Divider before non-first inactive items */}
+                    {index > 0 && !isActive && (
+                      <div className="h-px bg-border mb-2" />
+                    )}
+                    <Link
+                      to={item.path}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={cn(
+                        "flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all min-h-[48px] w-full",
+                        isActive
+                          ? "bg-primary text-primary-foreground shadow-md"
+                          : "text-foreground hover:bg-secondary bg-secondary/30"
+                      )}
+                    >
+                      <item.icon className="w-5 h-5 flex-shrink-0" />
+                      <span>{item.name}</span>
+                      {isActive && (
+                        <span className="ml-auto text-xs bg-primary-foreground/20 px-2 py-0.5 rounded-full">
+                          Active
+                        </span>
+                      )}
+                    </Link>
+                  </div>
+                );
+              })}
+            </div>
           </nav>
+          
+          {/* Bottom safe area padding */}
+          <div className="h-2 bg-gradient-to-b from-card to-transparent" />
         </div>
       )}
     </header>

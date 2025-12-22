@@ -180,54 +180,57 @@ export function SmartSearch({
 
       </div>
 
-      {/* AI-Powered Suggestions - Absolute positioned to overlay content */}
+      {/* AI-Powered Suggestions - Compact fixed height with internal scroll */}
       {showSuggestions && filteredSuggestions.length > 0 && (
         <div 
-          className="absolute left-0 right-0 top-full mt-2 bg-card border border-border rounded-xl shadow-2xl z-[9999] animate-fade-in"
+          className="absolute left-0 right-0 top-full mt-2 bg-card border border-border rounded-xl shadow-2xl z-[9999] animate-fade-in flex flex-col max-h-[200px] md:max-h-[280px]"
         >
-          <div className="p-2">
-            <div className="flex items-center gap-2 px-3 py-2">
-              <Sparkles className="w-4 h-4 text-primary" />
-              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
-                AI-Powered Suggestions
-              </p>
-            </div>
-            <div className="max-h-64 overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted">
-              {filteredSuggestions.slice(0, 6).map((suggestion, index) => (
-                <button
-                  key={suggestion.text}
-                  onClick={() => handleSubmit(suggestion.text)}
-                  className={cn(
-                    "w-full flex items-center gap-3 px-3 py-3 rounded-lg text-left transition-all",
-                    index === selectedIndex
-                      ? "bg-primary text-primary-foreground"
-                      : "text-foreground hover:bg-secondary"
-                  )}
-                >
-                  <span className="text-lg">{suggestion.icon}</span>
-                  <div className="flex-1">
-                    <span className="text-sm font-medium">{suggestion.text}</span>
-                    <span className={cn(
-                      "ml-2 text-xs px-2 py-0.5 rounded-full",
-                      index === selectedIndex 
-                        ? "bg-primary-foreground/20 text-primary-foreground" 
-                        : "bg-secondary text-muted-foreground"
-                    )}>
-                      {suggestion.category}
-                    </span>
-                  </div>
-                  <MapPin className={cn(
-                    "w-4 h-4",
-                    index === selectedIndex ? "text-primary-foreground/60" : "text-muted-foreground/60"
-                  )} />
-                </button>
-              ))}
-            </div>
+          {/* Fixed Header */}
+          <div className="flex items-center gap-2 px-4 py-2.5 border-b border-border/50 flex-shrink-0">
+            <Sparkles className="w-4 h-4 text-primary" />
+            <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
+              AI-Powered Suggestions
+            </p>
           </div>
-          <div className="px-4 py-3 bg-secondary/50 border-t border-border rounded-b-xl flex items-center gap-2">
+          
+          {/* Scrollable Suggestions List */}
+          <div className="flex-1 overflow-y-auto scroll-smooth px-2 py-1.5">
+            {filteredSuggestions.map((suggestion, index) => (
+              <button
+                key={suggestion.text}
+                onClick={() => handleSubmit(suggestion.text)}
+                className={cn(
+                  "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all",
+                  index === selectedIndex
+                    ? "bg-primary text-primary-foreground"
+                    : "text-foreground hover:bg-secondary"
+                )}
+              >
+                <span className="text-lg flex-shrink-0">{suggestion.icon}</span>
+                <div className="flex-1 min-w-0">
+                  <span className="text-sm font-medium">{suggestion.text}</span>
+                  <span className={cn(
+                    "ml-2 text-xs px-2 py-0.5 rounded-full",
+                    index === selectedIndex 
+                      ? "bg-primary-foreground/20 text-primary-foreground" 
+                      : "bg-secondary text-muted-foreground"
+                  )}>
+                    {suggestion.category}
+                  </span>
+                </div>
+                <MapPin className={cn(
+                  "w-4 h-4 flex-shrink-0",
+                  index === selectedIndex ? "text-primary-foreground/60" : "text-muted-foreground/60"
+                )} />
+              </button>
+            ))}
+          </div>
+          
+          {/* Fixed Footer Hint */}
+          <div className="px-4 py-2 bg-secondary/50 border-t border-border rounded-b-xl flex items-center gap-2 flex-shrink-0">
             <Sparkles className="w-3 h-3 text-primary" />
             <p className="text-xs text-muted-foreground">
-              AI understands natural language queries like "nearest hospital" or "schools in Abu Dhabi"
+              AI understands natural language queries
             </p>
           </div>
         </div>

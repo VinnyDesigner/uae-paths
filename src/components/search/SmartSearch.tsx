@@ -148,8 +148,8 @@ export function SmartSearch({
           onKeyDown={handleKeyDown}
           placeholder={dynamicPlaceholder}
           className={cn(
-            "flex-1 bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground",
-            isLarge ? "px-4 text-base md:text-lg" : "px-3 text-sm"
+            "flex-1 min-w-0 bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground truncate",
+            isLarge ? "pl-4 pr-2 text-base md:text-lg" : "pl-3 pr-2 text-sm"
           )}
         />
 

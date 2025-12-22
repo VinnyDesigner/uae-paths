@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { 
   ArrowLeft,
   Check,
@@ -39,6 +39,7 @@ interface LayerFlyoutProps {
   onSelectAll: (themeId: number) => void;
   onClearAll: (themeId: number) => void;
   highlightedLayerId?: number | null;
+  clickedElementRect?: DOMRect | null;
 }
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -66,9 +67,69 @@ export function LayerFlyout({
   onLayerToggle,
   onSelectAll,
   onClearAll,
-  highlightedLayerId 
+  highlightedLayerId,
+  clickedElementRect,
 }: LayerFlyoutProps) {
   const flyoutRef = useRef<HTMLDivElement>(null);
+  const [flyoutPosition, setFlyoutPosition] = useState({ top: 0, maxHeight: 0 });
+
+  // Calculate flyout position based on clicked element
+  const calculatePosition = useCallback(() => {
+    if (!clickedElementRect) {
+      // Default position if no rect
+      const headerHeight = 64;
+      const padding = 16;
+      return {
+        top: headerHeight + padding,
+        maxHeight: window.innerHeight - headerHeight - padding * 2,
+      };
+    }
+
+    const headerHeight = 64;
+    const safeTop = headerHeight + 16;
+    const safeBottom = 16;
+    const viewportHeight = window.innerHeight;
+    
+    // Estimate flyout height (header ~120px + list items ~70px each)
+    const estimatedItemHeight = 72;
+    const estimatedHeaderHeight = 140;
+    const estimatedListHeight = (theme?.layers.length || 8) * estimatedItemHeight;
+    const estimatedFlyoutHeight = Math.min(
+      estimatedHeaderHeight + estimatedListHeight,
+      viewportHeight - safeTop - safeBottom
+    );
+
+    // Start from clicked element's top
+    let targetTop = clickedElementRect.top;
+
+    // Clamp to viewport bounds
+    const minTop = safeTop;
+    const maxTop = viewportHeight - estimatedFlyoutHeight - safeBottom;
+    
+    targetTop = Math.max(minTop, Math.min(targetTop, maxTop));
+
+    const maxHeight = viewportHeight - targetTop - safeBottom;
+
+    return { top: targetTop, maxHeight };
+  }, [clickedElementRect, theme?.layers.length]);
+
+  // Update position when opening or clicked element changes
+  useEffect(() => {
+    if (isOpen) {
+      setFlyoutPosition(calculatePosition());
+    }
+  }, [isOpen, calculatePosition]);
+
+  // Recalculate on resize
+  useEffect(() => {
+    const handleResize = () => {
+      if (isOpen) {
+        setFlyoutPosition(calculatePosition());
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isOpen, calculatePosition]);
 
   // Close on escape key
   useEffect(() => {
@@ -112,20 +173,24 @@ export function LayerFlyout({
     <div
       ref={flyoutRef}
       className={cn(
-        "fixed top-[calc(var(--header-height,56px)+16px)] bottom-4 w-[380px] bg-white/95 dark:bg-card/95 backdrop-blur-xl",
+        "fixed w-[380px] bg-white/95 dark:bg-card/95 backdrop-blur-xl",
         "border border-white/30 dark:border-white/10 rounded-2xl shadow-2xl z-[1002]",
         "transition-all duration-250 ease-out",
-        "flex flex-col",
+        "flex flex-col overflow-hidden",
         isOpen 
           ? "opacity-100 translate-x-0 pointer-events-auto" 
           : "opacity-0 -translate-x-4 pointer-events-none"
       )}
-      style={{ left: `${leftPosition}px` }}
+      style={{ 
+        left: `${leftPosition}px`,
+        top: `${flyoutPosition.top}px`,
+        maxHeight: `${flyoutPosition.maxHeight}px`,
+      }}
       role="dialog"
       aria-modal="true"
       aria-label={`${theme.name} layers`}
     >
-      {/* Flyout Header */}
+      {/* Flyout Header - Sticky */}
       <div 
         className={cn(
           "px-4 py-4 border-b border-white/20 dark:border-white/10 flex-shrink-0",
@@ -202,7 +267,7 @@ export function LayerFlyout({
 
       {/* Scrollable Layer List */}
       <TooltipProvider delayDuration={300}>
-        <div className="flex-1 overflow-y-auto p-4 space-y-3 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-white/30 hover:scrollbar-thumb-white/50">
+        <div className="flex-1 overflow-y-auto p-4 space-y-3 overscroll-contain">
           {theme.layers.map((layer) => {
             const isHighlighted = highlightedLayerId === layer.id;
             const LayerIcon = iconMap[layer.icon];
@@ -216,7 +281,7 @@ export function LayerFlyout({
                     onClick={() => onLayerToggle(theme.id, layer.id)}
                     className={cn(
                       "w-full flex items-center gap-3 px-3 py-3.5 rounded-xl text-left group",
-                      "transition-all duration-200 ease-out motion-reduce:transition-none",
+                      "transition-all duration-150 ease-out motion-reduce:transition-none",
                       "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1",
                       isHighlighted && "ring-2 ring-primary ring-offset-1 ring-offset-background",
                       layer.visible
@@ -230,7 +295,7 @@ export function LayerFlyout({
                     <div
                       className={cn(
                         "w-10 h-10 flex-shrink-0 rounded-lg flex items-center justify-center",
-                        "transition-all duration-200 ease-out motion-reduce:transition-none",
+                        "transition-all duration-150 ease-out motion-reduce:transition-none",
                         layer.visible 
                           ? "shadow-sm" 
                           : "opacity-60 group-hover:opacity-80"
@@ -241,8 +306,8 @@ export function LayerFlyout({
                     >
                       <div 
                         className={cn(
-                          "transition-all duration-200 ease-out motion-reduce:transition-none",
-                          layer.visible ? "opacity-100 scale-100" : "opacity-70 scale-95 group-hover:scale-100"
+                          "transition-all duration-150 ease-out motion-reduce:transition-none",
+                          layer.visible ? "opacity-100 scale-100" : "opacity-70 scale-[0.98] group-hover:scale-100"
                         )}
                         style={{ color: layerColor }}
                       >
@@ -277,7 +342,7 @@ export function LayerFlyout({
                     <div
                       className={cn(
                         "flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-lg",
-                        "transition-all duration-200 ease-out motion-reduce:transition-none",
+                        "transition-all duration-150 ease-out motion-reduce:transition-none",
                         layer.visible
                           ? "shadow-sm"
                           : "bg-muted/20 group-hover:bg-muted/40"
@@ -288,7 +353,7 @@ export function LayerFlyout({
                     >
                       <div
                         className={cn(
-                          "w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-200 ease-out",
+                          "w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-150 ease-out",
                           layer.visible
                             ? "border-transparent"
                             : "border-muted-foreground/25 group-hover:border-muted-foreground/40"

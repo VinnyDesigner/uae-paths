@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Menu, X, Sparkles, Filter, Map, MapPin } from 'lucide-react';
+import { Menu, X, Sparkles, Filter, Map, MapPin, Layers } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { SmartSearch } from '@/components/search/SmartSearch';
 import { InteractiveMap } from '@/components/map/InteractiveMap';
@@ -82,6 +82,32 @@ export default function SmartMapPage() {
               layers: theme.layers.map(layer =>
                 layer.id === layerId ? { ...layer, visible: !layer.visible } : layer
               ),
+            }
+          : theme
+      )
+    );
+  };
+
+  const handleSelectAll = (themeId: number) => {
+    setLayers(prevLayers =>
+      prevLayers.map(theme =>
+        theme.id === themeId
+          ? {
+              ...theme,
+              layers: theme.layers.map(layer => ({ ...layer, visible: true })),
+            }
+          : theme
+      )
+    );
+  };
+
+  const handleClearAll = (themeId: number) => {
+    setLayers(prevLayers =>
+      prevLayers.map(theme =>
+        theme.id === themeId
+          ? {
+              ...theme,
+              layers: theme.layers.map(layer => ({ ...layer, visible: false })),
             }
           : theme
       )
@@ -187,6 +213,8 @@ export default function SmartMapPage() {
               <SidePanelLayers 
                 layers={layers} 
                 onLayerToggle={handleLayerToggle}
+                onSelectAll={handleSelectAll}
+                onClearAll={handleClearAll}
                 highlightedLayerId={highlightedLayerId}
               />
             </div>
@@ -247,42 +275,26 @@ export default function SmartMapPage() {
             <div className="p-4 space-y-6">
               {/* Mobile Filters */}
               <div>
-                <h4 className="text-sm font-semibold text-foreground mb-3">Filters</h4>
+                <h4 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                  <Filter className="w-4 h-4 text-primary" />
+                  Filters
+                </h4>
                 <InlineFilters filters={filters} onFilterChange={setFilters} className="flex-wrap" />
               </div>
 
-              {/* Mobile Layers */}
+              {/* Mobile Layers - Use same enhanced component */}
               <div>
-                <h4 className="text-sm font-semibold text-foreground mb-3">Map Layers</h4>
-                <div className="space-y-3">
-                  {layers.map(theme => (
-                    <div key={theme.id} className="bg-secondary/30 rounded-xl p-3">
-                      <h5 className="text-sm font-medium text-foreground mb-2">{theme.name}</h5>
-                      <div className="space-y-2">
-                        {theme.layers.map(layer => (
-                          <label
-                            key={layer.id}
-                            className="flex items-center justify-between py-2 px-2 rounded-lg hover:bg-secondary/50 cursor-pointer"
-                          >
-                            <div className="flex items-center gap-2">
-                              <div
-                                className="w-5 h-5 rounded-md"
-                                style={{ backgroundColor: layer.color }}
-                              />
-                              <span className="text-sm text-foreground">{layer.name}</span>
-                            </div>
-                            <input
-                              type="checkbox"
-                              checked={layer.visible}
-                              onChange={() => handleLayerToggle(theme.id, layer.id)}
-                              className="w-4 h-4 rounded border-border text-primary focus:ring-primary"
-                            />
-                          </label>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                <h4 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                  <Layers className="w-4 h-4 text-primary" />
+                  Map Layers
+                </h4>
+                <SidePanelLayers 
+                  layers={layers} 
+                  onLayerToggle={handleLayerToggle}
+                  onSelectAll={handleSelectAll}
+                  onClearAll={handleClearAll}
+                  highlightedLayerId={highlightedLayerId}
+                />
               </div>
 
             </div>

@@ -264,15 +264,39 @@ export default function SmartMapPage() {
       {/* Mobile Bottom Sheet */}
       {mobileSheetOpen && (
         <div className="lg:hidden fixed inset-0 z-50">
-          <div className="absolute inset-0 bg-foreground/20 backdrop-blur-sm" onClick={() => setMobileSheetOpen(false)} />
-          <div className="absolute bottom-0 left-0 right-0 bg-card rounded-t-2xl border-t border-border max-h-[80vh] overflow-y-auto animate-slide-in-right">
-            <div className="sticky top-0 bg-card border-b border-border p-4 flex items-center justify-between">
-              <h3 className="font-heading font-semibold text-foreground">Layers & Filters</h3>
-              <button onClick={() => setMobileSheetOpen(false)} className="p-2 rounded-lg hover:bg-secondary">
+          <div 
+            className="absolute inset-0 bg-foreground/20 backdrop-blur-sm transition-opacity duration-200" 
+            onClick={() => setMobileSheetOpen(false)} 
+            aria-hidden="true"
+          />
+          <div 
+            className="absolute bottom-0 left-0 right-0 bg-card rounded-t-2xl border-t border-border max-h-[85vh] flex flex-col animate-slide-in-right"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Layers and Filters"
+          >
+            {/* Sheet Handle */}
+            <div className="flex justify-center pt-3 pb-1">
+              <div className="w-10 h-1 rounded-full bg-muted-foreground/30" />
+            </div>
+            
+            {/* Sticky Header */}
+            <div className="sticky top-0 bg-card border-b border-border px-4 py-3 flex items-center justify-between z-10">
+              <div className="flex items-center gap-2">
+                <Layers className="w-5 h-5 text-primary" />
+                <h3 className="font-heading font-semibold text-foreground">Layers & Filters</h3>
+              </div>
+              <button 
+                onClick={() => setMobileSheetOpen(false)} 
+                className="p-2 rounded-lg hover:bg-secondary min-h-[44px] min-w-[44px] flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                aria-label="Close panel"
+              >
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <div className="p-4 space-y-6">
+            
+            {/* Scrollable Content */}
+            <div className="flex-1 overflow-y-auto overscroll-contain p-4 space-y-6">
               {/* Mobile Filters */}
               <div>
                 <h4 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
@@ -282,7 +306,7 @@ export default function SmartMapPage() {
                 <InlineFilters filters={filters} onFilterChange={setFilters} className="flex-wrap" />
               </div>
 
-              {/* Mobile Layers - Use same enhanced component */}
+              {/* Mobile Layers */}
               <div>
                 <h4 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
                   <Layers className="w-4 h-4 text-primary" />
@@ -296,7 +320,6 @@ export default function SmartMapPage() {
                   highlightedLayerId={highlightedLayerId}
                 />
               </div>
-
             </div>
           </div>
         </div>

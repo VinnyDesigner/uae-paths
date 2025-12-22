@@ -76,52 +76,52 @@ export function LayerFlyout({
   const [flyoutPosition, setFlyoutPosition] = useState({ top: 0, height: 0, left: 0 });
   const [togglingLayerId, setTogglingLayerId] = useState<number | null>(null);
 
-  // Calculate flyout position: starts at clicked card top, ends at sidebar bottom
+  // Calculate flyout position: starts at clicked card's vertical center, ends at sidebar bottom
   const calculatePosition = useCallback(() => {
-    const safePadding = 8;
-    const minFlyoutHeight = 200;
+    const gap = 12; // gap between sidebar and flyout
+    const bottomPadding = 0; // flyout ends exactly at sidebar bottom
+    const minFlyoutHeight = 280;
     
-    // Get sidebar bounds
+    // Get sidebar bounds - use defaults if not available
     const sidebarTop = sidebarRect?.top ?? 80;
-    const sidebarBottom = sidebarRect?.bottom ?? window.innerHeight - 16;
+    const sidebarBottom = sidebarRect?.bottom ?? (window.innerHeight - 16);
     const sidebarRight = sidebarRect?.right ?? 336;
 
-    // Left position: right after sidebar with small gap
-    const leftPosition = sidebarRight + 8;
+    // Left position: right after sidebar with gap
+    const leftPosition = sidebarRight + gap;
 
     // If no clicked element, align with sidebar top
     if (!clickedElementRect) {
-      const height = sidebarBottom - sidebarTop - safePadding * 2;
+      const height = sidebarBottom - sidebarTop;
       return {
-        top: sidebarTop + safePadding,
+        top: sidebarTop,
         height: Math.max(minFlyoutHeight, height),
         left: leftPosition,
       };
     }
 
-    // Start from clicked card's position
-    let targetTop = clickedElementRect.top;
+    // Start from clicked card's vertical center position
+    const cardCenter = clickedElementRect.top + (clickedElementRect.height / 2);
+    
+    // Calculate available height from card center to sidebar bottom
+    let targetTop = cardCenter - 40; // Offset slightly above card center for header
+    
+    // Ensure flyout doesn't go above sidebar top
+    targetTop = Math.max(sidebarTop, targetTop);
+    
+    // Height: MUST end exactly at sidebar bottom (no padding)
+    let height = sidebarBottom - targetTop - bottomPadding;
 
-    // Clamp to not go above sidebar
-    const minTop = sidebarTop + safePadding;
-    targetTop = Math.max(minTop, targetTop);
-
-    // Height: MUST end exactly at sidebar bottom
-    const height = sidebarBottom - targetTop - safePadding;
-
-    // If height would be too small, shift up
+    // If height would be too small, adjust top position upward
     if (height < minFlyoutHeight) {
-      const adjustedTop = sidebarBottom - minFlyoutHeight - safePadding;
-      return { 
-        top: Math.max(minTop, adjustedTop), 
-        height: minFlyoutHeight,
-        left: leftPosition,
-      };
+      targetTop = sidebarBottom - minFlyoutHeight - bottomPadding;
+      targetTop = Math.max(sidebarTop, targetTop);
+      height = sidebarBottom - targetTop - bottomPadding;
     }
 
     return { 
       top: targetTop, 
-      height: height,
+      height: Math.max(minFlyoutHeight, height),
       left: leftPosition,
     };
   }, [clickedElementRect, sidebarRect]);
@@ -186,8 +186,8 @@ export function LayerFlyout({
     <div
       ref={flyoutRef}
       className={cn(
-        "fixed w-[360px] bg-white/95 dark:bg-card/95 backdrop-blur-xl",
-        "border border-white/40 dark:border-white/10 rounded-2xl shadow-2xl z-[35]",
+        "fixed w-[340px] bg-white/98 dark:bg-card/98 backdrop-blur-xl",
+        "border border-white/60 dark:border-white/15 rounded-2xl shadow-2xl",
         "transition-all duration-200 ease-out",
         "flex flex-col overflow-hidden",
         isOpen 
@@ -198,6 +198,7 @@ export function LayerFlyout({
         left: `${flyoutPosition.left}px`,
         top: `${flyoutPosition.top}px`,
         height: `${flyoutPosition.height}px`,
+        zIndex: 40, // Higher than sidebar (z-30) but below modals
       }}
       role="dialog"
       aria-modal="true"

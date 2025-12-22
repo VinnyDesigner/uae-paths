@@ -1,10 +1,8 @@
 import { Link } from 'react-router-dom';
 import { 
-  MapPin, 
   Heart, 
   GraduationCap, 
-  ArrowRight, 
-  Layers
+  ArrowRight
 } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
@@ -37,7 +35,7 @@ export default function HomePage() {
       <Header />
 
       <main className="flex-1">
-        {/* Hero Section - Tightened */}
+        {/* Hero Section - Search Focused */}
         <section className="relative py-12 md:py-16 lg:py-20 overflow-hidden bg-hero-gradient">
           <div className="absolute inset-0 pointer-events-none bg-plus-pattern opacity-50" />
 
@@ -48,31 +46,14 @@ export default function HomePage() {
                 Smart Map for <span className="text-accent">Daily Life</span>
               </h1>
 
-              {/* Subtitle - Single line */}
+              {/* Subtitle */}
               <p className="text-base text-muted-foreground max-w-lg mx-auto mb-8 animate-fade-up delay-100">
                 Find healthcare and education services across the UAE
               </p>
 
-              {/* Search Bar Container - Reserves space for dropdown */}
-              <div className="max-w-2xl mx-auto mb-8 animate-fade-up delay-200">
+              {/* Search Bar - Primary Action */}
+              <div className="max-w-2xl mx-auto animate-fade-up delay-200">
                 <SmartSearch onSearch={handleSearch} size="large" />
-              </div>
-
-              {/* CTAs - Separate from search container with proper spacing */}
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-6 animate-fade-up delay-300">
-                <Button variant="accent" size="lg" asChild className="rounded-lg px-8">
-                  <Link to="/map">
-                    <MapPin className="w-4 h-4 mr-2" />
-                    Open Smart Map
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Link>
-                </Button>
-                <Button variant="outline" size="lg" asChild className="rounded-lg px-6 bg-card/80">
-                  <Link to="/map">
-                    <Layers className="w-4 h-4 mr-2" />
-                    Browse Public Layers
-                  </Link>
-                </Button>
               </div>
             </div>
           </div>

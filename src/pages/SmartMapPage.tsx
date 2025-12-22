@@ -213,8 +213,8 @@ export default function SmartMapPage() {
             </div>
             
             {/* Map Layers */}
-            <div className="relative">
-              <h4 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2 px-1">
+            <div className="relative" data-map-layers-section>
+              <h4 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2 px-1" data-map-layers-header>
                 <Map className="w-4 h-4 text-primary" />
                 Map Layers
               </h4>

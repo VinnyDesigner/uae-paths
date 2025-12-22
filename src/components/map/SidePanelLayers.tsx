@@ -60,35 +60,41 @@ export function SidePanelLayers({
   className 
 }: SidePanelLayersProps) {
   const [selectedTheme, setSelectedTheme] = useState<ThemeGroup | null>(null);
-  const [clickedRect, setClickedRect] = useState<DOMRect | null>(null);
+  const [sectionRect, setSectionRect] = useState<DOMRect | null>(null);
   const [sidebarRect, setSidebarRect] = useState<DOMRect | null>(null);
   const categoryRefs = useRef<Map<number, HTMLDivElement>>(new Map());
   const containerRef = useRef<HTMLDivElement>(null);
+  const sectionHeaderRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
-  // Get sidebar bounds on mount and resize
+  // Get sidebar and section bounds on mount and resize
   useEffect(() => {
-    const updateSidebarRect = () => {
-      // Find the sidebar by data attribute or class
+    const updateRects = () => {
+      // Find the sidebar by data attribute
       const sidebar = containerRef.current?.closest('[data-sidebar-panel]') || 
                       document.querySelector('[data-sidebar-panel]');
       if (sidebar) {
         setSidebarRect(sidebar.getBoundingClientRect());
       }
+      
+      // Get the Map Layers section header position
+      if (sectionHeaderRef.current) {
+        setSectionRect(sectionHeaderRef.current.getBoundingClientRect());
+      }
     };
 
-    updateSidebarRect();
-    window.addEventListener('resize', updateSidebarRect);
+    updateRects();
+    window.addEventListener('resize', updateRects);
     
     const scrollContainer = containerRef.current?.closest('.overflow-y-auto');
     if (scrollContainer) {
-      scrollContainer.addEventListener('scroll', updateSidebarRect);
+      scrollContainer.addEventListener('scroll', updateRects);
     }
 
     return () => {
-      window.removeEventListener('resize', updateSidebarRect);
+      window.removeEventListener('resize', updateRects);
       if (scrollContainer) {
-        scrollContainer.removeEventListener('scroll', updateSidebarRect);
+        scrollContainer.removeEventListener('scroll', updateRects);
       }
     };
   }, []);
@@ -148,23 +154,21 @@ export function SidePanelLayers({
     });
   }, [layers, onClearAll, onLayerToggle, toast]);
 
-  const handleCategoryClick = useCallback((theme: ThemeGroup, cardElement: HTMLDivElement | null) => {
-    // Find sidebar panel
+  const handleCategoryClick = useCallback((theme: ThemeGroup) => {
+    // Update rects before opening flyout
     const sidebar = containerRef.current?.closest('[data-sidebar-panel]') || 
                     document.querySelector('[data-sidebar-panel]');
     if (sidebar) {
       setSidebarRect(sidebar.getBoundingClientRect());
     }
-    
-    if (cardElement) {
-      setClickedRect(cardElement.getBoundingClientRect());
+    if (sectionHeaderRef.current) {
+      setSectionRect(sectionHeaderRef.current.getBoundingClientRect());
     }
     setSelectedTheme(theme);
   }, []);
 
   const handleCloseFlyout = useCallback(() => {
     setSelectedTheme(null);
-    setClickedRect(null);
   }, []);
 
   const setRef = useCallback((themeId: number) => (el: HTMLDivElement | null) => {
@@ -177,6 +181,9 @@ export function SidePanelLayers({
 
   return (
     <div ref={containerRef} className={cn("relative", className)} data-sidebar-layers>
+      {/* Section header anchor - used for flyout positioning */}
+      <div ref={sectionHeaderRef} className="absolute top-0 left-0 w-0 h-0" aria-hidden="true" />
+      
       <div className="space-y-3">
         {layers.map((theme) => {
           const visibleCount = getVisibleLayerCount(theme);
@@ -210,7 +217,7 @@ export function SidePanelLayers({
               >
                 {/* Row 1: 3-Column Grid - Icon (44px) | Title (flex) | Chevron (40px) */}
                 <button
-                  onClick={() => handleCategoryClick(theme, categoryRefs.current.get(theme.id) || null)}
+                  onClick={() => handleCategoryClick(theme)}
                   className={cn(
                     "w-full grid grid-cols-[44px_1fr_40px] items-center gap-2 group/row",
                     "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 rounded-xl",
@@ -322,7 +329,7 @@ export function SidePanelLayers({
         onSelectAll={handleSelectAll}
         onClearAll={handleClearAll}
         highlightedLayerId={highlightedLayerId}
-        clickedElementRect={clickedRect}
+        sectionRect={sectionRect}
         sidebarRect={sidebarRect}
       />
     </div>

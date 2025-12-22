@@ -221,12 +221,12 @@ export default function SmartMapPage() {
           </div>
         </div>
 
-        {/* Mobile Search Bar Overlay */}
-        <div className="lg:hidden absolute top-4 left-4 right-4 z-[1001]">
+        {/* Mobile Search Bar Overlay - Compact */}
+        <div className="lg:hidden absolute top-2 left-3 right-3 z-[1001]">
           <SmartSearch onSearch={handleSearch} onLocateMe={handleLocateMe} isSearching={isSearching} />
           {userMessage && (
-            <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground bg-card/95 backdrop-blur-sm rounded-lg px-3 py-2 shadow-lg border border-border">
-              <Sparkles className="w-3 h-3 text-primary" />
+            <div className="mt-1.5 flex items-center gap-2 text-xs text-muted-foreground bg-card/95 backdrop-blur-sm rounded-lg px-2.5 py-1.5 shadow-lg border border-border">
+              <Sparkles className="w-3 h-3 text-primary flex-shrink-0" />
               <span className="truncate">{userMessage}</span>
             </div>
           )}
@@ -244,19 +244,16 @@ export default function SmartMapPage() {
             className="h-full w-full"
           />
 
-          {/* Map Controls Overlay - Desktop (removed base map & legend - now in side panel) */}
-          {/* Kept empty for potential future controls */}
-
-          {/* Mobile Bottom Controls */}
-          <div className="lg:hidden absolute bottom-20 left-4 right-4 z-10 flex items-center justify-end">
-            <Button
-              variant="default"
-              className="shadow-lg"
+          {/* Mobile FAB - Layers Button (compact) */}
+          <div className="lg:hidden absolute bottom-20 left-4 z-[1001]">
+            <button
               onClick={() => setMobileSheetOpen(true)}
+              className="flex items-center gap-2 bg-primary text-primary-foreground shadow-lg rounded-full px-4 py-3 min-h-[48px] hover:bg-primary/90 active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              aria-label="Open layers and filters"
             >
-              <Menu className="w-4 h-4 mr-2" />
-              Layers & Filters
-            </Button>
+              <Layers className="w-5 h-5" />
+              <span className="text-sm font-medium">Layers</span>
+            </button>
           </div>
 
       </main>

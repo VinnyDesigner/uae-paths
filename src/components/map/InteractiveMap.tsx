@@ -115,21 +115,21 @@ function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFu
 
       {/* Bottom-right: Combined Zoom Control */}
       <div className="absolute bottom-20 right-4 z-[1000]">
-        <div className="flex flex-col bg-[#1a1a1a] rounded-lg shadow-lg overflow-hidden">
+        <div className="flex flex-col bg-card rounded-xl shadow-lg border border-border overflow-hidden">
           <button
             onClick={onZoomIn}
             aria-label="Zoom In"
-            className="p-3 hover:bg-[#2a2a2a] active:bg-[#333] transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+            className="p-3 hover:bg-secondary hover:scale-105 active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
           >
-            <ZoomIn className="w-5 h-5 text-white" />
+            <ZoomIn className="w-5 h-5 text-foreground" />
           </button>
-          <div className="h-px bg-[#333]" />
+          <div className="h-px bg-border" />
           <button
             onClick={onZoomOut}
             aria-label="Zoom Out"
-            className="p-3 hover:bg-[#2a2a2a] active:bg-[#333] transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+            className="p-3 hover:bg-secondary hover:scale-105 active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
           >
-            <ZoomOut className="w-5 h-5 text-white" />
+            <ZoomOut className="w-5 h-5 text-foreground" />
           </button>
         </div>
       </div>

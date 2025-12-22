@@ -25,6 +25,7 @@ import { ThemeGroup } from '@/types/map';
 interface SidePanelLayersProps {
   layers: ThemeGroup[];
   onLayerToggle: (themeId: number, layerId: number) => void;
+  highlightedLayerId?: number | null;
   className?: string;
 }
 
@@ -46,7 +47,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Users,
 };
 
-export function SidePanelLayers({ layers, onLayerToggle, className }: SidePanelLayersProps) {
+export function SidePanelLayers({ layers, onLayerToggle, highlightedLayerId, className }: SidePanelLayersProps) {
   const [expandedGroups, setExpandedGroups] = useState<number[]>([350, 300]); // Both expanded by default
 
   const toggleGroup = (groupId: number) => {
@@ -125,17 +126,20 @@ export function SidePanelLayers({ layers, onLayerToggle, className }: SidePanelL
               )}
             >
               <div className="px-3 pb-3 space-y-1">
-                {theme.layers.map((layer) => (
-                  <button
-                    key={layer.id}
-                    onClick={() => onLayerToggle(theme.id, layer.id)}
-                    className={cn(
-                      "w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition-all text-left group",
-                      layer.visible
-                        ? "bg-primary/15 border border-primary/30"
-                        : "bg-white/20 dark:bg-white/5 border border-transparent hover:bg-white/40 dark:hover:bg-white/10"
-                    )}
-                  >
+                {theme.layers.map((layer) => {
+                  const isHighlighted = highlightedLayerId === layer.id;
+                  return (
+                    <button
+                      key={layer.id}
+                      onClick={() => onLayerToggle(theme.id, layer.id)}
+                      className={cn(
+                        "w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition-all text-left group",
+                        isHighlighted && "ring-2 ring-primary ring-offset-1 ring-offset-background",
+                        layer.visible
+                          ? "bg-primary/15 border border-primary/30"
+                          : "bg-white/20 dark:bg-white/5 border border-transparent hover:bg-white/40 dark:hover:bg-white/10"
+                      )}
+                    >
                     <div className="flex items-center gap-3">
                       <div
                         className="w-6 h-6 rounded-md flex items-center justify-center"
@@ -165,8 +169,9 @@ export function SidePanelLayers({ layers, onLayerToggle, className }: SidePanelL
                         <EyeOff className="w-3.5 h-3.5" />
                       )}
                     </div>
-                  </button>
-                ))}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           </div>

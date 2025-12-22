@@ -26,6 +26,10 @@ export interface Facility {
   emirate: string;
   coordinates: [number, number];
   distance?: number;
+  // Hospital-specific attributes
+  hasEmergency?: boolean;
+  bedCapacity?: number;
+  specialties?: string[];
 }
 
 export interface SearchSuggestion {

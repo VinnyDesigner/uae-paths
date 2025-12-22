@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Menu, X, Sparkles, Layers, Filter, Map } from 'lucide-react';
+import { Menu, X, Sparkles, Layers, Filter, Map, MapPin } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { SmartSearch } from '@/components/search/SmartSearch';
 import { InteractiveMap } from '@/components/map/InteractiveMap';
@@ -148,6 +148,14 @@ export default function SmartMapPage() {
           
           {/* Scrollable Content Area - Only this scrolls */}
           <div className="relative z-10 p-4 pt-3 space-y-4 overflow-y-auto flex-1 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-white/30 hover:scrollbar-thumb-white/50">
+            {/* Result Count - Shows only when search results exist */}
+            {searchResults.length > 0 && (
+              <div className="flex items-center gap-1.5 text-xs text-muted-foreground px-1">
+                <MapPin className="w-3 h-3" />
+                <span>{searchResults.length} {searchResults.length === 1 ? 'facility' : 'facilities'} found{searchIntent?.responseMessage ? ` – ${searchIntent.responseMessage}` : ''}</span>
+              </div>
+            )}
+            
             {/* Filters Section */}
             <div className="bg-white/30 dark:bg-white/5 rounded-xl pt-3 pb-4 px-4 border border-white/20 dark:border-white/10">
               <h4 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">

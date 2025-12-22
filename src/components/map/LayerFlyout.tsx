@@ -198,21 +198,21 @@ export function LayerFlyout({
       aria-modal="true"
       aria-label={`${theme.name} layers`}
     >
-      {/* Header - Fixed */}
+      {/* Header - Sticky & Compact */}
       <div 
         className={cn(
-          "px-4 py-3.5 border-b border-white/20 dark:border-white/10 flex-shrink-0",
+          "px-3 py-2.5 border-b border-white/20 dark:border-white/10 flex-shrink-0",
           isHealthcare 
-            ? "bg-gradient-to-r from-primary/10 to-transparent" 
-            : "bg-gradient-to-r from-education/10 to-transparent"
+            ? "bg-gradient-to-r from-primary/8 to-transparent" 
+            : "bg-gradient-to-r from-education/8 to-transparent"
         )}
       >
         {/* Row 1: Back + Title */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 mb-2">
           <button
             onClick={onClose}
             className={cn(
-              "w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0",
+              "w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0",
               "bg-white/60 dark:bg-white/10 hover:bg-white/80 dark:hover:bg-white/20",
               "transition-all duration-150 active:scale-95",
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
@@ -226,24 +226,21 @@ export function LayerFlyout({
           </h3>
         </div>
 
-        {/* Divider */}
-        <div className="h-px bg-border/30 mt-3 mb-2.5" />
-
-        {/* Row 2: Counter + Actions */}
-        <div className="flex items-center justify-between h-7">
+        {/* Row 2: Counter + Actions (single row) */}
+        <div className="flex items-center justify-between">
           <span className="text-xs text-muted-foreground">
             <span className="font-semibold text-foreground">{visibleCount}</span>
-            <span className="mx-1">of</span>
+            <span className="mx-0.5">of</span>
             <span>{totalCount}</span>
-            <span className="ml-1">visible</span>
+            <span className="ml-0.5">visible</span>
           </span>
 
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1">
             <button
               onClick={() => onSelectAll(theme.id)}
               disabled={allVisible}
               className={cn(
-                "flex items-center gap-1 px-2.5 h-7 rounded-lg text-xs font-medium transition-all duration-120",
+                "flex items-center gap-1 px-2 h-6 rounded-md text-[11px] font-medium transition-all duration-120",
                 "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary",
                 allVisible
                   ? "bg-muted/30 text-muted-foreground/40 cursor-not-allowed"
@@ -257,7 +254,7 @@ export function LayerFlyout({
               onClick={() => onClearAll(theme.id)}
               disabled={noneVisible}
               className={cn(
-                "flex items-center gap-1 px-2.5 h-7 rounded-lg text-xs font-medium transition-all duration-120",
+                "flex items-center gap-1 px-2 h-6 rounded-md text-[11px] font-medium transition-all duration-120",
                 "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary",
                 noneVisible
                   ? "bg-muted/30 text-muted-foreground/40 cursor-not-allowed"

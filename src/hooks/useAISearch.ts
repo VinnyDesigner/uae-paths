@@ -56,11 +56,6 @@ export function useAISearch(): UseAISearchResult {
           description: `No facilities found for "${query}". Try a different search.`,
           variant: "default"
         });
-      } else {
-        toast({
-          title: `Found ${results.length} facilities`,
-          description: intent.responseMessage,
-        });
       }
     } catch (error) {
       console.error('Search error:', error);
@@ -82,13 +77,14 @@ export function useAISearch(): UseAISearchResult {
       setSearchResults(results);
       setUserMessage(fallbackIntent.responseMessage);
 
-      toast({
-        title: "Search completed",
-        description: error instanceof Error && error.message.includes('Rate limit') 
-          ? error.message 
-          : `Found ${results.length} facilities`,
-        variant: error instanceof Error && error.message.includes('Rate limit') ? "destructive" : "default"
-      });
+      // Only show toast for rate limit errors
+      if (error instanceof Error && error.message.includes('Rate limit')) {
+        toast({
+          title: "Search completed",
+          description: error.message,
+          variant: "destructive"
+        });
+      }
     } finally {
       setIsSearching(false);
     }

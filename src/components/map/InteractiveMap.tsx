@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { ZoomIn, ZoomOut, Maximize, LocateFixed, Home, Map, Check, Eye, Building2, Heart, GraduationCap, Stethoscope, Pill, HeartPulse, Siren, Accessibility, Truck, Microscope, School, Building, BookOpen, Baby, Users } from 'lucide-react';
+import { ZoomIn, ZoomOut, Maximize, LocateFixed, Home, Map, Check, List, Building2, Heart, GraduationCap, Stethoscope, Pill, HeartPulse, Siren, Accessibility, Truck, Microscope, School, Building, BookOpen, Baby, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ThemeGroup, Facility, MapLayer } from '@/types/map';
 import { baseMaps, BaseMapOption } from './BaseMapSelector';
@@ -150,7 +150,7 @@ function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFu
             )}
             title="Map Legend"
           >
-            <Eye className="w-5 h-5 text-foreground" />
+            <List className="w-5 h-5 text-foreground" />
             {visibleLayers.length > 0 && (
               <span className="absolute -top-1 -right-1 w-4 h-4 bg-primary rounded-full flex items-center justify-center text-[10px] font-bold text-primary-foreground">
                 {visibleLayers.length}
@@ -169,7 +169,7 @@ function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFu
                 <div className="px-3 py-2.5 border-b border-border">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <Eye className="w-4 h-4 text-primary" />
+                      <List className="w-4 h-4 text-primary" />
                       <span className="text-sm font-semibold text-foreground">Legend</span>
                     </div>
                     <span className="text-xs text-muted-foreground bg-secondary rounded-full px-2 py-0.5">

@@ -163,8 +163,8 @@ export default function SmartMapPage() {
 
       {/* Map Area */}
       <main className="flex-1 relative h-full min-h-[500px]">
-        {/* Left Panel - Desktop (Glassmorphism) */}
-        <div className="hidden lg:flex flex-col w-80 absolute top-4 left-4 bottom-4 bg-white/50 dark:bg-card/40 backdrop-blur-xl border border-white/40 dark:border-white/10 rounded-2xl shadow-2xl z-[1001]">
+        {/* Left Panel - Desktop (Glassmorphism) - z-30 for desktop panel */}
+        <div className="hidden lg:flex flex-col w-80 absolute top-4 left-4 bottom-4 bg-white/50 dark:bg-card/40 backdrop-blur-xl border border-white/40 dark:border-white/10 rounded-2xl shadow-2xl z-30">
           {/* Search Header - Fixed */}
           <div className="relative z-20 p-4 pb-3 bg-white/70 dark:bg-card/60 backdrop-blur-xl border-b border-white/30 dark:border-white/10 rounded-t-2xl flex-shrink-0" style={{ overflow: 'visible' }}>
             <div className="relative bg-white/60 dark:bg-white/5 rounded-xl p-3 border border-white/30 dark:border-white/10 transition-all hover:bg-white/70 dark:hover:bg-white/10" style={{ overflow: 'visible' }}>
@@ -229,13 +229,13 @@ export default function SmartMapPage() {
           </div>
         </div>
 
-        {/* Mobile Search Bar - Top with safe area */}
-        <div className="lg:hidden absolute top-3 left-3 right-3 z-[1001]">
-          <div className="bg-card/95 backdrop-blur-xl rounded-xl shadow-lg border border-border/50 p-2">
+        {/* Mobile Search Bar - Fixed sticky at top, always visible above menus */}
+        <div className="lg:hidden absolute top-3 left-3 right-3 z-[60]">
+          <div className="bg-card/98 backdrop-blur-xl rounded-xl shadow-lg border border-border/50 p-2">
             <SmartSearch onSearch={handleSearch} onLocateMe={handleLocateMe} isSearching={isSearching} />
           </div>
           {userMessage && (
-            <div className="mt-2 flex items-center gap-2 text-xs text-foreground/80 bg-card/95 backdrop-blur-sm rounded-lg px-3 py-2 shadow-lg border border-border/50">
+            <div className="mt-2 flex items-center gap-2 text-xs text-foreground/80 bg-card/98 backdrop-blur-xl rounded-lg px-3 py-2 shadow-lg border border-border/50">
               <Sparkles className="w-3 h-3 text-primary flex-shrink-0" />
               <span className="truncate">{userMessage}</span>
             </div>
@@ -263,8 +263,8 @@ export default function SmartMapPage() {
             className="h-full w-full"
           />
 
-          {/* Mobile FAB - Layers Button - positioned to avoid map controls */}
-          <div className="lg:hidden absolute bottom-24 left-4 z-[1001]">
+          {/* Mobile FAB - Layers Button - z-20 for map controls */}
+          <div className="lg:hidden absolute bottom-24 left-4 z-20">
             <button
               onClick={() => setMobileSheetOpen(true)}
               className="flex items-center gap-2 bg-primary text-primary-foreground shadow-xl rounded-full px-4 py-3 min-h-[52px] hover:bg-primary/90 active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
@@ -293,15 +293,15 @@ export default function SmartMapPage() {
       {/* Directions Panel - Desktop: right side modal, Mobile: bottom sheet */}
       {directionsFacility && (
         <>
-          {/* Desktop */}
-          <div className="hidden lg:block fixed top-1/2 right-8 -translate-y-1/2 z-[1100]">
+          {/* Desktop - z-[100] for modals */}
+          <div className="hidden lg:block fixed top-1/2 right-8 -translate-y-1/2 z-[100]">
             <DirectionsPanel 
               facility={directionsFacility} 
               onClose={() => setDirectionsFacility(null)} 
             />
           </div>
-          {/* Mobile */}
-          <div className="lg:hidden fixed inset-0 z-[1100]">
+          {/* Mobile - z-[100] for modals */}
+          <div className="lg:hidden fixed inset-0 z-[100]">
             <div 
               className="absolute inset-0 bg-foreground/30 backdrop-blur-sm" 
               onClick={() => setDirectionsFacility(null)} 

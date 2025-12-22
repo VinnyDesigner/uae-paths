@@ -169,7 +169,7 @@ export function LayerFlyout({
       ref={flyoutRef}
       className={cn(
         "fixed w-[340px] bg-white/95 dark:bg-card/95 backdrop-blur-xl",
-        "border border-white/40 dark:border-white/10 rounded-2xl shadow-2xl z-[1002]",
+        "border border-white/40 dark:border-white/10 rounded-2xl shadow-2xl z-30",
         "transition-all duration-200 ease-out",
         "flex flex-col overflow-hidden",
         isOpen 

@@ -134,7 +134,7 @@ export function BaseMapSelector({ selectedMap, onMapChange, className, variant =
             className="fixed inset-0 z-[999]" 
             onClick={() => setIsOpen(false)} 
           />
-          <div className="absolute bottom-full mb-2 left-0 bg-card/95 backdrop-blur-xl rounded-xl shadow-xl border border-border overflow-hidden z-[1000] animate-fade-in p-3 w-[280px]">
+          <div className="absolute bottom-full mb-2 left-0 bg-card/95 backdrop-blur-xl rounded-xl shadow-xl border border-border overflow-hidden z-30 animate-fade-in p-3 w-[280px]">
             <p className="text-xs text-muted-foreground font-medium px-1 pb-2 uppercase tracking-wide">
               Select Base Map
             </p>

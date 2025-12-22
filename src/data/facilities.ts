@@ -4,29 +4,29 @@ import { Facility } from '@/types/map';
 export const uaeFacilities: Facility[] = [
   // ============ HEALTHCARE - HOSPITALS ============
   // Abu Dhabi
-  { id: 'h1', name: 'Cleveland Clinic Abu Dhabi', type: 'Hospitals', theme: 'healthcare', layerId: 330, address: 'Al Maryah Island', emirate: 'Abu Dhabi', coordinates: [54.3952, 24.5015] },
-  { id: 'h2', name: 'Sheikh Khalifa Medical City', type: 'Hospitals', theme: 'healthcare', layerId: 330, address: 'Karamah Street', emirate: 'Abu Dhabi', coordinates: [54.3673, 24.4755] },
-  { id: 'h3', name: 'Burjeel Hospital Abu Dhabi', type: 'Hospitals', theme: 'healthcare', layerId: 330, address: 'Najda Street', emirate: 'Abu Dhabi', coordinates: [54.3590, 24.4885] },
-  { id: 'h4', name: 'NMC Royal Hospital', type: 'Hospitals', theme: 'healthcare', layerId: 330, address: 'Khalifa City', emirate: 'Abu Dhabi', coordinates: [54.5683, 24.4165] },
-  { id: 'h5', name: 'Al Ain Hospital', type: 'Hospitals', theme: 'healthcare', layerId: 330, address: 'Al Ain City Center', emirate: 'Abu Dhabi', coordinates: [55.7608, 24.2075] },
-  { id: 'h6', name: 'Mediclinic Al Noor Hospital', type: 'Hospitals', theme: 'healthcare', layerId: 330, address: 'Airport Road', emirate: 'Abu Dhabi', coordinates: [54.4185, 24.4458] },
-  { id: 'h7', name: 'Tawam Hospital', type: 'Hospitals', theme: 'healthcare', layerId: 330, address: 'Al Ain', emirate: 'Abu Dhabi', coordinates: [55.7412, 24.2285] },
+  { id: 'h1', name: 'Cleveland Clinic Abu Dhabi', type: 'Hospitals', theme: 'healthcare', layerId: 330, address: 'Al Maryah Island', emirate: 'Abu Dhabi', coordinates: [54.3952, 24.5015], hasEmergency: true, bedCapacity: 364, specialties: ['Cardiology', 'Oncology', 'Neurology', 'Transplant'] },
+  { id: 'h2', name: 'Sheikh Khalifa Medical City', type: 'Hospitals', theme: 'healthcare', layerId: 330, address: 'Karamah Street', emirate: 'Abu Dhabi', coordinates: [54.3673, 24.4755], hasEmergency: true, bedCapacity: 550, specialties: ['ICU', 'Pediatrics', 'Surgery', 'Cardiology'] },
+  { id: 'h3', name: 'Burjeel Hospital Abu Dhabi', type: 'Hospitals', theme: 'healthcare', layerId: 330, address: 'Najda Street', emirate: 'Abu Dhabi', coordinates: [54.3590, 24.4885], hasEmergency: true, bedCapacity: 180, specialties: ['Orthopedics', 'Oncology', 'Cardiology'] },
+  { id: 'h4', name: 'NMC Royal Hospital', type: 'Hospitals', theme: 'healthcare', layerId: 330, address: 'Khalifa City', emirate: 'Abu Dhabi', coordinates: [54.5683, 24.4165], hasEmergency: true, bedCapacity: 250, specialties: ['General Surgery', 'Pediatrics', 'Gynecology'] },
+  { id: 'h5', name: 'Al Ain Hospital', type: 'Hospitals', theme: 'healthcare', layerId: 330, address: 'Al Ain City Center', emirate: 'Abu Dhabi', coordinates: [55.7608, 24.2075], hasEmergency: true, bedCapacity: 402, specialties: ['ICU', 'Emergency', 'Surgery', 'Pediatrics'] },
+  { id: 'h6', name: 'Mediclinic Al Noor Hospital', type: 'Hospitals', theme: 'healthcare', layerId: 330, address: 'Airport Road', emirate: 'Abu Dhabi', coordinates: [54.4185, 24.4458], hasEmergency: true, bedCapacity: 163, specialties: ['Cardiology', 'Orthopedics', 'Neurology'] },
+  { id: 'h7', name: 'Tawam Hospital', type: 'Hospitals', theme: 'healthcare', layerId: 330, address: 'Al Ain', emirate: 'Abu Dhabi', coordinates: [55.7412, 24.2285], hasEmergency: true, bedCapacity: 468, specialties: ['Oncology', 'ICU', 'Pediatrics', 'Surgery'] },
   
   // Dubai
-  { id: 'h8', name: 'Dubai Hospital', type: 'Hospitals', theme: 'healthcare', layerId: 330, address: 'Al Baraha', emirate: 'Dubai', coordinates: [55.3085, 25.2765] },
-  { id: 'h9', name: 'Rashid Hospital', type: 'Hospitals', theme: 'healthcare', layerId: 330, address: 'Oud Metha', emirate: 'Dubai', coordinates: [55.3125, 25.2318] },
-  { id: 'h10', name: 'Mediclinic City Hospital', type: 'Hospitals', theme: 'healthcare', layerId: 330, address: 'Dubai Healthcare City', emirate: 'Dubai', coordinates: [55.3245, 25.2285] },
-  { id: 'h11', name: 'American Hospital Dubai', type: 'Hospitals', theme: 'healthcare', layerId: 330, address: 'Oud Metha', emirate: 'Dubai', coordinates: [55.3185, 25.2398] },
-  { id: 'h12', name: 'Saudi German Hospital Dubai', type: 'Hospitals', theme: 'healthcare', layerId: 330, address: 'Al Barsha', emirate: 'Dubai', coordinates: [55.2012, 25.1125] },
+  { id: 'h8', name: 'Dubai Hospital', type: 'Hospitals', theme: 'healthcare', layerId: 330, address: 'Al Baraha', emirate: 'Dubai', coordinates: [55.3085, 25.2765], hasEmergency: true, bedCapacity: 620, specialties: ['Emergency', 'ICU', 'Cardiology', 'Neurology'] },
+  { id: 'h9', name: 'Rashid Hospital', type: 'Hospitals', theme: 'healthcare', layerId: 330, address: 'Oud Metha', emirate: 'Dubai', coordinates: [55.3125, 25.2318], hasEmergency: true, bedCapacity: 750, specialties: ['Trauma', 'Emergency', 'Burns', 'ICU'] },
+  { id: 'h10', name: 'Mediclinic City Hospital', type: 'Hospitals', theme: 'healthcare', layerId: 330, address: 'Dubai Healthcare City', emirate: 'Dubai', coordinates: [55.3245, 25.2285], hasEmergency: true, bedCapacity: 280, specialties: ['Cardiology', 'Oncology', 'Pediatrics'] },
+  { id: 'h11', name: 'American Hospital Dubai', type: 'Hospitals', theme: 'healthcare', layerId: 330, address: 'Oud Metha', emirate: 'Dubai', coordinates: [55.3185, 25.2398], hasEmergency: true, bedCapacity: 254, specialties: ['Cardiology', 'Oncology', 'Orthopedics', 'Neurology'] },
+  { id: 'h12', name: 'Saudi German Hospital Dubai', type: 'Hospitals', theme: 'healthcare', layerId: 330, address: 'Al Barsha', emirate: 'Dubai', coordinates: [55.2012, 25.1125], hasEmergency: true, bedCapacity: 300, specialties: ['General Surgery', 'Pediatrics', 'Gynecology'] },
   
   // Sharjah
-  { id: 'h13', name: 'Al Qassimi Hospital', type: 'Hospitals', theme: 'healthcare', layerId: 330, address: 'Al Taawun', emirate: 'Sharjah', coordinates: [55.3875, 25.3385] },
-  { id: 'h14', name: 'University Hospital Sharjah', type: 'Hospitals', theme: 'healthcare', layerId: 330, address: 'University City', emirate: 'Sharjah', coordinates: [55.5125, 25.2985] },
+  { id: 'h13', name: 'Al Qassimi Hospital', type: 'Hospitals', theme: 'healthcare', layerId: 330, address: 'Al Taawun', emirate: 'Sharjah', coordinates: [55.3875, 25.3385], hasEmergency: true, bedCapacity: 425, specialties: ['Emergency', 'ICU', 'Surgery', 'Pediatrics'] },
+  { id: 'h14', name: 'University Hospital Sharjah', type: 'Hospitals', theme: 'healthcare', layerId: 330, address: 'University City', emirate: 'Sharjah', coordinates: [55.5125, 25.2985], hasEmergency: true, bedCapacity: 350, specialties: ['Cardiology', 'Neurology', 'Orthopedics'] },
   
   // Other Emirates
-  { id: 'h15', name: 'Ajman Specialty General Hospital', type: 'Hospitals', theme: 'healthcare', layerId: 330, address: 'Al Nuaimia', emirate: 'Ajman', coordinates: [55.4458, 25.4025] },
-  { id: 'h16', name: 'Saqr Hospital', type: 'Hospitals', theme: 'healthcare', layerId: 330, address: 'RAK City', emirate: 'Ras Al Khaimah', coordinates: [55.9425, 25.7585] },
-  { id: 'h17', name: 'Fujairah Hospital', type: 'Hospitals', theme: 'healthcare', layerId: 330, address: 'Fujairah City', emirate: 'Fujairah', coordinates: [56.3415, 25.1285] },
+  { id: 'h15', name: 'Ajman Specialty General Hospital', type: 'Hospitals', theme: 'healthcare', layerId: 330, address: 'Al Nuaimia', emirate: 'Ajman', coordinates: [55.4458, 25.4025], hasEmergency: true, bedCapacity: 180, specialties: ['Emergency', 'General Surgery', 'Pediatrics'] },
+  { id: 'h16', name: 'Saqr Hospital', type: 'Hospitals', theme: 'healthcare', layerId: 330, address: 'RAK City', emirate: 'Ras Al Khaimah', coordinates: [55.9425, 25.7585], hasEmergency: true, bedCapacity: 285, specialties: ['Emergency', 'ICU', 'Surgery'] },
+  { id: 'h17', name: 'Fujairah Hospital', type: 'Hospitals', theme: 'healthcare', layerId: 330, address: 'Fujairah City', emirate: 'Fujairah', coordinates: [56.3415, 25.1285], hasEmergency: true, bedCapacity: 230, specialties: ['Emergency', 'Pediatrics', 'Gynecology'] },
 
   // ============ HEALTHCARE - CLINICS ============
   { id: 'c1', name: 'SEHA Clinic Al Bateen', type: 'Clinics', theme: 'healthcare', layerId: 328, address: 'Al Bateen Area', emirate: 'Abu Dhabi', coordinates: [54.3415, 24.4625] },

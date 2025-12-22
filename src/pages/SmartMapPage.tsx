@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Menu, X, Sparkles, Layers, Filter, Map } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
@@ -17,6 +17,8 @@ import { uaeFacilities } from '@/data/facilities';
 import { useAISearch } from '@/hooks/useAISearch';
 import { ThemeGroup, Facility, FilterState } from '@/types/map';
 
+const HOSPITAL_LAYER_ID = 330;
+
 export default function SmartMapPage() {
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -34,8 +36,20 @@ export default function SmartMapPage() {
   const [mobileSheetOpen, setMobileSheetOpen] = useState(false);
   const [selectedFacility, setSelectedFacility] = useState<Facility | null>(null);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | undefined>();
+  const [highlightedLayerId, setHighlightedLayerId] = useState<number | null>(null);
 
   const { isSearching, searchResults, searchIntent, userMessage, search, clearResults, getLayersToEnable } = useAISearch();
+
+  // Determine if hospitals layer is active based on search results or visible layers
+  const activeHospitalLayer = useMemo(() => {
+    // Check if hospitals are in search results
+    const hasHospitalResults = searchResults.some(r => r.layerId === HOSPITAL_LAYER_ID);
+    // Check if hospital layer is visible
+    const isHospitalLayerVisible = layers.some(theme => 
+      theme.layers.some(l => l.id === HOSPITAL_LAYER_ID && l.visible)
+    );
+    return hasHospitalResults || isHospitalLayerVisible ? HOSPITAL_LAYER_ID : null;
+  }, [searchResults, layers]);
 
   // Handle initial search from URL
   useEffect(() => {
@@ -95,10 +109,13 @@ export default function SmartMapPage() {
 
   const handleFacilityClick = (facility: Facility) => {
     setSelectedFacility(facility);
+    // Highlight the layer this facility belongs to
+    setHighlightedLayerId(facility.layerId);
   };
 
   const handleClearResults = () => {
     clearResults();
+    setHighlightedLayerId(null);
   };
 
   return (
@@ -112,7 +129,13 @@ export default function SmartMapPage() {
           <div className="p-4 space-y-4 overflow-y-auto flex-1 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-white/30 hover:scrollbar-thumb-white/50">
             {/* Search Section */}
             <div className="bg-white/50 dark:bg-white/5 rounded-xl p-3 border border-white/20 dark:border-white/10 transition-all hover:bg-white/60 dark:hover:bg-white/10">
-              <SmartSearch onSearch={handleSearch} onLocateMe={handleLocateMe} isSearching={isSearching} size="default" />
+              <SmartSearch 
+                onSearch={handleSearch} 
+                onLocateMe={handleLocateMe} 
+                isSearching={isSearching} 
+                size="default"
+                activeLayerId={activeHospitalLayer}
+              />
             </div>
             
             {userMessage && (
@@ -137,7 +160,11 @@ export default function SmartMapPage() {
                 <Map className="w-4 h-4 text-primary" />
                 Map Layers
               </h4>
-              <SidePanelLayers layers={layers} onLayerToggle={handleLayerToggle} />
+              <SidePanelLayers 
+                layers={layers} 
+                onLayerToggle={handleLayerToggle}
+                highlightedLayerId={highlightedLayerId}
+              />
             </div>
             
             {/* Base Map & Legend Section */}

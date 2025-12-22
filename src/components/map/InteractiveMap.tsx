@@ -15,7 +15,7 @@ L.Icon.Default.mergeOptions({
 });
 
 // Custom marker icons with pulse animation for search results
-const createCustomIcon = (color: string, isHealthcare: boolean, isHighlighted: boolean = false) => {
+const createCustomIcon = (color: string, isHealthcare: boolean, isHighlighted: boolean = false, isHospital: boolean = false) => {
   const pulseAnimation = isHighlighted ? `
     <div style="
       position: absolute;
@@ -36,37 +36,42 @@ const createCustomIcon = (color: string, isHealthcare: boolean, isHighlighted: b
     </style>
   ` : '';
 
+  // Special hospital icon
+  const iconEmoji = isHospital ? '🏥' : (isHealthcare ? '❤️' : '🎓');
+  const iconSize = isHospital ? 40 : 36;
+  const iconAnchor = isHospital ? 20 : 18;
+
   return L.divIcon({
     className: 'custom-marker',
     html: `
       <div style="position: relative;">
         ${pulseAnimation}
         <div style="
-          width: 36px;
-          height: 36px;
-          background: ${color};
+          width: ${iconSize}px;
+          height: ${iconSize}px;
+          background: ${isHospital ? '#063660' : color};
           border-radius: 50% 50% 50% 0;
           transform: rotate(-45deg);
           display: flex;
           align-items: center;
           justify-content: center;
-          box-shadow: 0 4px 12px ${color}66;
+          box-shadow: 0 4px 12px ${isHospital ? '#06366066' : color + '66'};
           border: 3px solid white;
           ${isHighlighted ? 'animation: bounce 1s ease-in-out;' : ''}
         ">
           <div style="
             transform: rotate(45deg);
             color: white;
-            font-size: 16px;
+            font-size: ${isHospital ? '18px' : '16px'};
           ">
-            ${isHealthcare ? '🏥' : '🎓'}
+            ${iconEmoji}
           </div>
         </div>
       </div>
     `,
-    iconSize: [36, 36],
-    iconAnchor: [18, 36],
-    popupAnchor: [0, -36],
+    iconSize: [iconSize, iconSize],
+    iconAnchor: [iconAnchor, iconSize],
+    popupAnchor: [0, -iconSize],
   });
 };
 
@@ -247,8 +252,10 @@ export function InteractiveMap({
     visibleFacilities.forEach(facility => {
       const isHealthcare = facility.theme === 'healthcare';
       const isHighlighted = isSearchResult(facility);
+      const isHospital = facility.type === 'Hospitals';
+      
       const marker = L.marker([facility.coordinates[1], facility.coordinates[0]], {
-        icon: createCustomIcon(getLayerColor(facility.layerId), isHealthcare, isHighlighted),
+        icon: createCustomIcon(getLayerColor(facility.layerId), isHealthcare, isHighlighted, isHospital),
         zIndexOffset: isHighlighted ? 1000 : 0,
       });
 
@@ -258,8 +265,59 @@ export function InteractiveMap({
            </p>` 
         : '';
 
+      // Hospital-specific popup content
+      const hospitalSpecificInfo = isHospital ? `
+        <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px;">
+          <div style="
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 500;
+            background-color: ${facility.hasEmergency ? '#dcfce7' : '#f1f5f9'};
+            color: ${facility.hasEmergency ? '#166534' : '#64748b'};
+          ">
+            ⚡ Emergency: ${facility.hasEmergency ? 'Yes' : 'No'}
+          </div>
+          ${facility.bedCapacity ? `
+            <div style="
+              display: flex;
+              align-items: center;
+              gap: 4px;
+              padding: 4px 8px;
+              border-radius: 6px;
+              font-size: 11px;
+              font-weight: 500;
+              background-color: #e0f4ff;
+              color: #0369a1;
+            ">
+              🛏️ ${facility.bedCapacity} Beds
+            </div>
+          ` : ''}
+        </div>
+        ${facility.specialties && facility.specialties.length > 0 ? `
+          <div style="margin-top: 12px;">
+            <p style="font-size: 11px; color: #64748b; margin-bottom: 6px;">Specialties:</p>
+            <div style="display: flex; flex-wrap: wrap; gap: 4px;">
+              ${facility.specialties.map(s => `
+                <span style="
+                  padding: 3px 8px;
+                  border-radius: 4px;
+                  font-size: 10px;
+                  font-weight: 500;
+                  background-color: #e0f2fe;
+                  color: #0369a1;
+                ">${s}</span>
+              `).join('')}
+            </div>
+          </div>
+        ` : ''}
+      ` : '';
+
       const popupContent = `
-        <div style="padding: 16px; min-width: 260px; font-family: system-ui, sans-serif;">
+        <div style="padding: 16px; min-width: 280px; font-family: system-ui, sans-serif;">
           <div style="display: flex; align-items: flex-start; gap: 12px;">
             <div style="
               width: 48px;
@@ -269,10 +327,10 @@ export function InteractiveMap({
               align-items: center;
               justify-content: center;
               font-size: 22px;
-              background-color: ${isHealthcare ? '#ccfbf1' : '#e0f4ff'};
+              background-color: ${isHospital ? '#063660' : (isHealthcare ? '#ccfbf1' : '#e0f4ff')};
               flex-shrink: 0;
             ">
-              ${isHealthcare ? '🏥' : '🎓'}
+              ${isHospital ? '<span style="filter: grayscale(100%) brightness(10);">🏥</span>' : (isHealthcare ? '❤️' : '🎓')}
             </div>
             <div style="flex: 1; min-width: 0;">
               <h4 style="font-weight: 600; font-size: 15px; margin: 0 0 6px 0; color: #1e293b; line-height: 1.3;">
@@ -285,13 +343,14 @@ export function InteractiveMap({
                 font-size: 11px;
                 font-weight: 600;
                 letter-spacing: 0.02em;
-                background-color: ${isHealthcare ? '#ccfbf1' : '#e0f4ff'};
-                color: ${isHealthcare ? '#0d9488' : '#38B6FF'};
+                background-color: ${isHospital ? '#063660' : (isHealthcare ? '#ccfbf1' : '#e0f4ff')};
+                color: ${isHospital ? 'white' : (isHealthcare ? '#0d9488' : '#38B6FF')};
               ">
                 ${facility.type}
               </span>
             </div>
           </div>
+          ${hospitalSpecificInfo}
           <div style="margin-top: 14px; font-size: 13px; line-height: 1.5;">
             <p style="color: #64748b; margin: 0;">
               📍 ${facility.address}
@@ -306,14 +365,14 @@ export function InteractiveMap({
               flex: 1;
               padding: 10px;
               border-radius: 10px;
-              background-color: #0c4a6e;
+              background: linear-gradient(135deg, #0c4a6e 0%, #063660 100%);
               color: white;
               font-size: 13px;
               font-weight: 500;
               border: none;
               cursor: pointer;
-              transition: background-color 0.2s;
-            " onmouseover="this.style.backgroundColor='#075985'" onmouseout="this.style.backgroundColor='#0c4a6e'">
+              transition: all 0.2s;
+            " onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
               🧭 Get Directions
             </button>
           </div>
@@ -321,7 +380,7 @@ export function InteractiveMap({
       `;
 
       marker.bindPopup(popupContent, {
-        maxWidth: 320,
+        maxWidth: 340,
         className: 'custom-popup'
       });
       marker.on('click', () => onFacilitySelect?.(facility));

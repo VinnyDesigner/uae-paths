@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from 'react';
-import { Search, MapPin, X, Loader2, Sparkles, Navigation } from 'lucide-react';
+import { useState, useRef, useEffect, useMemo } from 'react';
+import { Search, MapPin, X, Loader2, Sparkles, Navigation, Building2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 
@@ -10,10 +10,13 @@ interface SmartSearchProps {
   className?: string;
   size?: 'default' | 'large';
   placeholder?: string;
+  activeLayerId?: number | null;
 }
 
 const aiSuggestions = [
   { text: 'Nearest hospital', icon: '🏥', category: 'Emergency' },
+  { text: 'Emergency hospital near me', icon: '🚑', category: 'Emergency' },
+  { text: 'Hospitals with ICU in Abu Dhabi', icon: '🏥', category: 'Healthcare' },
   { text: 'Schools in Abu Dhabi', icon: '🎓', category: 'Education' },
   { text: 'Pharmacies near me', icon: '💊', category: 'Healthcare' },
   { text: 'Clinics in Dubai', icon: '🩺', category: 'Healthcare' },
@@ -23,19 +26,40 @@ const aiSuggestions = [
   { text: 'Healthcare centers near me', icon: '🏨', category: 'Healthcare' },
 ];
 
+// Hospital-related keywords for icon display
+const hospitalKeywords = ['hospital', 'hospitals', 'emergency', 'icu', 'trauma', 'medical'];
+
 export function SmartSearch({ 
   onSearch, 
   onLocateMe,
   isSearching = false, 
   className, 
   size = 'default',
-  placeholder = "Search for nearest healthcare, schools, or wellness centers..."
+  placeholder = "Search for nearest healthcare, schools, or wellness centers...",
+  activeLayerId
 }: SmartSearchProps) {
   const [query, setQuery] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Check if hospital icon should be shown
+  const showHospitalIcon = useMemo(() => {
+    const isHospitalLayerActive = activeLayerId === 330;
+    const hasHospitalKeyword = hospitalKeywords.some(keyword => 
+      query.toLowerCase().includes(keyword)
+    );
+    return isHospitalLayerActive || hasHospitalKeyword;
+  }, [activeLayerId, query]);
+
+  // Dynamic placeholder based on context
+  const dynamicPlaceholder = useMemo(() => {
+    if (activeLayerId === 330) {
+      return "Search hospitals, emergency care, specialties…";
+    }
+    return placeholder;
+  }, [activeLayerId, placeholder]);
 
   const filteredSuggestions = query.trim() 
     ? aiSuggestions.filter(s =>
@@ -96,13 +120,18 @@ export function SmartSearch({
           isLarge ? "h-14 md:h-16" : "h-12"
         )}
       >
-        {/* AI indicator */}
+        {/* Search/Hospital indicator */}
         <div className={cn(
-          "flex items-center justify-center text-primary",
+          "flex items-center justify-center",
           isLarge ? "pl-5 md:pl-6" : "pl-4"
         )}>
           {isSearching ? (
             <Loader2 className={cn("animate-spin text-primary", isLarge ? "w-5 h-5 md:w-6 md:h-6" : "w-5 h-5")} />
+          ) : showHospitalIcon ? (
+            <div className="relative">
+              <Building2 className={cn("text-primary", isLarge ? "w-5 h-5 md:w-6 md:h-6" : "w-5 h-5")} />
+              <Sparkles className="absolute -top-1 -right-1 w-3 h-3 text-primary animate-pulse" />
+            </div>
           ) : (
             <div className="relative">
               <Search className={cn("text-muted-foreground", isLarge ? "w-5 h-5 md:w-6 md:h-6" : "w-5 h-5")} />
@@ -122,7 +151,7 @@ export function SmartSearch({
           }}
           onFocus={() => setShowSuggestions(true)}
           onKeyDown={handleKeyDown}
-          placeholder={placeholder}
+          placeholder={dynamicPlaceholder}
           className={cn(
             "flex-1 bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground",
             isLarge ? "px-4 text-base md:text-lg" : "px-3 text-sm"

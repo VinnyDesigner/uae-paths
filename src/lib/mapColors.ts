@@ -3,6 +3,12 @@
  * Single source of truth for all category colors
  */
 
+import {
+  Building2, Stethoscope, Microscope, Pill, HeartPulse, Siren,
+  Accessibility, Truck, School, Building, BookOpen, Baby, Users,
+  type LucideIcon
+} from 'lucide-react';
+
 export interface CategoryColor {
   base: string;       // 100% color for icons, markers, text
   light: string;      // 8-12% opacity background
@@ -170,3 +176,28 @@ export const ctaColor = {
   base: '#0c4a6e',
   gradient: 'linear-gradient(135deg, #0c4a6e 0%, #063660 100%)',
 };
+
+// Icon mapping for categories
+const categoryIcons: Record<string, LucideIcon> = {
+  'Hospitals': Building2,
+  'Clinics': Stethoscope,
+  'Diagnostic Centers': Microscope,
+  'Pharmacies': Pill,
+  'Healthcare Centers': HeartPulse,
+  'Ambulance Stations': Siren,
+  'Rehabilitation Centres': Accessibility,
+  'Mobile Health Units': Truck,
+  'Public Schools': School,
+  'Private Schools': Building,
+  'Charter Schools': BookOpen,
+  'Nurseries': Baby,
+  'POD Centers': Users,
+  // Theme group names
+  'Healthcare & Wellness': HeartPulse,
+  'Education': School,
+};
+
+// Get category icon by name
+export function getCategoryIcon(typeName: string): LucideIcon {
+  return categoryIcons[typeName] || Building2;
+}

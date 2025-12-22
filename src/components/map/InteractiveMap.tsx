@@ -5,6 +5,7 @@ import { ZoomIn, ZoomOut, Maximize, LocateFixed, Home, Map, Check, List, Buildin
 import { cn } from '@/lib/utils';
 import { ThemeGroup, Facility, MapLayer } from '@/types/map';
 import { baseMaps, BaseMapOption } from './BaseMapSelector';
+import { getCategoryColor, getCategoryColorByLayerId, statusColors, ctaColor } from '@/lib/mapColors';
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Heart, GraduationCap, Building2, Stethoscope, Pill, HeartPulse, 
@@ -15,6 +16,23 @@ function getIcon(iconName: string) {
   return iconMap[iconName] || Building2;
 }
 
+// SVG icons for markers (inline to avoid external dependencies)
+const markerIcons: Record<string, string> = {
+  Building2: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>',
+  Stethoscope: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3"/><path d="M8 15v1a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6v-4"/><circle cx="20" cy="10" r="2"/></svg>',
+  Microscope: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18h8"/><path d="M3 22h18"/><path d="M14 22a7 7 0 1 0 0-14h-1"/><path d="M9 14h2"/><path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"/><path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"/></svg>',
+  Pill: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg>',
+  HeartPulse: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/><path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27"/></svg>',
+  Siren: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18v-6a5 5 0 1 1 10 0v6"/><path d="M5 21a1 1 0 0 1-1-1v-1a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1Z"/><path d="M21 12h1"/><path d="M18.5 4.5 18 5"/><path d="M2 12h1"/><path d="M12 2v1"/><path d="m4.929 4.929.707.707"/><path d="M12 12v6"/></svg>',
+  Accessibility: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="4" r="1"/><path d="m18 19 1-7-6 1"/><path d="m5 8 3-3 5.5 3-2.36 3.5"/><path d="M4.24 14.5a5 5 0 0 0 6.88 6"/><path d="M13.76 17.5a5 5 0 0 0-6.88-6"/></svg>',
+  Truck: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18h2"/><path d="M19 18h2"/><path d="M19 18a2 2 0 1 0 0-4h-3"/><path d="M8 18a2 2 0 1 1 0-4H5.83"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>',
+  School: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m4 6 8-4 8 4"/><path d="m18 10 4 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-8l4-2"/><path d="M14 22v-4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v4"/><path d="M18 5v17"/><path d="M6 5v17"/><circle cx="12" cy="9" r="2"/></svg>',
+  Building: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg>',
+  BookOpen: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',
+  Baby: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12h.01"/><path d="M15 12h.01"/><path d="M10 16c.5.3 1.2.5 2 .5s1.5-.2 2-.5"/><path d="M19 6.3a9 9 0 0 1 1.8 3.9 2 2 0 0 1 0 3.6 9 9 0 0 1-17.6 0 2 2 0 0 1 0-3.6A9 9 0 0 1 12 3c2 0 3.5 1.1 3.5 2.5s-.9 2.5-2 2.5c-.8 0-1.5-.4-1.5-1"/></svg>',
+  Users: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+};
+
 // Fix for default marker icons
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -23,8 +41,12 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
 
-// Custom marker icons with pulse animation for search results
-const createCustomIcon = (color: string, isHealthcare: boolean, isHighlighted: boolean = false, isHospital: boolean = false) => {
+// Custom marker icons with consistent colors from unified system
+const createCustomIcon = (facilityType: string, isHighlighted: boolean = false) => {
+  const categoryColor = getCategoryColor(facilityType);
+  const color = categoryColor.base;
+  const iconSvg = markerIcons[categoryColor.iconName] || markerIcons['Building2'];
+  
   const pulseAnimation = isHighlighted ? `
     <div style="
       position: absolute;
@@ -33,7 +55,7 @@ const createCustomIcon = (color: string, isHealthcare: boolean, isHighlighted: b
       top: -8px;
       left: -8px;
       border-radius: 50%;
-      background: ${color}33;
+      background: ${categoryColor.glow};
       animation: pulse 2s infinite;
     "></div>
     <style>
@@ -45,10 +67,8 @@ const createCustomIcon = (color: string, isHealthcare: boolean, isHighlighted: b
     </style>
   ` : '';
 
-  // Special hospital icon
-  const iconEmoji = isHospital ? '🏥' : (isHealthcare ? '❤️' : '🎓');
-  const iconSize = isHospital ? 40 : 36;
-  const iconAnchor = isHospital ? 20 : 18;
+  const iconSize = isHighlighted ? 42 : 36;
+  const iconAnchor = isHighlighted ? 21 : 18;
 
   return L.divIcon({
     className: 'custom-marker',
@@ -58,22 +78,23 @@ const createCustomIcon = (color: string, isHealthcare: boolean, isHighlighted: b
         <div style="
           width: ${iconSize}px;
           height: ${iconSize}px;
-          background: ${isHospital ? '#063660' : color};
+          background: ${color};
           border-radius: 50% 50% 50% 0;
           transform: rotate(-45deg);
           display: flex;
           align-items: center;
           justify-content: center;
-          box-shadow: 0 4px 12px ${isHospital ? '#06366066' : color + '66'};
+          box-shadow: 0 4px 12px ${categoryColor.glow};
           border: 3px solid white;
-          ${isHighlighted ? 'animation: bounce 1s ease-in-out;' : ''}
+          ${isHighlighted ? 'transform: rotate(-45deg) scale(1.05);' : ''}
         ">
           <div style="
             transform: rotate(45deg);
             color: white;
-            font-size: ${isHospital ? '18px' : '16px'};
+            width: 16px;
+            height: 16px;
           ">
-            ${iconEmoji}
+            ${iconSvg}
           </div>
         </div>
       </div>
@@ -592,22 +613,23 @@ export function InteractiveMap({
 
     // Add new markers
     visibleFacilities.forEach(facility => {
-      const isHealthcare = facility.theme === 'healthcare';
       const isHighlighted = isSearchResult(facility);
-      const isHospital = facility.type === 'Hospitals';
+      const categoryColor = getCategoryColor(facility.type);
+      const iconSvg = markerIcons[categoryColor.iconName] || markerIcons['Building2'];
       
       const marker = L.marker([facility.coordinates[1], facility.coordinates[0]], {
-        icon: createCustomIcon(getLayerColor(facility.layerId), isHealthcare, isHighlighted, isHospital),
+        icon: createCustomIcon(facility.type, isHighlighted),
         zIndexOffset: isHighlighted ? 1000 : 0,
       });
 
       const distanceInfo = facility.distance 
-        ? `<p style="color: #0d9488; margin: 4px 0 0 0; font-weight: 500;">
+        ? `<p style="color: ${categoryColor.base}; margin: 4px 0 0 0; font-weight: 500;">
              📍 ${facility.distance.toFixed(1)} km away
            </p>` 
         : '';
 
-      // Hospital-specific popup content
+      // Hospital-specific popup content with unified colors
+      const isHospital = facility.type === 'Hospitals';
       const hospitalSpecificInfo = isHospital ? `
         <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px;">
           <div style="
@@ -618,8 +640,8 @@ export function InteractiveMap({
             border-radius: 6px;
             font-size: 11px;
             font-weight: 500;
-            background-color: ${facility.hasEmergency ? '#dcfce7' : '#f1f5f9'};
-            color: ${facility.hasEmergency ? '#166534' : '#64748b'};
+            background-color: ${facility.hasEmergency ? statusColors.success.light : statusColors.neutral.light};
+            color: ${facility.hasEmergency ? statusColors.success.text : statusColors.neutral.text};
           ">
             ⚡ Emergency: ${facility.hasEmergency ? 'Yes' : 'No'}
           </div>
@@ -632,8 +654,8 @@ export function InteractiveMap({
               border-radius: 6px;
               font-size: 11px;
               font-weight: 500;
-              background-color: #e0f4ff;
-              color: #0369a1;
+              background-color: ${statusColors.info.light};
+              color: ${statusColors.info.text};
             ">
               🛏️ ${facility.bedCapacity} Beds
             </div>
@@ -649,8 +671,8 @@ export function InteractiveMap({
                   border-radius: 4px;
                   font-size: 10px;
                   font-weight: 500;
-                  background-color: #e0f2fe;
-                  color: #0369a1;
+                  background-color: ${categoryColor.medium};
+                  color: ${categoryColor.base};
                 ">${s}</span>
               `).join('')}
             </div>
@@ -668,11 +690,13 @@ export function InteractiveMap({
               display: flex;
               align-items: center;
               justify-content: center;
-              font-size: 22px;
-              background-color: ${isHospital ? '#063660' : (isHealthcare ? '#ccfbf1' : '#e0f4ff')};
+              background-color: ${categoryColor.light};
               flex-shrink: 0;
+              color: ${categoryColor.base};
             ">
-              ${isHospital ? '<span style="filter: grayscale(100%) brightness(10);">🏥</span>' : (isHealthcare ? '❤️' : '🎓')}
+              <div style="width: 24px; height: 24px;">
+                ${iconSvg}
+              </div>
             </div>
             <div style="flex: 1; min-width: 0;">
               <h4 style="font-weight: 600; font-size: 15px; margin: 0 0 6px 0; color: #1e293b; line-height: 1.3;">
@@ -685,8 +709,8 @@ export function InteractiveMap({
                 font-size: 11px;
                 font-weight: 600;
                 letter-spacing: 0.02em;
-                background-color: ${isHospital ? '#063660' : (isHealthcare ? '#ccfbf1' : '#e0f4ff')};
-                color: ${isHospital ? 'white' : (isHealthcare ? '#0d9488' : '#38B6FF')};
+                background-color: ${categoryColor.medium};
+                color: ${categoryColor.base};
               ">
                 ${facility.type}
               </span>
@@ -707,7 +731,7 @@ export function InteractiveMap({
               flex: 1;
               padding: 10px;
               border-radius: 10px;
-              background: linear-gradient(135deg, #0c4a6e 0%, #063660 100%);
+              background: ${ctaColor.gradient};
               color: white;
               font-size: 13px;
               font-weight: 500;

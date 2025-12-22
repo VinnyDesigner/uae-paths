@@ -25,6 +25,7 @@ import {
 import { cn } from '@/lib/utils';
 import { ThemeGroup } from '@/types/map';
 import { useToast } from '@/hooks/use-toast';
+import { getCategoryColor } from '@/lib/mapColors';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -63,23 +64,6 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   BookOpen,
   Baby,
   Users,
-};
-
-// Color mapping for consistent theming
-const layerColorMap: Record<string, string> = {
-  'Hospitals': '#0891b2',      // Cyan-600
-  'Clinics': '#0d9488',        // Teal-600
-  'Diagnostic Centers': '#059669', // Emerald-600
-  'Pharmacies': '#16a34a',     // Green-600
-  'Healthcare Centers': '#0ea5e9', // Sky-500
-  'Ambulance Stations': '#dc2626', // Red-600
-  'Rehabilitation Centres': '#7c3aed', // Violet-600
-  'Mobile Health Units': '#2563eb', // Blue-600
-  'Public Schools': '#38B6FF',
-  'Private Schools': '#3b82f6',
-  'Charter Schools': '#6366f1',
-  'Nurseries': '#f59e0b',
-  'POD Centers': '#8b5cf6',
 };
 
 export function SidePanelLayers({ 
@@ -307,7 +291,8 @@ export function SidePanelLayers({
                   {theme.layers.map((layer) => {
                     const isHighlighted = highlightedLayerId === layer.id;
                     const LayerIcon = iconMap[layer.icon];
-                    const layerColor = layerColorMap[layer.name] || layer.color;
+                    const categoryColor = getCategoryColor(layer.name);
+                    const layerColor = categoryColor.base;
                     
                     return (
                       <Tooltip key={layer.id}>

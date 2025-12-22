@@ -120,19 +120,24 @@ export function SmartSearch({
           isLarge ? "h-14 md:h-16" : "h-12"
         )}
       >
-        {/* Search/Hospital indicator with AI sparkle */}
+        {/* Search/Hospital indicator */}
         <div className={cn(
-          "flex items-center gap-2",
+          "flex items-center justify-center",
           isLarge ? "pl-5 md:pl-6" : "pl-4"
         )}>
           {isSearching ? (
             <Loader2 className={cn("animate-spin text-primary", isLarge ? "w-5 h-5 md:w-6 md:h-6" : "w-5 h-5")} />
           ) : showHospitalIcon ? (
-            <Building2 className={cn("text-primary", isLarge ? "w-5 h-5 md:w-6 md:h-6" : "w-5 h-5")} />
+            <div className="relative">
+              <Building2 className={cn("text-primary", isLarge ? "w-5 h-5 md:w-6 md:h-6" : "w-5 h-5")} />
+              <Sparkles className="absolute -top-1 -right-1 w-3 h-3 text-primary animate-pulse" />
+            </div>
           ) : (
-            <Search className={cn("text-muted-foreground", isLarge ? "w-5 h-5 md:w-6 md:h-6" : "w-5 h-5")} />
+            <div className="relative">
+              <Search className={cn("text-muted-foreground", isLarge ? "w-5 h-5 md:w-6 md:h-6" : "w-5 h-5")} />
+              <Sparkles className="absolute -top-1 -right-1 w-3 h-3 text-primary animate-pulse" />
+            </div>
           )}
-          <Sparkles className="w-4 h-4 text-primary animate-pulse" />
         </div>
         
         <input

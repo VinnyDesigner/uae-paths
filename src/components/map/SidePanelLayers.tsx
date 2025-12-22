@@ -18,17 +18,10 @@ import {
   Users,
   CheckCircle2,
   XCircle,
-  MoreHorizontal
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ThemeGroup } from '@/types/map';
 import { useToast } from '@/hooks/use-toast';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { LayerFlyout } from './LayerFlyout';
 
 interface SidePanelLayersProps {
@@ -76,7 +69,7 @@ export function SidePanelLayers({
   // Get sidebar bounds on mount and resize
   useEffect(() => {
     const updateSidebarRect = () => {
-      // Find the main sidebar container (the absolute positioned panel)
+      // Find the main sidebar container
       const sidebar = document.querySelector('.lg\\:flex.flex-col.w-80.absolute');
       if (sidebar) {
         setSidebarRect(sidebar.getBoundingClientRect());
@@ -86,7 +79,6 @@ export function SidePanelLayers({
     updateSidebarRect();
     window.addEventListener('resize', updateSidebarRect);
     
-    // Also update when scrolling the sidebar content
     const scrollContainer = containerRef.current?.closest('.overflow-y-auto');
     if (scrollContainer) {
       scrollContainer.addEventListener('scroll', updateSidebarRect);
@@ -131,7 +123,7 @@ export function SidePanelLayers({
       });
     }
     toast({
-      description: `${theme.name} layers enabled (${theme.layers.length})`,
+      description: `All ${theme.name} layers enabled`,
       duration: 1500,
     });
   }, [layers, onSelectAll, onLayerToggle, toast]);
@@ -150,13 +142,12 @@ export function SidePanelLayers({
       });
     }
     toast({
-      description: `${theme.name} layers cleared`,
+      description: `All ${theme.name} layers cleared`,
       duration: 1500,
     });
   }, [layers, onClearAll, onLayerToggle, toast]);
 
   const handleCategoryClick = useCallback((theme: ThemeGroup, buttonElement: HTMLButtonElement | null) => {
-    // Update sidebar rect before opening flyout
     const sidebar = document.querySelector('.lg\\:flex.flex-col.w-80.absolute');
     if (sidebar) {
       setSidebarRect(sidebar.getBoundingClientRect());
@@ -183,7 +174,7 @@ export function SidePanelLayers({
 
   return (
     <div ref={containerRef} className={cn("relative", className)} data-sidebar-layers>
-      <div className="space-y-4">
+      <div className="space-y-3">
         {layers.map((theme) => {
           const visibleCount = getVisibleLayerCount(theme);
           const totalCount = theme.layers.length;
@@ -196,57 +187,58 @@ export function SidePanelLayers({
             <div
               key={theme.id}
               className={cn(
-                "bg-white/40 dark:bg-white/5 rounded-2xl border overflow-hidden transition-all duration-200",
-                "hover:shadow-md hover:border-white/40 dark:hover:border-white/15",
+                "rounded-2xl border overflow-hidden transition-all duration-200",
+                "bg-white/50 dark:bg-white/5 backdrop-blur-sm",
+                "hover:shadow-md",
                 isSelected 
-                  ? "border-primary/50 ring-2 ring-primary/20 shadow-md" 
-                  : "border-white/30 dark:border-white/10 shadow-sm"
+                  ? "border-primary/40 ring-2 ring-primary/20 shadow-md" 
+                  : "border-white/40 dark:border-white/10 shadow-sm hover:border-white/60"
               )}
             >
-              {/* Card Content */}
+              {/* Card Content - 16px padding consistent */}
               <div 
                 className={cn(
                   "p-4",
                   isHealthcare 
-                    ? "bg-gradient-to-r from-primary/5 to-transparent" 
-                    : "bg-gradient-to-r from-education/5 to-transparent"
+                    ? "bg-gradient-to-br from-primary/8 via-transparent to-transparent" 
+                    : "bg-gradient-to-br from-education/8 via-transparent to-transparent"
                 )}
               >
-                {/* Row 1: Icon + Title + Chevron - Grid layout for perfect alignment */}
+                {/* Row 1: Icon + Title + Chevron */}
                 <button
                   ref={setRef(theme.id)}
                   onClick={(e) => handleCategoryClick(theme, e.currentTarget)}
                   className={cn(
-                    "w-full grid gap-3 group/row",
-                    "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 rounded-lg",
+                    "w-full flex items-center gap-3 group/row",
+                    "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 rounded-xl",
                     "-mx-1 px-1 py-1"
                   )}
-                  style={{ gridTemplateColumns: '40px 1fr 40px' }}
                   aria-label={`Open ${theme.name} layers`}
                 >
-                  {/* Fixed 40x40 icon container */}
+                  {/* Icon container with category tint - 40x40px */}
                   <div
                     className={cn(
-                      "w-10 h-10 rounded-xl flex items-center justify-center shadow-sm transition-transform duration-200",
-                      "group-hover/row:scale-105",
+                      "w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0",
+                      "transition-all duration-200 group-hover/row:scale-105",
                       isHealthcare 
-                        ? "bg-primary/15 text-primary" 
-                        : "bg-education/15 text-education"
+                        ? "bg-primary/12 text-primary shadow-sm shadow-primary/10" 
+                        : "bg-education/12 text-education shadow-sm shadow-education/10"
                     )}
                   >
                     {getThemeIcon(theme.icon)}
                   </div>
                   
-                  {/* Title - vertically centered, single line with ellipsis */}
-                  <span className="flex items-center text-left text-base font-semibold text-foreground leading-tight truncate">
+                  {/* Title - flex-1 for proper truncation */}
+                  <span className="flex-1 text-left text-[15px] font-semibold text-foreground leading-tight truncate">
                     {theme.name}
                   </span>
                   
-                  {/* Right Chevron - vertically centered in 40x40 container */}
+                  {/* Chevron - 40x40px container for alignment */}
                   <div
                     className={cn(
-                      "w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-200",
-                      "group-hover/row:bg-white/30 dark:group-hover/row:bg-white/10",
+                      "w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0",
+                      "transition-all duration-200",
+                      "group-hover/row:bg-white/40 dark:group-hover/row:bg-white/10",
                       isSelected && "bg-primary/10"
                     )}
                   >
@@ -260,24 +252,19 @@ export function SidePanelLayers({
                   </div>
                 </button>
 
-                {/* Subtle divider */}
-                <div className="h-px bg-border/30 mt-3 mb-3" />
+                {/* Divider */}
+                <div className="h-px bg-border/40 my-3" />
 
-                {/* Row 2: Visibility Count (left) | Actions (right) - Grid layout */}
-                <div 
-                  className="grid items-center h-8"
-                  style={{ gridTemplateColumns: '1fr auto auto' }}
-                >
-                  {/* Left: Visibility status */}
-                  <span className="text-[13px] leading-8 text-muted-foreground whitespace-nowrap">
-                    <span className="font-medium text-foreground">{visibleCount}</span>
-                    <span className="mx-1">of</span>
-                    <span>{totalCount}</span>
-                    <span className="ml-1">visible</span>
-                  </span>
+                {/* Row 2: Status (left) | Actions (right) */}
+                <div className="flex items-center justify-between h-8">
+                  {/* Left: Visibility counter */}
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-sm font-semibold text-foreground">{visibleCount}</span>
+                    <span className="text-sm text-muted-foreground">of {totalCount} visible</span>
+                  </div>
 
-                  {/* Right: Actions - Desktop/Tablet */}
-                  <div className="hidden sm:flex items-center h-8">
+                  {/* Right: Select All | Clear All */}
+                  <div className="flex items-center gap-1">
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
@@ -285,17 +272,18 @@ export function SidePanelLayers({
                       }}
                       disabled={allVisible}
                       className={cn(
-                        "text-[13px] leading-8 px-2.5 rounded-md transition-all font-medium",
-                        "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1",
+                        "flex items-center gap-1 px-2 h-7 rounded-lg text-xs font-medium transition-all",
+                        "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary",
                         allVisible
                           ? "text-muted-foreground/40 cursor-not-allowed"
                           : "text-primary hover:bg-primary/10 active:scale-95"
                       )}
                       aria-label={`Select all ${theme.name} layers`}
                     >
-                      Select All
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      <span className="hidden sm:inline">All</span>
                     </button>
-                    <span className="text-border/50 text-[13px] leading-8 mx-0.5 select-none">|</span>
+                    <span className="text-muted-foreground/30 text-xs select-none">|</span>
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
@@ -303,48 +291,18 @@ export function SidePanelLayers({
                       }}
                       disabled={noneVisible}
                       className={cn(
-                        "text-[13px] leading-8 px-2.5 rounded-md transition-all font-medium",
-                        "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1",
+                        "flex items-center gap-1 px-2 h-7 rounded-lg text-xs font-medium transition-all",
+                        "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary",
                         noneVisible
                           ? "text-muted-foreground/40 cursor-not-allowed"
                           : "text-muted-foreground hover:bg-muted/50 hover:text-foreground active:scale-95"
                       )}
                       aria-label={`Clear all ${theme.name} layers`}
                     >
-                      Clear All
+                      <XCircle className="w-3.5 h-3.5" />
+                      <span className="hidden sm:inline">Clear</span>
                     </button>
                   </div>
-
-                  {/* Right: Actions - Mobile dropdown */}
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <button 
-                        className="sm:hidden p-2 rounded-lg hover:bg-white/30 dark:hover:bg-white/10 h-8 w-8 flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-primary transition-colors"
-                        aria-label="Layer actions"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <MoreHorizontal className="w-4 h-4 text-muted-foreground" />
-                      </button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-48 bg-card border border-border shadow-xl z-50">
-                      <DropdownMenuItem 
-                        onClick={() => handleSelectAll(theme.id)}
-                        disabled={allVisible}
-                        className="gap-2.5 min-h-[44px]"
-                      >
-                        <CheckCircle2 className="w-4 h-4" />
-                        Select All
-                      </DropdownMenuItem>
-                      <DropdownMenuItem 
-                        onClick={() => handleClearAll(theme.id)}
-                        disabled={noneVisible}
-                        className="gap-2.5 min-h-[44px]"
-                      >
-                        <XCircle className="w-4 h-4" />
-                        Clear All
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
                 </div>
               </div>
             </div>
@@ -352,7 +310,7 @@ export function SidePanelLayers({
         })}
       </div>
 
-      {/* Layer Flyout - Opens to the right with dynamic positioning matching sidebar bounds */}
+      {/* Layer Flyout */}
       <LayerFlyout
         theme={selectedTheme}
         isOpen={!!selectedTheme}

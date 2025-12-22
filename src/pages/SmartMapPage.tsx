@@ -5,9 +5,7 @@ import { Header } from '@/components/layout/Header';
 import { SmartSearch } from '@/components/search/SmartSearch';
 import { InteractiveMap } from '@/components/map/InteractiveMap';
 import { DirectionsPanel } from '@/components/map/DirectionsPanel';
-import { MapLegendOverlay } from '@/components/map/MapLegendOverlay';
 import { InlineFilters } from '@/components/map/InlineFilters';
-import { LayerTogglePanel } from '@/components/map/LayerTogglePanel';
 import { SidePanelLayers } from '@/components/map/SidePanelLayers';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -192,11 +190,6 @@ export default function SmartMapPage() {
                 highlightedLayerId={highlightedLayerId}
               />
             </div>
-            
-            {/* Legend Section */}
-            <div className="bg-white/30 dark:bg-white/5 rounded-xl p-4 border border-white/20 dark:border-white/10">
-              <MapLegendOverlay layers={layers} />
-            </div>
           </div>
         </div>
 
@@ -292,11 +285,6 @@ export default function SmartMapPage() {
                 </div>
               </div>
 
-              {/* Mobile Legend */}
-              <div>
-                <h4 className="text-sm font-semibold text-foreground mb-3">Legend</h4>
-                <MapLegendOverlay layers={layers} />
-              </div>
             </div>
           </div>
         </div>

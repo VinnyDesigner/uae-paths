@@ -79,28 +79,27 @@ export function LayerFlyout({
   // Calculate flyout position: starts at Map Layers section top, ends at sidebar bottom
   const calculatePosition = useCallback(() => {
     const gap = 12; // gap between sidebar and flyout
-    const minFlyoutHeight = 200;
-    
-    // Get sidebar bounds - use defaults if not available
+    const flyoutWidth = 340;
+
+    // Sidebar bounds (viewport space)
+    const sidebarTop = sidebarRect?.top ?? 80;
     const sidebarBottom = sidebarRect?.bottom ?? (window.innerHeight - 16);
     const sidebarRight = sidebarRect?.right ?? 336;
-    const sidebarTop = sidebarRect?.top ?? 80;
 
-    // Left position: right after sidebar with gap
-    const leftPosition = sidebarRight + gap;
+    // Top aligned to Map Layers heading/top
+    const sectionTop = sectionRect?.top ?? sidebarTop;
 
-    // Top position: aligned with Map Layers section header
-    // Use section rect if available, otherwise fall back to sidebar top + offset
-    const sectionTop = sectionRect?.top ?? (sidebarTop + 200);
-    
-    // Ensure flyout starts at Map Layers section and ends exactly at sidebar bottom
-    const targetTop = sectionTop;
-    const height = sidebarBottom - targetTop;
+    const unclampedLeft = sidebarRight + gap;
+    const maxLeft = Math.max(16, window.innerWidth - flyoutWidth - 16);
+    const left = Math.min(unclampedLeft, maxLeft);
 
-    return { 
-      top: targetTop, 
-      height: Math.max(minFlyoutHeight, height),
-      left: leftPosition,
+    const top = Math.max(sidebarTop, sectionTop);
+    const height = Math.max(0, sidebarBottom - top);
+
+    return {
+      top,
+      height,
+      left,
     };
   }, [sectionRect, sidebarRect]);
 
@@ -168,15 +167,16 @@ export function LayerFlyout({
         "border border-white/60 dark:border-white/15 rounded-2xl shadow-2xl",
         "transition-all duration-200 ease-out",
         "flex flex-col overflow-hidden",
-        isOpen 
-          ? "opacity-100 translate-x-0 pointer-events-auto" 
+        isOpen
+          ? "opacity-100 translate-x-0 pointer-events-auto"
           : "opacity-0 -translate-x-3 pointer-events-none"
       )}
-      style={{ 
+      style={{
         left: `${flyoutPosition.left}px`,
         top: `${flyoutPosition.top}px`,
         height: `${flyoutPosition.height}px`,
-        zIndex: 40, // Higher than sidebar (z-30) but below modals
+        // Leaflet controls/markers often sit at z-index 400–1000; keep flyout above them.
+        zIndex: 1200,
       }}
       role="dialog"
       aria-modal="true"

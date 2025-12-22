@@ -39,7 +39,7 @@ interface LayerFlyoutProps {
   onSelectAll: (themeId: number) => void;
   onClearAll: (themeId: number) => void;
   highlightedLayerId?: number | null;
-  clickedElementRect?: DOMRect | null;
+  sectionRect?: DOMRect | null;
   sidebarRect?: DOMRect | null;
 }
 
@@ -69,62 +69,40 @@ export function LayerFlyout({
   onSelectAll,
   onClearAll,
   highlightedLayerId,
-  clickedElementRect,
+  sectionRect,
   sidebarRect,
 }: LayerFlyoutProps) {
   const flyoutRef = useRef<HTMLDivElement>(null);
   const [flyoutPosition, setFlyoutPosition] = useState({ top: 0, height: 0, left: 0 });
   const [togglingLayerId, setTogglingLayerId] = useState<number | null>(null);
 
-  // Calculate flyout position: starts at clicked card's vertical center, ends at sidebar bottom
+  // Calculate flyout position: starts at Map Layers section top, ends at sidebar bottom
   const calculatePosition = useCallback(() => {
     const gap = 12; // gap between sidebar and flyout
-    const bottomPadding = 0; // flyout ends exactly at sidebar bottom
-    const minFlyoutHeight = 280;
+    const minFlyoutHeight = 200;
     
     // Get sidebar bounds - use defaults if not available
-    const sidebarTop = sidebarRect?.top ?? 80;
     const sidebarBottom = sidebarRect?.bottom ?? (window.innerHeight - 16);
     const sidebarRight = sidebarRect?.right ?? 336;
+    const sidebarTop = sidebarRect?.top ?? 80;
 
     // Left position: right after sidebar with gap
     const leftPosition = sidebarRight + gap;
 
-    // If no clicked element, align with sidebar top
-    if (!clickedElementRect) {
-      const height = sidebarBottom - sidebarTop;
-      return {
-        top: sidebarTop,
-        height: Math.max(minFlyoutHeight, height),
-        left: leftPosition,
-      };
-    }
-
-    // Start from clicked card's vertical center position
-    const cardCenter = clickedElementRect.top + (clickedElementRect.height / 2);
+    // Top position: aligned with Map Layers section header
+    // Use section rect if available, otherwise fall back to sidebar top + offset
+    const sectionTop = sectionRect?.top ?? (sidebarTop + 200);
     
-    // Calculate available height from card center to sidebar bottom
-    let targetTop = cardCenter - 40; // Offset slightly above card center for header
-    
-    // Ensure flyout doesn't go above sidebar top
-    targetTop = Math.max(sidebarTop, targetTop);
-    
-    // Height: MUST end exactly at sidebar bottom (no padding)
-    let height = sidebarBottom - targetTop - bottomPadding;
-
-    // If height would be too small, adjust top position upward
-    if (height < minFlyoutHeight) {
-      targetTop = sidebarBottom - minFlyoutHeight - bottomPadding;
-      targetTop = Math.max(sidebarTop, targetTop);
-      height = sidebarBottom - targetTop - bottomPadding;
-    }
+    // Ensure flyout starts at Map Layers section and ends exactly at sidebar bottom
+    const targetTop = sectionTop;
+    const height = sidebarBottom - targetTop;
 
     return { 
       top: targetTop, 
       height: Math.max(minFlyoutHeight, height),
       left: leftPosition,
     };
-  }, [clickedElementRect, sidebarRect]);
+  }, [sectionRect, sidebarRect]);
 
   useEffect(() => {
     if (isOpen) {

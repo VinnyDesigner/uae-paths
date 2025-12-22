@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { X, Layers, Filter, ChevronRight, ArrowLeft, Check, CheckCircle2, XCircle, Circle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ThemeGroup, FilterState } from '@/types/map';
@@ -36,6 +36,7 @@ export function MobileBottomSheet({
   const [dragOffset, setDragOffset] = useState(0);
   const [sheetLevel, setSheetLevel] = useState<SheetLevel>('categories');
   const [selectedTheme, setSelectedTheme] = useState<ThemeGroup | null>(null);
+  const [togglingLayerId, setTogglingLayerId] = useState<number | null>(null);
   const startY = useRef(0);
   const contentRef = useRef<HTMLDivElement>(null);
 
@@ -88,6 +89,13 @@ export function MobileBottomSheet({
     setSheetState('half');
   };
 
+  // Handle layer toggle with animation feedback
+  const handleLayerToggle = useCallback((themeId: number, layerId: number) => {
+    setTogglingLayerId(layerId);
+    onLayerToggle(themeId, layerId);
+    setTimeout(() => setTogglingLayerId(null), 150);
+  }, [onLayerToggle]);
+
   useEffect(() => {
     if (isOpen) {
       setSheetState('half');
@@ -125,6 +133,7 @@ export function MobileBottomSheet({
         style={{
           height: getSheetHeight(sheetState),
           transform: isDragging ? `translateY(${Math.max(0, dragOffset)}px)` : undefined,
+          paddingBottom: 'env(safe-area-inset-bottom, 16px)',
         }}
         role="dialog"
         aria-modal="true"
@@ -142,7 +151,7 @@ export function MobileBottomSheet({
 
         {/* Header - Categories Level */}
         {sheetLevel === 'categories' && (
-          <div className="bg-card border-b border-border px-4 py-3 flex items-center justify-between">
+          <div className="bg-card border-b border-border px-4 py-3 flex items-center justify-between flex-shrink-0">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
                 <Layers className="w-5 h-5 text-primary" />
@@ -164,7 +173,7 @@ export function MobileBottomSheet({
 
         {/* Header - Layers Level */}
         {sheetLevel === 'layers' && selectedTheme && (
-          <div className="bg-card border-b border-border px-4 py-3">
+          <div className="bg-card border-b border-border px-4 py-3 flex-shrink-0">
             <div className="flex items-center gap-3">
               <button
                 onClick={handleBackToCategories}
@@ -194,7 +203,7 @@ export function MobileBottomSheet({
                 onClick={() => onSelectAll(selectedTheme.id)}
                 disabled={getVisibleCount(selectedTheme) === selectedTheme.layers.length}
                 className={cn(
-                  "flex items-center gap-1.5 px-3 h-9 rounded-lg text-sm font-medium transition-all",
+                  "flex items-center gap-1.5 px-3 h-9 rounded-lg text-sm font-medium transition-all duration-120",
                   getVisibleCount(selectedTheme) === selectedTheme.layers.length
                     ? "bg-muted/30 text-muted-foreground/40 cursor-not-allowed"
                     : "bg-primary/10 text-primary active:scale-95"
@@ -207,7 +216,7 @@ export function MobileBottomSheet({
                 onClick={() => onClearAll(selectedTheme.id)}
                 disabled={getVisibleCount(selectedTheme) === 0}
                 className={cn(
-                  "flex items-center gap-1.5 px-3 h-9 rounded-lg text-sm font-medium transition-all",
+                  "flex items-center gap-1.5 px-3 h-9 rounded-lg text-sm font-medium transition-all duration-120",
                   getVisibleCount(selectedTheme) === 0
                     ? "bg-muted/30 text-muted-foreground/40 cursor-not-allowed"
                     : "bg-muted/50 text-muted-foreground active:scale-95"
@@ -253,14 +262,14 @@ export function MobileBottomSheet({
                     className="bg-secondary/40 rounded-xl overflow-hidden border border-border/50"
                   >
                     <div className="p-4">
-                      {/* Row 1: Icon + Title + Status + Chevron */}
+                      {/* Row 1: 3-column grid - Icon (44px) | Title (flex) | Status+Chevron */}
                       <button
                         onClick={() => handleCategoryClick(theme)}
-                        className="w-full flex items-center gap-3 group/row active:scale-[0.98] transition-transform"
+                        className="w-full grid grid-cols-[44px_1fr_auto] items-center gap-3 group/row active:scale-[0.98] transition-transform duration-120"
                       >
-                        {/* Icon - 40x40 */}
+                        {/* Icon - Fixed 44x44 */}
                         <div 
-                          className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+                          className="w-11 h-11 rounded-xl flex items-center justify-center"
                           style={{ backgroundColor: `${categoryColor.base}12` }}
                         >
                           <CategoryIcon 
@@ -270,12 +279,12 @@ export function MobileBottomSheet({
                         </div>
 
                         {/* Title */}
-                        <span className="flex-1 text-left text-base font-semibold text-foreground truncate">
+                        <span className="text-left text-base font-semibold text-foreground line-clamp-2 leading-snug">
                           {theme.name}
                         </span>
 
-                        {/* Status */}
-                        <div className="flex items-center gap-2 flex-shrink-0">
+                        {/* Status + Chevron */}
+                        <div className="flex items-center gap-2">
                           {allSelected && (
                             <div 
                               className="w-6 h-6 rounded-full flex items-center justify-center"
@@ -298,19 +307,18 @@ export function MobileBottomSheet({
                               {visibleCount}
                             </div>
                           )}
-                        </div>
-
-                        {/* Chevron - 40x40 */}
-                        <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 group-active/row:bg-secondary">
-                          <ChevronRight className="w-5 h-5 text-muted-foreground" />
+                          {/* Chevron - Fixed 40x40 */}
+                          <div className="w-10 h-10 rounded-xl flex items-center justify-center group-active/row:bg-secondary">
+                            <ChevronRight className="w-5 h-5 text-muted-foreground" />
+                          </div>
                         </div>
                       </button>
 
                       {/* Divider */}
                       <div className="h-px bg-border/40 my-3" />
 
-                      {/* Row 2: Counter + Actions */}
-                      <div className="flex items-center justify-between h-8">
+                      {/* Row 2: Counter + Actions - Grid alignment */}
+                      <div className="grid grid-cols-2 items-center h-8">
                         <span className="text-sm text-muted-foreground">
                           <span className="font-semibold text-foreground">{visibleCount}</span>
                           <span className="mx-1">of</span>
@@ -318,7 +326,7 @@ export function MobileBottomSheet({
                           <span className="ml-1">visible</span>
                         </span>
 
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center justify-end gap-1">
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
@@ -326,7 +334,7 @@ export function MobileBottomSheet({
                             }}
                             disabled={allSelected}
                             className={cn(
-                              "text-xs px-2 h-7 rounded-md font-medium transition-all",
+                              "text-xs px-2 h-7 rounded-md font-medium transition-all duration-120",
                               allSelected
                                 ? "text-muted-foreground/40 cursor-not-allowed"
                                 : "text-primary active:scale-95"
@@ -342,7 +350,7 @@ export function MobileBottomSheet({
                             }}
                             disabled={visibleCount === 0}
                             className={cn(
-                              "text-xs px-2 h-7 rounded-md font-medium transition-all",
+                              "text-xs px-2 h-7 rounded-md font-medium transition-all duration-120",
                               visibleCount === 0
                                 ? "text-muted-foreground/40 cursor-not-allowed"
                                 : "text-muted-foreground active:scale-95"
@@ -357,107 +365,125 @@ export function MobileBottomSheet({
                 );
               })}
             </div>
+
+            {/* Sticky Footer */}
+            <div className="sticky bottom-0 p-4 bg-card border-t border-border">
+              <button
+                onClick={onClose}
+                className="w-full py-3 px-4 bg-primary text-primary-foreground rounded-xl font-semibold text-sm shadow-lg hover:bg-primary/90 active:scale-[0.98] transition-all duration-150"
+              >
+                Done
+              </button>
+            </div>
           </div>
         )}
 
         {/* Content - Layers */}
         {sheetLevel === 'layers' && selectedTheme && (
-          <div className="flex-1 overflow-y-auto overscroll-contain p-4 space-y-2">
-            {selectedTheme.layers.map(layer => {
-              const layerColor = getCategoryColor(layer.name);
-              const LayerIcon = getCategoryIcon(layer.name);
-              const isHighlighted = highlightedLayerId === layer.id;
+          <div className="flex-1 flex flex-col overflow-hidden">
+            <div className="flex-1 overflow-y-auto overscroll-contain p-4 space-y-2">
+              {selectedTheme.layers.map(layer => {
+                const layerColor = getCategoryColor(layer.name);
+                const LayerIcon = getCategoryIcon(layer.name);
+                const isHighlighted = highlightedLayerId === layer.id;
+                const isToggling = togglingLayerId === layer.id;
 
-              return (
-                <button
-                  key={layer.id}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onLayerToggle(selectedTheme.id, layer.id);
-                  }}
-                  className={cn(
-                    "w-full flex items-center gap-3 p-3 rounded-xl min-h-[60px]",
-                    "transition-all duration-100 active:scale-[0.98]",
-                    layer.visible 
-                      ? "bg-white/70 dark:bg-white/10 border border-white/60 dark:border-white/20 shadow-sm" 
-                      : "bg-white/30 dark:bg-white/5 border border-transparent",
-                    isHighlighted && "ring-2 ring-primary ring-offset-1"
-                  )}
-                >
-                  {/* Icon */}
-                  <div 
-                    className={cn(
-                      "w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all",
-                      layer.visible ? "shadow-sm" : "opacity-60"
-                    )}
-                    style={{ backgroundColor: `${layerColor.base}12` }}
-                  >
-                    <LayerIcon 
-                      className={cn(
-                        "w-5 h-5 transition-transform",
-                        layer.visible ? "scale-100" : "scale-95"
-                      )}
-                      style={{ color: layerColor.base }}
-                    />
-                  </div>
-
-                  {/* Text */}
-                  <div className="flex-1 text-left min-w-0">
-                    <span className={cn(
-                      "block text-sm font-medium truncate",
-                      layer.visible ? "text-foreground" : "text-foreground/75"
-                    )}>
-                      {layer.name}
-                    </span>
-                    <p className={cn(
-                      "text-xs truncate mt-0.5",
-                      layer.visible ? "text-muted-foreground" : "text-muted-foreground/60"
-                    )}>
-                      {layer.description}
-                    </p>
-                  </div>
-
-                  {/* Toggle */}
-                  <div 
-                    className={cn(
-                      "w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-all",
-                      layer.visible ? "shadow-sm" : "bg-muted/20"
-                    )}
-                    style={{
-                      backgroundColor: layer.visible ? `${layerColor.base}15` : undefined,
+                return (
+                  <button
+                    key={layer.id}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleLayerToggle(selectedTheme.id, layer.id);
                     }}
+                    className={cn(
+                      "w-full flex items-center gap-3 p-3 rounded-xl min-h-[60px]",
+                      "transition-all duration-120 active:scale-[0.98]",
+                      layer.visible 
+                        ? "bg-white/70 dark:bg-white/10 border border-white/60 dark:border-white/20 shadow-sm" 
+                        : "bg-white/30 dark:bg-white/5 border border-transparent",
+                      isHighlighted && "ring-2 ring-primary ring-offset-1",
+                      isToggling && "scale-[0.98]"
+                    )}
                   >
-                    <div
+                    {/* Icon */}
+                    <div 
                       className={cn(
-                        "w-5 h-5 rounded-full flex items-center justify-center transition-all",
-                        !layer.visible && "border-2 border-muted-foreground/25"
+                        "w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-120",
+                        layer.visible ? "shadow-sm" : "opacity-60"
+                      )}
+                      style={{ backgroundColor: `${layerColor.base}12` }}
+                    >
+                      <LayerIcon 
+                        className={cn(
+                          "w-5 h-5 transition-transform duration-120",
+                          layer.visible ? "scale-100" : "scale-95"
+                        )}
+                        style={{ color: layerColor.base }}
+                      />
+                    </div>
+
+                    {/* Text */}
+                    <div className="flex-1 text-left min-w-0">
+                      <span className={cn(
+                        "block text-sm font-medium truncate transition-colors duration-120",
+                        layer.visible ? "text-foreground" : "text-foreground/75"
+                      )}>
+                        {layer.name}
+                      </span>
+                      <p className={cn(
+                        "text-xs truncate mt-0.5 transition-colors duration-120",
+                        layer.visible ? "text-muted-foreground" : "text-muted-foreground/60"
+                      )}>
+                        {layer.description}
+                      </p>
+                    </div>
+
+                    {/* Toggle */}
+                    <div 
+                      className={cn(
+                        "w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-all duration-120",
+                        layer.visible ? "shadow-sm" : "bg-muted/20"
                       )}
                       style={{
-                        backgroundColor: layer.visible ? layerColor.base : 'transparent',
+                        backgroundColor: layer.visible ? `${layerColor.base}15` : undefined,
                       }}
                     >
-                      {layer.visible ? (
-                        <Check className="w-3 h-3 text-white" />
-                      ) : (
-                        <Circle className="w-2 h-2 text-muted-foreground/30" />
-                      )}
+                      <div
+                        className={cn(
+                          "w-5 h-5 rounded-full flex items-center justify-center transition-all duration-120",
+                          !layer.visible && "border-2 border-muted-foreground/25",
+                          isToggling && "scale-90"
+                        )}
+                        style={{
+                          backgroundColor: layer.visible ? layerColor.base : 'transparent',
+                        }}
+                      >
+                        {layer.visible ? (
+                          <Check className={cn(
+                            "w-3 h-3 text-white transition-transform duration-120",
+                            isToggling && "scale-110"
+                          )} />
+                        ) : (
+                          <Circle className="w-2 h-2 text-muted-foreground/30" />
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </button>
-              );
-            })}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Sticky Footer */}
+            <div className="flex-shrink-0 p-4 bg-card border-t border-border">
+              <button
+                onClick={onClose}
+                className="w-full py-3 px-4 bg-primary text-primary-foreground rounded-xl font-semibold text-sm shadow-lg hover:bg-primary/90 active:scale-[0.98] transition-all duration-150"
+              >
+                Done
+              </button>
+            </div>
           </div>
         )}
-
-        {/* Sticky Done Button */}
-        <div className="p-4 border-t border-border bg-card flex-shrink-0 safe-area-bottom">
-          <button
-            onClick={onClose}
-            className="w-full py-3 rounded-xl bg-primary text-primary-foreground font-medium text-base hover:bg-primary/90 active:scale-[0.98] transition-all min-h-[48px]"
-          >
-            Done
-          </button>
-        </div>
       </div>
     </div>
   );

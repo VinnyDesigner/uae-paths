@@ -48,13 +48,13 @@ export default function HomePage() {
         {/* === IMMERSIVE HERO SECTION - Fits in one screen === */}
         <section className="relative min-h-[calc(100vh-64px)] flex flex-col overflow-hidden">
           
-          {/* === LAYERED IMMERSIVE BACKGROUND === */}
-          <div className="absolute inset-0 bg-hero-immersive" />
-          <div className="absolute inset-0 bg-indigo-glow-left" />
-          <div className="absolute inset-0 bg-teal-glow-right" />
-          <div className="absolute inset-0 bg-cyan-glow-center" />
-          <div className="absolute inset-0 bg-wave-flow" />
-          <div className="absolute inset-0 bg-pulse-glow" />
+          {/* === LAYERED IMMERSIVE BACKGROUND (must not block UI) === */}
+          <div className="absolute inset-0 bg-hero-immersive pointer-events-none" />
+          <div className="absolute inset-0 bg-indigo-glow-left pointer-events-none" />
+          <div className="absolute inset-0 bg-teal-glow-right pointer-events-none" />
+          <div className="absolute inset-0 bg-cyan-glow-center pointer-events-none" />
+          <div className="absolute inset-0 bg-wave-flow pointer-events-none" />
+          <div className="absolute inset-0 bg-pulse-glow pointer-events-none" />
           <div className="absolute inset-0 bg-noise-overlay pointer-events-none" />
           <div className="absolute inset-x-0 bottom-0 h-24 bg-hero-bottom-fade pointer-events-none" />
 
@@ -90,7 +90,7 @@ export default function HomePage() {
               </p>
 
               {/* === PRIMARY SEARCH BAR - Liquid Glass Style === */}
-              <div className="animate-fade-up delay-200 mb-5 md:mb-6 relative z-[100]">
+              <div className="animate-fade-up delay-200 mb-5 md:mb-6 relative z-[var(--z-popover)]">
                 <div className="mx-auto" style={{ width: 'min(860px, 92vw)' }}>
                   <SmartSearch
                     onSearch={handleSearch} 

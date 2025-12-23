@@ -163,8 +163,8 @@ export default function SmartMapPage() {
 
       {/* Map Area - Wrapper with proper stacking context */}
       <main className="flex-1 relative h-full min-h-[500px]">
-        {/* Map Container - z-0 base layer */}
-        <div className="absolute inset-0 z-0">
+        {/* Map Container - base layer */}
+        <div className="absolute inset-0">
           <InteractiveMap
             layers={layers}
             facilities={uaeFacilities}
@@ -248,7 +248,7 @@ export default function SmartMapPage() {
         </div>
 
         {/* Mobile Search Bar - Fixed sticky at top, always visible above menus */}
-        <div className="lg:hidden absolute top-3 left-3 right-3 z-[60]">
+        <div className="lg:hidden absolute top-3 left-3 right-3 z-[var(--z-popover)]">
           <div className="bg-card/98 backdrop-blur-xl rounded-xl shadow-lg border border-border/50 p-2">
             <SmartSearch onSearch={handleSearch} onLocateMe={handleLocateMe} isSearching={isSearching} />
           </div>
@@ -298,15 +298,15 @@ export default function SmartMapPage() {
       {/* Directions Panel - Desktop: right side modal, Mobile: bottom sheet */}
       {directionsFacility && (
         <>
-          {/* Desktop - z-[100] for modals */}
-          <div className="hidden lg:block fixed top-1/2 right-8 -translate-y-1/2 z-[100]">
+          {/* Desktop - z-modal */}
+          <div className="hidden lg:block fixed top-1/2 right-8 -translate-y-1/2 z-[var(--z-modal)]">
             <DirectionsPanel 
               facility={directionsFacility} 
               onClose={() => setDirectionsFacility(null)} 
             />
           </div>
-          {/* Mobile - z-[100] for modals */}
-          <div className="lg:hidden fixed inset-0 z-[100]">
+          {/* Mobile - z-modal */}
+          <div className="lg:hidden fixed inset-0 z-[var(--z-modal)]">
             <div 
               className="absolute inset-0 bg-foreground/30 backdrop-blur-sm" 
               onClick={() => setDirectionsFacility(null)} 

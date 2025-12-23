@@ -17,13 +17,11 @@ const categories = [
     icon: Heart,
     title: 'Healthcare & Wellness',
     colorClass: 'healthcare',
-    chips: ['Hospitals', 'Clinics', 'Pharmacies'],
   },
   {
     icon: GraduationCap,
     title: 'Education',
     colorClass: 'education',
-    chips: ['Schools', 'Nurseries', 'POD Centers'],
   },
 ];
 
@@ -143,7 +141,7 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                {/* Simplified Category Cards - Icons and Text Only */}
+                {/* Simplified Category Cards - Icons and Title Only, Equal Size */}
                 <div className="max-w-[680px] mx-auto">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
                     {categories.map((category) => {
@@ -153,14 +151,15 @@ export default function HomePage() {
                           to="/map"
                           key={category.title}
                           className={cn(
-                            "relative rounded-xl p-5 md:p-6 overflow-hidden group cursor-pointer",
-                            "bg-white/[0.04] backdrop-blur-md border border-white/10",
-                            "hover:bg-white/[0.08] hover:border-white/20",
-                            "transition-all duration-300 hover:scale-[1.02]"
+                            "relative rounded-2xl overflow-hidden group cursor-pointer",
+                            "bg-white/[0.06] backdrop-blur-lg border border-white/10",
+                            "hover:bg-white/[0.10] hover:border-white/20 hover:shadow-[0_8px_30px_rgba(0,0,0,0.2)]",
+                            "transition-all duration-300 hover:scale-[1.02]",
+                            "h-[140px] md:h-[160px] flex items-center justify-center"
                           )}
                         >
-                          {/* Icon + Title Row */}
-                          <div className="flex items-center gap-4 relative">
+                          {/* Icon + Title - Centered Layout */}
+                          <div className="flex items-center gap-4 px-6">
                             <div
                               className={cn(
                                 "w-12 h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center flex-shrink-0",
@@ -172,24 +171,11 @@ export default function HomePage() {
                             >
                               <category.icon className="w-6 h-6 md:w-7 md:h-7 text-white drop-shadow-md" strokeWidth={2} />
                             </div>
-                            <div className="flex-1">
-                              <h3 className="font-heading text-lg md:text-xl font-bold text-white leading-tight mb-1.5">
-                                {category.title}
-                              </h3>
-                              {/* Chips inline */}
-                              <div className="flex flex-wrap gap-1.5">
-                                {category.chips.map((chip) => (
-                                  <span
-                                    key={chip}
-                                    className="px-2 py-0.5 rounded-full text-[10px] md:text-xs font-medium bg-white/8 text-white/60"
-                                  >
-                                    {chip}
-                                  </span>
-                                ))}
-                              </div>
-                            </div>
+                            <h3 className="font-heading text-lg md:text-xl font-bold text-white leading-tight">
+                              {category.title}
+                            </h3>
                             {/* Arrow indicator */}
-                            <ArrowRight className="w-5 h-5 text-white/40 group-hover:text-white/80 group-hover:translate-x-1 transition-all duration-300" />
+                            <ArrowRight className="w-5 h-5 text-white/40 group-hover:text-white/80 group-hover:translate-x-1 transition-all duration-300 ml-auto" />
                           </div>
                         </Link>
                       );

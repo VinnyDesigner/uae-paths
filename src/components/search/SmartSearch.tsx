@@ -131,12 +131,12 @@ export function SmartSearch({
       {/* Liquid Glass Search Container */}
       <div
         className={cn(
-          "relative flex items-center transition-all duration-300 rounded-full",
+          "relative flex items-center transition-all duration-300 rounded-full overflow-hidden",
           isDark ? [
             "bg-[rgba(10,25,45,0.40)] backdrop-blur-[18px] saturate-[180%]",
             "border border-[rgba(0,212,255,0.22)]",
             "shadow-[0_18px_50px_rgba(0,0,0,0.35)]",
-            isFocused && "border-[rgba(0,212,255,0.5)] shadow-[0_20px_60px_rgba(0,0,0,0.4),0_0_0_4px_rgba(0,212,255,0.12)] ring-0 outline-none"
+            isFocused && "border-[rgba(0,212,255,0.5)] shadow-[0_20px_60px_rgba(0,0,0,0.4),inset_0_0_0_1px_rgba(0,212,255,0.15)] ring-0 outline-none"
           ] : [
             "glass-search rounded-[20px] md:rounded-[24px]"
           ],
@@ -144,6 +144,7 @@ export function SmartSearch({
             ? "h-[60px] md:h-[66px] lg:h-[72px]" 
             : "h-12 md:h-14"
         )}
+        style={{ borderRadius: '9999px' }}
       >
         {/* Search icon in circular container - matching right button style */}
         <div className={cn(

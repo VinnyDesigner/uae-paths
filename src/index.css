@@ -1,4 +1,24 @@
 @tailwind base;
+
+/* ===========================================
+   UNIFIED SELECTION SYSTEM
+   Single consistent selection style across all devices
+   =========================================== */
+:root {
+  /* Selection State Colors - ALWAYS use primary, never category colors */
+  --selection-bg: hsl(var(--primary) / 0.08);
+  --selection-bg-hover: hsl(var(--primary) / 0.05);
+  --selection-border: hsl(var(--primary) / 0.35);
+  --selection-border-active: hsl(var(--primary));
+  --selection-check-bg: hsl(var(--primary));
+  --selection-check-icon: hsl(0 0% 100%);
+  
+  /* Unselected State */
+  --unselected-bg: transparent;
+  --unselected-border: hsl(var(--border));
+  --unselected-check-border: hsl(var(--muted-foreground) / 0.3);
+  --unselected-check-icon: hsl(var(--muted-foreground) / 0.4);
+}
 @tailwind components;
 @tailwind utilities;
 

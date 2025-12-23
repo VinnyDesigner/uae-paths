@@ -3,15 +3,14 @@ import { MapPin, Heart, GraduationCap, ExternalLink } from 'lucide-react';
 
 export function Footer() {
   return (
-    <footer className="relative bg-footer-gradient border-t border-border/30 overflow-hidden">
+    <footer className="relative bg-footer-gradient border-t border-border/20 overflow-hidden">
       {/* Subtle topo pattern */}
-      <div className="absolute inset-0 bg-topo-pattern opacity-[0.03] pointer-events-none" />
+      <div className="absolute inset-0 bg-topo-pattern opacity-[0.025] pointer-events-none" />
       
-      {/* Top glow divider */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[1px] bg-gradient-to-r from-transparent via-[hsl(200_100%_55%/0.3)] to-transparent blur-[1px]" />
+      {/* Top glow separator */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[hsl(200_100%_55%/0.25)] to-transparent" />
 
-      <div className="container mx-auto px-4 py-16 md:py-20 relative">
+      <div className="container mx-auto px-4 py-14 md:py-18 relative">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8">
           
           {/* Brand Column */}

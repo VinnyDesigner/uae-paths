@@ -135,13 +135,15 @@ export function SmartSearch({
         <div className="fixed inset-0 bg-black/30 z-[var(--z-popover-backdrop)] pointer-events-none" />
       )}
       
-      {/* Liquid Glass Search Container */}
+      {/* Liquid Glass Search Container - Always prominent */}
       <div
         className={cn(
           "relative flex items-center transition-all duration-300 rounded-full overflow-visible z-[var(--z-dropdown)]",
           isDark ? [
             "glass-search-liquid",
-            isFocused && "!border-[rgba(0,212,255,0.5)] ring-0 outline-none"
+            "border-2 border-[rgba(106,63,255,0.4)]",
+            "bg-[rgba(255,255,255,0.12)]",
+            isFocused && "!bg-[rgba(255,255,255,0.18)] !border-[rgba(106,63,255,0.6)] shadow-[0_0_25px_rgba(106,63,255,0.35)]"
           ] : [
             "glass-search rounded-[20px] md:rounded-[24px]"
           ],

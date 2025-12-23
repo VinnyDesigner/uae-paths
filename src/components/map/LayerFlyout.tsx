@@ -73,14 +73,15 @@ export function LayerFlyout({
   sidebarRect,
 }: LayerFlyoutProps) {
   const flyoutRef = useRef<HTMLDivElement>(null);
-  const [flyoutPosition, setFlyoutPosition] = useState({ top: 0, height: 0, left: 0 });
+  const [flyoutPosition, setFlyoutPosition] = useState({ top: 0, height: 0, left: 0, width: 340 });
   const [togglingLayerId, setTogglingLayerId] = useState<number | null>(null);
 
-  // Calculate flyout position: starts at 15% from sidebar top, ends at sidebar bottom
+  // Calculate flyout position: starts at 10-15% from sidebar top, ends exactly at sidebar bottom
   const calculatePosition = useCallback(() => {
-    const gap = 12; // gap between sidebar and flyout
-    const flyoutWidth = 340;
-    const minFlyoutHeight = 320; // minimum visible height
+    const gap = 16; // gap between sidebar and flyout
+    const flyoutMaxWidth = 420;
+    const flyoutMinWidth = 340;
+    const minFlyoutHeight = 280;
 
     // Sidebar bounds (viewport space)
     const sidebarTop = sidebarRect?.top ?? 80;
@@ -88,26 +89,34 @@ export function LayerFlyout({
     const sidebarRight = sidebarRect?.right ?? 336;
     const sidebarHeight = sidebarBottom - sidebarTop;
 
-    // Flyout starts at 15% from the top of the sidebar
-    let flyoutTop = sidebarTop + (sidebarHeight * 0.15);
+    // Flyout starts at 10% from the top of the sidebar (tighter alignment)
+    let flyoutTop = sidebarTop + (sidebarHeight * 0.10);
     
-    // Ensure minimum height of 320px is available
-    const availableHeight = sidebarBottom - flyoutTop;
-    if (availableHeight < minFlyoutHeight) {
-      // Clamp top upward to ensure minimum height
+    // Flyout ends exactly at sidebar bottom
+    let flyoutHeight = sidebarBottom - flyoutTop;
+    
+    // Ensure minimum height is available
+    if (flyoutHeight < minFlyoutHeight) {
       flyoutTop = Math.max(sidebarTop, sidebarBottom - minFlyoutHeight);
+      flyoutHeight = sidebarBottom - flyoutTop;
     }
 
+    // Calculate left position with gap
     const unclampedLeft = sidebarRight + gap;
+    
+    // Calculate width: min(420px, 100vw - flyoutLeft - 24px)
+    const availableWidth = window.innerWidth - unclampedLeft - 24;
+    const flyoutWidth = Math.min(flyoutMaxWidth, Math.max(flyoutMinWidth, availableWidth));
+    
+    // Ensure flyout stays on screen
     const maxLeft = Math.max(16, window.innerWidth - flyoutWidth - 16);
     const left = Math.min(unclampedLeft, maxLeft);
 
-    const height = Math.max(minFlyoutHeight, sidebarBottom - flyoutTop);
-
     return {
       top: flyoutTop,
-      height,
+      height: flyoutHeight,
       left,
+      width: flyoutWidth,
     };
   }, [sidebarRect]);
 
@@ -171,15 +180,15 @@ export function LayerFlyout({
     <div
       ref={flyoutRef}
       className={cn(
-        "fixed w-[340px]",
-        // Glass/frosted effect background
-        "bg-white/[0.72] dark:bg-card/80",
-        "backdrop-blur-[20px] backdrop-saturate-150",
-        // Border and shadow for depth
-        "border border-white/55 dark:border-white/20",
-        "rounded-2xl",
-        "shadow-[0_8px_32px_rgba(0,0,0,0.12),0_2px_8px_rgba(0,0,0,0.08)]",
-        "dark:shadow-[0_8px_32px_rgba(0,0,0,0.4),0_2px_8px_rgba(0,0,0,0.2)]",
+        "fixed",
+        // Solid/glass background - consistent style
+        "bg-white dark:bg-card/95",
+        "backdrop-blur-xl backdrop-saturate-150",
+        // Border and shadow for depth - matching side panel
+        "border border-border/10 dark:border-white/15",
+        "rounded-[18px]",
+        "shadow-[0_10px_30px_rgba(15,23,42,0.10)]",
+        "dark:shadow-[0_10px_30px_rgba(0,0,0,0.35)]",
         // Animation
         "transition-all duration-200 ease-out",
         "flex flex-col overflow-hidden",
@@ -191,6 +200,8 @@ export function LayerFlyout({
         left: `${flyoutPosition.left}px`,
         top: `${flyoutPosition.top}px`,
         height: `${flyoutPosition.height}px`,
+        width: `${flyoutPosition.width}px`,
+        maxHeight: `${flyoutPosition.height}px`,
         // Leaflet controls/markers often sit at z-index 400–1000; keep flyout above them.
         zIndex: 1200,
       }}
@@ -201,7 +212,7 @@ export function LayerFlyout({
       {/* Header - Sticky & Compact */}
       <div 
         className={cn(
-          "px-3 py-2.5 border-b border-white/20 dark:border-white/10 flex-shrink-0",
+          "px-3.5 py-3 border-b border-border/10 dark:border-white/10 flex-shrink-0",
           isHealthcare 
             ? "bg-gradient-to-r from-primary/8 to-transparent" 
             : "bg-gradient-to-r from-education/8 to-transparent"
@@ -268,9 +279,9 @@ export function LayerFlyout({
         </div>
       </div>
 
-      {/* Scrollable Layer List */}
+      {/* Scrollable Layer List - only this area scrolls */}
       <TooltipProvider delayDuration={400}>
-        <div className="flex-1 overflow-y-auto p-3 space-y-1.5 overscroll-contain">
+        <div className="flex-1 overflow-y-auto px-3.5 py-3 pb-4 space-y-1.5 overscroll-contain">
           {theme.layers.map((layer) => {
             const isHighlighted = highlightedLayerId === layer.id;
             const isToggling = togglingLayerId === layer.id;

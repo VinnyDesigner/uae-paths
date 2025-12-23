@@ -122,16 +122,23 @@ export function SmartSearch({
   };
 
   return (
-    <div ref={containerRef} className={cn("relative w-full", className)} style={{ overflow: 'visible' }}>
-      {/* Page dim overlay when dropdown is open */}
+    <div
+      ref={containerRef}
+      className={cn(
+        "relative w-full z-[60]",
+        className,
+      )}
+      style={{ overflow: 'visible' }}
+    >
+      {/* Page dim overlay when dropdown is open (kept behind the search pill) */}
       {showSuggestions && filteredSuggestions.length > 0 && (
-        <div className="fixed inset-0 bg-black/30 z-[9998] pointer-events-none" />
+        <div className="fixed inset-0 bg-black/30 z-[50] pointer-events-none" />
       )}
       
       {/* Liquid Glass Search Container */}
       <div
         className={cn(
-          "relative flex items-center transition-all duration-300 rounded-full overflow-hidden",
+          "relative flex items-center transition-all duration-300 rounded-full overflow-hidden z-[60]",
           isDark ? [
             "bg-[rgba(10,25,45,0.40)] backdrop-blur-[18px] saturate-[180%]",
             "border border-[rgba(0,212,255,0.22)]",
@@ -146,7 +153,16 @@ export function SmartSearch({
         )}
         style={{ borderRadius: '9999px' }}
       >
-        {/* Search icon in circular container - matching right button style */}
+        {/* Active overlay (always clipped to pill) */}
+        <div
+          aria-hidden="true"
+          className={cn(
+            "pointer-events-none absolute inset-0 rounded-full transition-opacity duration-300",
+            (showSuggestions || isFocused) ? "opacity-100" : "opacity-0",
+            "bg-[rgba(0,0,0,0.18)]"
+          )}
+        />
+
         <div className={cn(
           "flex items-center justify-center flex-shrink-0",
           isLarge ? "pl-2 md:pl-3" : "pl-2 md:pl-3"

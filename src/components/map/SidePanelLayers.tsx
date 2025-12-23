@@ -195,9 +195,6 @@ export function SidePanelLayers({
         {layers.map((theme) => {
           const visibleCount = getVisibleLayerCount(theme);
           const totalCount = theme.layers.length;
-          const allVisible = getAllLayersVisible(theme);
-          const noneVisible = getNoLayersVisible(theme);
-          const isHealthcare = theme.colorClass === 'healthcare';
           const isSelected = selectedTheme?.id === theme.id;
 
           return (
@@ -214,14 +211,7 @@ export function SidePanelLayers({
               )}
             >
               {/* Card Content - 16px padding consistent */}
-              <div 
-                className={cn(
-                  "p-4",
-                  isHealthcare 
-                    ? "bg-gradient-to-br from-primary/8 via-transparent to-transparent" 
-                    : "bg-gradient-to-br from-education/8 via-transparent to-transparent"
-                )}
-              >
+              <div className="p-4 bg-gradient-to-br from-primary/5 via-transparent to-transparent">
                 {/* Row 1: 3-Column Grid - Icon (44px) | Title (flex) | Chevron (40px) */}
                 <button
                   onClick={() => handleCategoryClick(theme)}
@@ -232,14 +222,12 @@ export function SidePanelLayers({
                   )}
                   aria-label={`Open ${theme.name} layers`}
                 >
-                  {/* Icon container - Fixed 44x44px */}
+                  {/* Icon container - Fixed 44x44px, unified primary color */}
                   <div
                     className={cn(
                       "w-11 h-11 rounded-xl flex items-center justify-center",
                       "transition-all duration-150 group-hover/row:scale-105",
-                      isHealthcare 
-                        ? "bg-primary/12 text-primary shadow-sm shadow-primary/10" 
-                        : "bg-education/12 text-education shadow-sm shadow-education/10"
+                      "bg-primary/10 text-primary shadow-sm shadow-primary/10"
                     )}
                   >
                     {getThemeIcon(theme.icon)}

@@ -3,7 +3,7 @@ import { X, Layers, Filter, ChevronRight, ArrowLeft, Check, CheckCircle2, XCircl
 import { cn } from '@/lib/utils';
 import { ThemeGroup, FilterState } from '@/types/map';
 import { InlineFilters } from './InlineFilters';
-import { getCategoryColor, getCategoryIcon } from '@/lib/mapColors';
+import { getCategoryIcon } from '@/lib/mapColors';
 
 interface MobileBottomSheetProps {
   isOpen: boolean;
@@ -258,7 +258,6 @@ export function MobileBottomSheet({
                 const totalCount = theme.layers.length;
                 const allSelected = visibleCount === totalCount;
                 const someSelected = visibleCount > 0 && visibleCount < totalCount;
-                const categoryColor = getCategoryColor(theme.name);
                 const CategoryIcon = getCategoryIcon(theme.name);
 
                 return (
@@ -272,15 +271,9 @@ export function MobileBottomSheet({
                         onClick={() => handleCategoryClick(theme)}
                         className="w-full grid grid-cols-[44px_1fr_auto] items-center gap-3 group/row active:scale-[0.98] transition-transform duration-120"
                       >
-                        {/* Icon - Fixed 44x44 */}
-                        <div 
-                          className="w-11 h-11 rounded-xl flex items-center justify-center"
-                          style={{ backgroundColor: `${categoryColor.base}12` }}
-                        >
-                          <CategoryIcon 
-                            className="w-5 h-5" 
-                            style={{ color: categoryColor.base }}
-                          />
+                        {/* Icon - Fixed 44x44, unified primary color */}
+                        <div className="w-11 h-11 rounded-xl flex items-center justify-center bg-primary/10">
+                          <CategoryIcon className="w-5 h-5 text-primary" />
                         </div>
 
                         {/* Title */}
@@ -288,27 +281,15 @@ export function MobileBottomSheet({
                           {theme.name}
                         </span>
 
-                        {/* Status + Chevron */}
+                        {/* Status + Chevron - unified primary color */}
                         <div className="flex items-center gap-2">
                           {allSelected && (
-                            <div 
-                              className="w-6 h-6 rounded-full flex items-center justify-center"
-                              style={{ backgroundColor: `${categoryColor.base}18` }}
-                            >
-                              <CheckCircle2 
-                                className="w-4 h-4" 
-                                style={{ color: categoryColor.base }}
-                              />
+                            <div className="w-6 h-6 rounded-full flex items-center justify-center bg-primary/15">
+                              <CheckCircle2 className="w-4 h-4 text-primary" />
                             </div>
                           )}
                           {someSelected && (
-                            <div 
-                              className="px-2 py-0.5 rounded-full text-xs font-medium"
-                              style={{ 
-                                backgroundColor: `${categoryColor.base}12`,
-                                color: categoryColor.base 
-                              }}
-                            >
+                            <div className="px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
                               {visibleCount}
                             </div>
                           )}

@@ -87,9 +87,9 @@ export default function HomePage() {
                 Find healthcare and education services across the UAE
               </p>
 
-              {/* === PRIMARY SEARCH BAR - Liquid Glass Style === */}
-              <div className="animate-fade-up delay-200 mb-5 md:mb-6 relative z-[var(--z-popover)]">
-                <div className="mx-auto" style={{ width: 'min(860px, 92vw)' }}>
+              {/* === PRIMARY SEARCH BAR - More Prominent with wider width === */}
+              <div className="animate-fade-up delay-200 mb-8 md:mb-10 relative z-[var(--z-popover)]">
+                <div className="mx-auto" style={{ width: 'min(920px, 95vw)' }}>
                   <SmartSearch
                     onSearch={handleSearch} 
                     size="large"
@@ -102,20 +102,20 @@ export default function HomePage() {
 
               {/* AI Suggestion Chips - Subtle styling with reduced opacity */}
               {!isSearchOpen && (
-                <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-5 md:mb-6 animate-fade-up delay-300">
+                <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-8 md:mb-10 animate-fade-up delay-300">
                   {aiSuggestionChips.map((chip) => (
                     <button
                       key={chip.text}
                       onClick={() => handleSearch(chip.text)}
                       className={cn(
                         "flex items-center gap-2 px-3.5 py-2 rounded-full",
-                        "bg-white/5 backdrop-blur-md border border-white/8",
-                        "text-white/50 text-xs md:text-sm font-medium",
-                        "hover:bg-white/12 hover:border-cyan-400/30 hover:text-white hover:opacity-100",
-                        "transition-all duration-300 opacity-60 hover:scale-105"
+                        "bg-white/[0.03] backdrop-blur-md border border-white/[0.06]",
+                        "text-white/40 text-xs md:text-sm font-medium",
+                        "hover:bg-white/10 hover:border-white/15 hover:text-white/80 hover:opacity-100",
+                        "transition-all duration-300 opacity-50 hover:scale-105"
                       )}
                     >
-                      <span>{chip.icon}</span>
+                      <span className="opacity-70">{chip.icon}</span>
                       <span>{chip.text}</span>
                     </button>
                   ))}
@@ -127,23 +127,23 @@ export default function HomePage() {
                 "animate-fade-up delay-400 transition-all duration-300 relative z-[1]",
                 isSearchOpen ? "mt-4" : ""
               )}>
-                {/* Section Header - Reduced spacing to cards */}
+                {/* Section Header - Less prominent */}
                 <div className="text-center mb-4 md:mb-5">
                   <div className="inline-flex items-center gap-2 mb-2">
-                    <Sparkles className="w-3.5 h-3.5 text-cyan-400/60" strokeWidth={2} />
-                    <h2 className="font-heading text-sm md:text-base font-semibold text-white/80 tracking-wide uppercase">
+                    <Sparkles className="w-3 h-3 text-cyan-400/40" strokeWidth={2} />
+                    <h2 className="font-heading text-xs md:text-sm font-medium text-white/50 tracking-wide uppercase">
                       Explore by Category
                     </h2>
-                    <Sparkles className="w-3.5 h-3.5 text-cyan-400/60" strokeWidth={2} />
+                    <Sparkles className="w-3 h-3 text-cyan-400/40" strokeWidth={2} />
                   </div>
                   <div className="flex justify-center">
-                    <div className="h-[1.5px] w-20 md:w-24 rounded-full bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent" />
+                    <div className="h-[1px] w-16 md:w-20 rounded-full bg-gradient-to-r from-transparent via-cyan-400/30 to-transparent" />
                   </div>
                 </div>
 
-                {/* Compact Category Cards - Single Line Text, Equal Size */}
-                <div className="max-w-[680px] mx-auto">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+                {/* Category Cards - Less prominent, subtle styling */}
+                <div className="max-w-[640px] mx-auto">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                     {categories.map((category) => {
                       const isHealthcare = category.colorClass === 'healthcare';
                       return (
@@ -151,31 +151,31 @@ export default function HomePage() {
                           to="/map"
                           key={category.title}
                           className={cn(
-                            "relative rounded-2xl overflow-hidden group cursor-pointer",
-                            "bg-white/[0.06] backdrop-blur-lg border border-white/10",
-                            "hover:bg-white/[0.10] hover:border-white/20 hover:shadow-[0_8px_30px_rgba(0,0,0,0.2)]",
-                            "transition-all duration-300 hover:scale-[1.02]",
-                            "h-[90px] md:h-[100px] flex items-center"
+                            "relative rounded-xl overflow-hidden group cursor-pointer",
+                            "bg-white/[0.04] backdrop-blur-md border border-white/[0.08]",
+                            "hover:bg-white/[0.08] hover:border-white/15",
+                            "transition-all duration-300 hover:scale-[1.01]",
+                            "h-[80px] md:h-[88px] flex items-center"
                           )}
                         >
                           {/* Icon + Title - Single Line Layout */}
-                          <div className="flex items-center gap-3 md:gap-4 px-5 md:px-6 w-full">
+                          <div className="flex items-center gap-3 px-4 md:px-5 w-full">
                             <div
                               className={cn(
-                                "w-11 h-11 md:w-12 md:h-12 rounded-xl flex items-center justify-center flex-shrink-0",
-                                "transition-all duration-300 group-hover:scale-110",
+                                "w-10 h-10 md:w-11 md:h-11 rounded-lg flex items-center justify-center flex-shrink-0",
+                                "transition-all duration-300 group-hover:scale-105",
                                 isHealthcare 
-                                  ? "bg-gradient-to-br from-blue-500 to-blue-700 shadow-[0_0_25px_-5px_rgba(59,130,246,0.5)]" 
-                                  : "bg-gradient-to-br from-cyan-400 to-cyan-600 shadow-[0_0_25px_-5px_rgba(34,211,238,0.5)]"
+                                  ? "bg-gradient-to-br from-blue-500/80 to-blue-700/80 shadow-[0_0_15px_-5px_rgba(59,130,246,0.3)]" 
+                                  : "bg-gradient-to-br from-cyan-400/80 to-cyan-600/80 shadow-[0_0_15px_-5px_rgba(34,211,238,0.3)]"
                               )}
                             >
-                              <category.icon className="w-5 h-5 md:w-6 md:h-6 text-white drop-shadow-md" strokeWidth={2} />
+                              <category.icon className="w-4 h-4 md:w-5 md:h-5 text-white/90 drop-shadow-sm" strokeWidth={2} />
                             </div>
-                            <h3 className="font-heading text-base md:text-lg font-bold text-white leading-tight whitespace-nowrap">
+                            <h3 className="font-heading text-sm md:text-base font-semibold text-white/70 leading-tight whitespace-nowrap group-hover:text-white/90 transition-colors">
                               {category.title}
                             </h3>
                             {/* Arrow indicator */}
-                            <ArrowRight className="w-5 h-5 text-white/40 group-hover:text-white/80 group-hover:translate-x-1 transition-all duration-300 ml-auto flex-shrink-0" />
+                            <ArrowRight className="w-4 h-4 text-white/25 group-hover:text-white/60 group-hover:translate-x-1 transition-all duration-300 ml-auto flex-shrink-0" />
                           </div>
                         </Link>
                       );

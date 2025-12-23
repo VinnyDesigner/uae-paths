@@ -35,8 +35,13 @@ export function MobileBottomSheet({
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState(0);
   const [sheetLevel, setSheetLevel] = useState<SheetLevel>('categories');
-  const [selectedTheme, setSelectedTheme] = useState<ThemeGroup | null>(null);
+  const [selectedThemeId, setSelectedThemeId] = useState<number | null>(null);
   const [togglingLayerId, setTogglingLayerId] = useState<number | null>(null);
+
+  // Derive selectedTheme from layers prop to always have fresh data
+  const selectedTheme = selectedThemeId !== null 
+    ? layers.find(t => t.id === selectedThemeId) ?? null 
+    : null;
   const startY = useRef(0);
   const contentRef = useRef<HTMLDivElement>(null);
 
@@ -78,14 +83,14 @@ export function MobileBottomSheet({
   };
 
   const handleCategoryClick = (theme: ThemeGroup) => {
-    setSelectedTheme(theme);
+    setSelectedThemeId(theme.id);
     setSheetLevel('layers');
     setSheetState('full');
   };
 
   const handleBackToCategories = () => {
     setSheetLevel('categories');
-    setSelectedTheme(null);
+    setSelectedThemeId(null);
     setSheetState('half');
   };
 
@@ -101,7 +106,7 @@ export function MobileBottomSheet({
       setSheetState('half');
       setDragOffset(0);
       setSheetLevel('categories');
-      setSelectedTheme(null);
+      setSelectedThemeId(null);
     }
   }, [isOpen]);
 

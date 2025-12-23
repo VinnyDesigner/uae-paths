@@ -116,14 +116,14 @@ export function SmartSearch({
     <div ref={containerRef} className={cn("relative w-full", className)} style={{ overflow: 'visible' }}>
       <div
         className={cn(
-          "relative flex items-center bg-card/98 backdrop-blur-sm border rounded-[14px] md:rounded-[16px] transition-all duration-300",
+          "relative flex items-center bg-card/95 backdrop-blur-md border rounded-[16px] md:rounded-[18px] transition-all duration-300",
           isFocused 
-            ? "shadow-focus border-primary/30 ring-2 ring-primary/10" 
-            : "shadow-soft border-border/40 hover:shadow-elevated hover:border-border/60",
-          isLarge ? "h-14 md:h-16" : "h-11 md:h-12"
+            ? "shadow-focus border-primary/25 ring-2 ring-primary/8" 
+            : "shadow-soft border-border/30 hover:shadow-elevated hover:border-border/50",
+          isLarge ? "h-16 md:h-[72px]" : "h-12 md:h-13"
         )}
       >
-        {/* Search icon with premium geo styling */}
+        {/* Search icon with AI sparkle - premium styling */}
         <div className={cn(
           "flex items-center justify-center flex-shrink-0",
           isLarge ? "pl-5 md:pl-6" : "pl-3 md:pl-4"
@@ -133,18 +133,20 @@ export function SmartSearch({
           ) : (
             <div className={cn(
               "relative flex items-center justify-center rounded-xl transition-all duration-300",
-              isLarge ? "w-10 h-10 md:w-11 md:h-11" : "w-8 h-8",
-              isFocused ? "bg-primary/15" : "bg-primary/8"
+              isLarge ? "w-11 h-11 md:w-12 md:h-12" : "w-9 h-9",
+              isFocused 
+                ? "bg-gradient-to-br from-primary/15 to-[hsl(200_100%_55%/0.1)]" 
+                : "bg-primary/6"
             )}>
               <Search className={cn(
                 "transition-colors duration-200",
-                isFocused ? "text-primary" : "text-primary/70",
-                isLarge ? "w-4.5 h-4.5 md:w-5 md:h-5" : "w-4 h-4"
+                isFocused ? "text-primary" : "text-primary/65",
+                isLarge ? "w-5 h-5 md:w-5.5 md:h-5.5" : "w-4 h-4"
               )} />
               <Sparkles className={cn(
-                "absolute -top-0.5 -right-0.5 text-primary transition-opacity duration-300",
-                isFocused ? "opacity-100" : "opacity-60",
-                isLarge ? "w-3 h-3 md:w-3.5 md:h-3.5" : "w-2.5 h-2.5"
+                "absolute -top-0.5 -right-0.5 transition-all duration-300",
+                isFocused ? "opacity-100 text-[hsl(200_100%_55%)]" : "opacity-50 text-primary/70",
+                isLarge ? "w-3.5 h-3.5 md:w-4 md:h-4" : "w-3 h-3"
               )} />
             </div>
           )}
@@ -207,23 +209,23 @@ export function SmartSearch({
             </>
           )}
 
-          {/* Primary action button - Premium styling */}
+          {/* Primary action button - Gradient blue styling */}
           <button
             onClick={() => handleSubmit()}
             disabled={!query.trim()}
             className={cn(
               "flex items-center justify-center rounded-xl transition-all duration-250",
-              "bg-primary text-primary-foreground",
-              "shadow-soft hover:shadow-elevated active:scale-95",
-              "disabled:opacity-35 disabled:cursor-not-allowed disabled:hover:shadow-soft disabled:active:scale-100",
-              "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
-              isLarge ? "w-11 h-11 md:w-12 md:h-12" : "w-9 h-9 md:w-10 md:h-10"
+              "bg-gradient-to-br from-[hsl(200_100%_50%)] to-[hsl(210_100%_45%)] text-white",
+              "shadow-soft hover:shadow-[0_4px_20px_-4px_hsl(200_100%_50%/0.4)] active:scale-95",
+              "disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:shadow-soft disabled:active:scale-100",
+              "focus:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(200_100%_55%)] focus-visible:ring-offset-2",
+              isLarge ? "w-12 h-12 md:w-14 md:h-14" : "w-10 h-10 md:w-11 md:h-11"
             )}
             aria-label="Search"
           >
             <Send className={cn(
               "transition-transform duration-200",
-              isLarge ? "w-4.5 h-4.5 md:w-5 md:h-5" : "w-4 h-4"
+              isLarge ? "w-5 h-5 md:w-5.5 md:h-5.5" : "w-4 h-4"
             )} />
           </button>
         </div>

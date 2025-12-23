@@ -23,7 +23,6 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ThemeGroup } from '@/types/map';
-import { getCategoryColor } from '@/lib/mapColors';
 import {
   Tooltip,
   TooltipContent,
@@ -283,12 +282,10 @@ export function LayerFlyout({
       {/* Scrollable Layer List - only this area scrolls */}
       <TooltipProvider delayDuration={400}>
         <div className="flex-1 overflow-y-auto px-3.5 py-3 pb-4 space-y-1.5 overscroll-contain">
-          {theme.layers.map((layer) => {
+        {theme.layers.map((layer) => {
             const isHighlighted = highlightedLayerId === layer.id;
             const isToggling = togglingLayerId === layer.id;
             const LayerIcon = iconMap[layer.icon];
-            const categoryColor = getCategoryColor(layer.name);
-            const layerColor = categoryColor.base;
             
             return (
               <Tooltip key={layer.id}>
@@ -305,37 +302,43 @@ export function LayerFlyout({
                       "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1",
                       isHighlighted && "ring-2 ring-primary ring-offset-1 ring-offset-background",
                       isToggling && "scale-[0.98]",
+                      // Unified selection styling - primary color only
                       layer.visible
-                        ? "bg-white/70 dark:bg-white/10 border border-white/60 dark:border-white/20 shadow-sm"
-                        : "bg-white/30 dark:bg-white/5 border border-transparent hover:bg-white/50 dark:hover:bg-white/10 hover:border-white/40"
+                        ? "bg-[var(--selection-bg)] border-2 border-[var(--selection-border)] shadow-sm"
+                        : "bg-transparent border border-border/50 hover:bg-[var(--selection-bg-hover)] hover:border-border"
                     )}
                     aria-pressed={layer.visible}
+                    aria-selected={layer.visible}
+                    role="button"
+                    tabIndex={0}
                     aria-label={`${layer.name}: ${layer.visible ? 'visible' : 'hidden'}`}
                   >
-                    {/* Icon with tinted background */}
+                    {/* Icon with primary tint when selected */}
                     <div
                       className={cn(
                         "w-9 h-9 flex-shrink-0 rounded-lg flex items-center justify-center",
                         "transition-all duration-120",
                         layer.visible 
-                          ? "shadow-sm" 
-                          : "opacity-60 group-hover:opacity-80"
+                          ? "bg-primary/10 shadow-sm" 
+                          : "bg-muted/30 opacity-60 group-hover:opacity-80"
                       )}
-                      style={{ backgroundColor: `${layerColor}12` }}
                     >
                       <div 
                         className={cn(
                           "transition-transform duration-120",
-                          layer.visible ? "scale-100" : "scale-95 group-hover:scale-100"
+                          layer.visible 
+                            ? "scale-100 text-primary" 
+                            : "scale-95 group-hover:scale-100 text-muted-foreground"
                         )}
-                        style={{ color: layerColor }}
                       >
                         {LayerIcon ? (
                           <LayerIcon className="w-4.5 h-4.5" />
                         ) : (
                           <div
-                            className="w-4 h-4 rounded"
-                            style={{ backgroundColor: layerColor }}
+                            className={cn(
+                              "w-4 h-4 rounded",
+                              layer.visible ? "bg-primary" : "bg-muted-foreground/40"
+                            )}
                           />
                         )}
                       </div>
@@ -344,8 +347,8 @@ export function LayerFlyout({
                     {/* Text */}
                     <div className="flex-1 min-w-0">
                       <span className={cn(
-                        "block text-sm font-medium truncate transition-colors duration-120",
-                        layer.visible ? "text-foreground" : "text-foreground/75"
+                        "block text-sm truncate transition-colors duration-120",
+                        layer.visible ? "font-semibold text-foreground" : "font-medium text-foreground/75"
                       )}>
                         {layer.name}
                       </span>
@@ -357,30 +360,24 @@ export function LayerFlyout({
                       </p>
                     </div>
                     
-                    {/* Toggle indicator with animation */}
+                    {/* Unified check indicator - primary color only */}
                     <div
                       className={cn(
                         "flex-shrink-0 flex items-center justify-center w-7 h-7 rounded-lg",
                         "transition-all duration-120",
                         layer.visible
-                          ? "shadow-sm"
+                          ? "bg-primary/10 shadow-sm"
                           : "bg-muted/20 group-hover:bg-muted/30"
                       )}
-                      style={{
-                        backgroundColor: layer.visible ? `${layerColor}18` : undefined,
-                      }}
                     >
                       <div
                         className={cn(
                           "w-5 h-5 rounded-full flex items-center justify-center transition-all duration-120",
                           layer.visible
-                            ? "border-0"
-                            : "border-2 border-muted-foreground/20 group-hover:border-muted-foreground/30",
+                            ? "bg-primary border-0"
+                            : "border-2 border-muted-foreground/25 group-hover:border-muted-foreground/35",
                           isToggling && "scale-90"
                         )}
-                        style={{
-                          backgroundColor: layer.visible ? layerColor : 'transparent',
-                        }}
                       >
                         {layer.visible ? (
                           <Check className={cn(

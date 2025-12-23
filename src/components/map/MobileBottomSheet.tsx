@@ -387,8 +387,7 @@ export function MobileBottomSheet({
         {sheetLevel === 'layers' && selectedTheme && (
           <div className="flex-1 flex flex-col overflow-hidden">
             <div className="flex-1 overflow-y-auto overscroll-contain p-4 space-y-2">
-              {selectedTheme.layers.map(layer => {
-                const layerColor = getCategoryColor(layer.name);
+            {selectedTheme.layers.map(layer => {
                 const LayerIcon = getCategoryIcon(layer.name);
                 const isHighlighted = highlightedLayerId === layer.id;
                 const isToggling = togglingLayerId === layer.id;
@@ -403,35 +402,41 @@ export function MobileBottomSheet({
                     className={cn(
                       "w-full flex items-center gap-3 p-3 rounded-xl min-h-[60px]",
                       "transition-all duration-120 active:scale-[0.98]",
+                      // Unified selection styling - primary color only
                       layer.visible 
-                        ? "bg-white/70 dark:bg-white/10 border border-white/60 dark:border-white/20 shadow-sm" 
-                        : "bg-white/30 dark:bg-white/5 border border-transparent",
+                        ? "bg-[var(--selection-bg)] border-2 border-[var(--selection-border)] shadow-sm" 
+                        : "bg-transparent border border-border/50 hover:bg-[var(--selection-bg-hover)]",
                       isHighlighted && "ring-2 ring-primary ring-offset-1",
                       isToggling && "scale-[0.98]"
                     )}
+                    aria-selected={layer.visible}
+                    role="button"
+                    tabIndex={0}
                   >
-                    {/* Icon */}
+                    {/* Icon - primary tint when selected */}
                     <div 
                       className={cn(
                         "w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-120",
-                        layer.visible ? "shadow-sm" : "opacity-60"
+                        layer.visible 
+                          ? "bg-primary/10 shadow-sm" 
+                          : "bg-muted/30 opacity-60"
                       )}
-                      style={{ backgroundColor: `${layerColor.base}12` }}
                     >
                       <LayerIcon 
                         className={cn(
                           "w-5 h-5 transition-transform duration-120",
-                          layer.visible ? "scale-100" : "scale-95"
+                          layer.visible 
+                            ? "scale-100 text-primary" 
+                            : "scale-95 text-muted-foreground"
                         )}
-                        style={{ color: layerColor.base }}
                       />
                     </div>
 
                     {/* Text */}
                     <div className="flex-1 text-left min-w-0">
                       <span className={cn(
-                        "block text-sm font-medium truncate transition-colors duration-120",
-                        layer.visible ? "text-foreground" : "text-foreground/75"
+                        "block text-sm truncate transition-colors duration-120",
+                        layer.visible ? "font-semibold text-foreground" : "font-medium text-foreground/75"
                       )}>
                         {layer.name}
                       </span>
@@ -443,25 +448,21 @@ export function MobileBottomSheet({
                       </p>
                     </div>
 
-                    {/* Toggle */}
+                    {/* Unified check indicator - primary color only */}
                     <div 
                       className={cn(
                         "w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-all duration-120",
-                        layer.visible ? "shadow-sm" : "bg-muted/20"
+                        layer.visible ? "bg-primary/10 shadow-sm" : "bg-muted/20"
                       )}
-                      style={{
-                        backgroundColor: layer.visible ? `${layerColor.base}15` : undefined,
-                      }}
                     >
                       <div
                         className={cn(
                           "w-5 h-5 rounded-full flex items-center justify-center transition-all duration-120",
-                          !layer.visible && "border-2 border-muted-foreground/25",
+                          layer.visible 
+                            ? "bg-primary" 
+                            : "border-2 border-muted-foreground/25",
                           isToggling && "scale-90"
                         )}
-                        style={{
-                          backgroundColor: layer.visible ? layerColor.base : 'transparent',
-                        }}
                       >
                         {layer.visible ? (
                           <Check className={cn(

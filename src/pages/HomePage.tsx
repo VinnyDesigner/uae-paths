@@ -65,17 +65,20 @@ export default function HomePage() {
               {/* Main Heading - Gradient TEXT only on "for Daily Life", NO boxes */}
               <div className="text-center mb-3 animate-fade-up relative z-10">
                 <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-extrabold leading-[1.1] tracking-tight">
-                  <span className="text-white" style={{ textShadow: '0 4px 20px rgba(0,0,0,0.3)' }}>Smart Map</span>
+                  <span 
+                    className="text-white drop-shadow-lg"
+                    style={{ textShadow: '0 4px 24px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.3)' }}
+                  >Smart Map</span>
                   <br className="sm:hidden" />
                   <span 
-                    className="ml-2 sm:ml-3"
+                    className="ml-2 sm:ml-3 inline-block"
                     style={{
-                      background: 'linear-gradient(90deg, #00D1FF, #2B6BFF, #7C3AED)',
+                      background: 'linear-gradient(90deg, #00D1FF 0%, #2B6BFF 50%, #7C3AED 100%)',
                       WebkitBackgroundClip: 'text',
                       backgroundClip: 'text',
                       WebkitTextFillColor: 'transparent',
                       color: 'transparent',
-                      textShadow: '0 0 20px rgba(0, 209, 255, 0.25)'
+                      filter: 'drop-shadow(0 4px 20px rgba(0, 209, 255, 0.35)) drop-shadow(0 0 40px rgba(43, 107, 255, 0.25))'
                     }}
                   >for Daily Life</span>
                 </h1>

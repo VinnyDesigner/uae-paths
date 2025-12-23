@@ -165,67 +165,97 @@
 }
 
 @layer utilities {
-  /* === CLEAN AMBIENT HERO BACKGROUND (No overlapping blocks) === */
+  /* === IMMERSIVE HERO BACKGROUND — Deep blue → cyan → teal === */
   
-  /* Base gradient - very light blue → white wash (full-width ambient) */
-  .bg-hero-ambient {
-    background: linear-gradient(180deg, 
-      hsl(205 35% 99%) 0%, 
-      hsl(200 30% 98%) 30%,
-      hsl(195 25% 97%) 60%,
-      hsl(200 20% 96%) 100%
+  /* Primary immersive gradient - full-width deep ocean */
+  .bg-hero-immersive {
+    background: linear-gradient(
+      135deg,
+      hsl(220 70% 12%) 0%,
+      hsl(215 65% 15%) 15%,
+      hsl(210 60% 18%) 30%,
+      hsl(200 70% 22%) 50%,
+      hsl(190 85% 28%) 70%,
+      hsl(180 75% 32%) 85%,
+      hsl(175 70% 35%) 100%
     );
   }
 
-  /* Soft radial glow behind heading - ambient light only, no blocks */
-  .bg-heading-glow {
-    background: radial-gradient(ellipse 800px 450px at center 18%, hsl(200 80% 65% / 0.05) 0%, transparent 65%);
+  /* Cyan glow center accent */
+  .bg-cyan-glow-center {
+    background: radial-gradient(
+      ellipse 80% 50% at 50% 40%,
+      hsl(188 100% 50% / 0.25) 0%,
+      hsl(195 100% 45% / 0.15) 30%,
+      transparent 70%
+    );
   }
 
-  /* Concentrated search bar ambient glow */
-  .bg-search-ambient {
-    background: radial-gradient(ellipse 700px 400px at center 38%, hsl(195 100% 58% / 0.06) 0%, transparent 55%);
+  /* Left indigo accent glow */
+  .bg-indigo-glow-left {
+    background: radial-gradient(
+      circle 600px at 5% 30%,
+      hsl(235 60% 30% / 0.4) 0%,
+      hsl(225 55% 25% / 0.2) 40%,
+      transparent 70%
+    );
   }
 
-  /* Flowing contour lines - GIS/topo inspired (subtle) */
-  .bg-wave-contours {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1000' height='700' viewBox='0 0 1000 700'%3E%3Cg fill='none' stroke='%230a5a9e' stroke-width='0.6' opacity='0.03'%3E%3Cpath d='M-100,350 Q200,220 400,350 T800,320 T1200,380'/%3E%3Cpath d='M-100,300 Q200,170 400,300 T800,270 T1200,330'/%3E%3Cpath d='M-100,400 Q200,270 400,400 T800,370 T1200,430'/%3E%3Cpath d='M-100,250 Q200,120 400,250 T800,220 T1200,280'/%3E%3Cpath d='M-100,450 Q200,320 400,450 T800,420 T1200,480'/%3E%3Cpath d='M-100,200 Q200,70 400,200 T800,170 T1200,230'/%3E%3Cpath d='M-100,500 Q200,370 400,500 T800,470 T1200,530'/%3E%3Cpath d='M-100,150 Q200,20 400,150 T800,120 T1200,180'/%3E%3C/g%3E%3C/svg%3E");
+  /* Right teal accent glow */
+  .bg-teal-glow-right {
+    background: radial-gradient(
+      circle 500px at 95% 60%,
+      hsl(175 80% 35% / 0.3) 0%,
+      hsl(180 70% 30% / 0.15) 40%,
+      transparent 70%
+    );
+  }
+
+  /* Flowing wave lines - topographic / contour-map inspired */
+  .bg-wave-flow {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1440' height='900' viewBox='0 0 1440 900'%3E%3Cg fill='none' stroke='%2300d4ff' stroke-width='0.5' opacity='0.08'%3E%3Cpath d='M-100,200 Q300,100 600,200 T1100,180 T1600,220'/%3E%3Cpath d='M-100,280 Q300,180 600,280 T1100,260 T1600,300'/%3E%3Cpath d='M-100,360 Q300,260 600,360 T1100,340 T1600,380'/%3E%3Cpath d='M-100,440 Q300,340 600,440 T1100,420 T1600,460'/%3E%3Cpath d='M-100,520 Q300,420 600,520 T1100,500 T1600,540'/%3E%3Cpath d='M-100,600 Q300,500 600,600 T1100,580 T1600,620'/%3E%3Cpath d='M-100,680 Q300,580 600,680 T1100,660 T1600,700'/%3E%3Cpath d='M-100,760 Q300,660 600,760 T1100,740 T1600,780'/%3E%3C/g%3E%3Cg fill='none' stroke='%2300ffcc' stroke-width='0.3' opacity='0.05'%3E%3Cpath d='M-100,240 Q350,150 650,240 T1150,220 T1600,260'/%3E%3Cpath d='M-100,400 Q350,310 650,400 T1150,380 T1600,420'/%3E%3Cpath d='M-100,560 Q350,470 650,560 T1150,540 T1600,580'/%3E%3Cpath d='M-100,720 Q350,630 650,720 T1150,700 T1600,740'/%3E%3C/g%3E%3C/svg%3E");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
   }
 
-  /* Subtle grid pattern - map tiles hint */
-  .bg-grid-subtle {
-    background-image: 
-      linear-gradient(to right, hsl(210 40% 88% / 0.02) 1px, transparent 1px),
-      linear-gradient(to bottom, hsl(210 40% 88% / 0.02) 1px, transparent 1px);
-    background-size: 60px 60px;
+  /* Animated subtle pulse glow */
+  .bg-pulse-glow {
+    background: radial-gradient(
+      ellipse 60% 40% at 50% 50%,
+      hsl(190 100% 50% / 0.08) 0%,
+      transparent 60%
+    );
+    animation: pulseGlow 6s ease-in-out infinite;
   }
 
-  /* Decorative ambient glow - top left */
-  .bg-accent-glow-tl {
-    background: radial-gradient(circle 400px at 10% 15%, hsl(195 100% 70% / 0.035) 0%, transparent 65%);
+  /* Ambient noise texture overlay */
+  .bg-noise-overlay {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
   }
 
-  /* Decorative ambient glow - bottom right */
-  .bg-accent-glow-br {
-    background: radial-gradient(circle 350px at 88% 75%, hsl(210 100% 65% / 0.03) 0%, transparent 65%);
-  }
-
-  /* Hero bottom fade - soft transition */
+  /* Bottom fade to footer */
   .bg-hero-bottom-fade {
-    background: linear-gradient(180deg, transparent 0%, hsl(200 15% 95% / 0.4) 100%);
+    background: linear-gradient(180deg, transparent 0%, hsl(215 40% 12%) 100%);
   }
 
-  /* Footer gradient - white to very light blue */
+  /* Footer gradient - aligned with hero tones */
+  .bg-footer-immersive {
+    background: linear-gradient(
+      180deg,
+      hsl(218 50% 14%) 0%,
+      hsl(220 55% 12%) 50%,
+      hsl(222 60% 10%) 100%
+    );
+  }
+
   .bg-footer-gradient {
     background: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(200 20% 97%) 100%);
   }
 
   /* Topo pattern for footer */
   .bg-topo-pattern {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220'%3E%3Cg fill='none' stroke='%230a4d8c' stroke-width='0.35' opacity='0.04'%3E%3Cpath d='M0,110 Q55,55 110,110 T220,110'/%3E%3Cpath d='M0,85 Q55,30 110,85 T220,85'/%3E%3Cpath d='M0,135 Q55,80 110,135 T220,135'/%3E%3C/g%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220'%3E%3Cg fill='none' stroke='%2300d4ff' stroke-width='0.35' opacity='0.06'%3E%3Cpath d='M0,110 Q55,55 110,110 T220,110'/%3E%3Cpath d='M0,85 Q55,30 110,85 T220,85'/%3E%3Cpath d='M0,135 Q55,80 110,135 T220,135'/%3E%3C/g%3E%3C/svg%3E");
     background-size: 220px 220px;
   }
 
@@ -238,15 +268,60 @@
     @apply bg-secondary/40;
   }
 
-  /* === TEXT GRADIENTS === */
-  
-  /* Bright blue gradient text - cyan → blue → indigo (never covered by blocks) */
-  .text-gradient-blue {
-    @apply bg-clip-text text-transparent;
-    background: linear-gradient(135deg, hsl(188 100% 45%) 0%, hsl(208 100% 50%) 50%, hsl(232 70% 55%) 100%);
+  /* Legacy ambient styles for other pages */
+  .bg-hero-ambient {
+    background: linear-gradient(180deg, 
+      hsl(205 35% 99%) 0%, 
+      hsl(200 30% 98%) 30%,
+      hsl(195 25% 97%) 60%,
+      hsl(200 20% 96%) 100%
+    );
   }
 
-  /* Subtle glowing underline for heading */
+  .bg-heading-glow {
+    background: radial-gradient(ellipse 800px 450px at center 18%, hsl(200 80% 65% / 0.05) 0%, transparent 65%);
+  }
+
+  .bg-search-ambient {
+    background: radial-gradient(ellipse 700px 400px at center 38%, hsl(195 100% 58% / 0.06) 0%, transparent 55%);
+  }
+
+  .bg-wave-contours {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1000' height='700' viewBox='0 0 1000 700'%3E%3Cg fill='none' stroke='%230a5a9e' stroke-width='0.6' opacity='0.03'%3E%3Cpath d='M-100,350 Q200,220 400,350 T800,320 T1200,380'/%3E%3Cpath d='M-100,300 Q200,170 400,300 T800,270 T1200,330'/%3E%3Cpath d='M-100,400 Q200,270 400,400 T800,370 T1200,430'/%3E%3Cpath d='M-100,250 Q200,120 400,250 T800,220 T1200,280'/%3E%3Cpath d='M-100,450 Q200,320 400,450 T800,420 T1200,480'/%3E%3Cpath d='M-100,200 Q200,70 400,200 T800,170 T1200,230'/%3E%3Cpath d='M-100,500 Q200,370 400,500 T800,470 T1200,530'/%3E%3Cpath d='M-100,150 Q200,20 400,150 T800,120 T1200,180'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .bg-grid-subtle {
+    background-image: 
+      linear-gradient(to right, hsl(210 40% 88% / 0.02) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(210 40% 88% / 0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .bg-accent-glow-tl {
+    background: radial-gradient(circle 400px at 10% 15%, hsl(195 100% 70% / 0.035) 0%, transparent 65%);
+  }
+
+  .bg-accent-glow-br {
+    background: radial-gradient(circle 350px at 88% 75%, hsl(210 100% 65% / 0.03) 0%, transparent 65%);
+  }
+
+  /* === TEXT STYLES === */
+  
+  /* Gradient text - cyan → blue → indigo */
+  .text-gradient-blue {
+    @apply bg-clip-text text-transparent;
+    background: linear-gradient(135deg, hsl(188 100% 50%) 0%, hsl(200 100% 55%) 50%, hsl(220 90% 65%) 100%);
+  }
+
+  /* Bright cyan glow text */
+  .text-glow-cyan {
+    text-shadow: 0 0 30px hsl(188 100% 55% / 0.4), 0 0 60px hsl(188 100% 55% / 0.2);
+  }
+
+  /* Subtle glowing underline */
   .glow-underline {
     position: relative;
     display: inline-block;
@@ -255,19 +330,19 @@
   .glow-underline::after {
     content: '';
     position: absolute;
-    left: 5%;
-    right: 5%;
-    bottom: -6px;
+    left: 0%;
+    right: 0%;
+    bottom: -8px;
     height: 3px;
     background: linear-gradient(90deg, 
-      transparent 0%, 
-      hsl(188 100% 50% / 0.6) 20%, 
-      hsl(208 100% 55% / 0.7) 50%, 
-      hsl(232 70% 55% / 0.6) 80%, 
-      transparent 100%
+      hsl(188 100% 55% / 0) 0%, 
+      hsl(188 100% 55% / 0.7) 20%, 
+      hsl(195 100% 60% / 0.9) 50%, 
+      hsl(188 100% 55% / 0.7) 80%, 
+      hsl(188 100% 55% / 0) 100%
     );
     border-radius: 2px;
-    filter: blur(2px);
+    filter: blur(1px);
     animation: glowPulse 3s ease-in-out infinite;
   }
 
@@ -291,7 +366,36 @@
     @apply bg-card/95 backdrop-blur-xl border border-border/60;
   }
 
-  /* Premium glassmorphism search bar - DOMINANT CTA (unmissable) */
+  /* Premium glassmorphism search bar - immersive dark theme */
+  .glass-search-dark {
+    background: hsl(210 40% 15% / 0.7);
+    backdrop-filter: blur(40px) saturate(180%);
+    border: 1px solid hsl(190 100% 50% / 0.2);
+    box-shadow: 
+      0 0 60px -10px hsl(190 100% 50% / 0.15),
+      0 25px 80px -20px hsl(220 80% 10% / 0.5),
+      inset 0 1px 0 0 hsl(190 100% 70% / 0.1),
+      inset 0 -1px 0 0 hsl(220 50% 20% / 0.3);
+  }
+
+  .glass-search-dark:hover {
+    border-color: hsl(190 100% 55% / 0.3);
+    box-shadow: 
+      0 0 80px -10px hsl(190 100% 50% / 0.2),
+      0 30px 90px -20px hsl(220 80% 10% / 0.6),
+      inset 0 1px 0 0 hsl(190 100% 70% / 0.15),
+      inset 0 -1px 0 0 hsl(220 50% 20% / 0.3);
+  }
+
+  .glass-search-dark:focus-within {
+    border-color: hsl(188 100% 55% / 0.5);
+    box-shadow: 
+      0 0 100px -10px hsl(188 100% 55% / 0.25),
+      0 30px 90px -20px hsl(220 80% 10% / 0.6),
+      0 0 0 4px hsl(188 100% 55% / 0.1),
+      inset 0 1px 0 0 hsl(188 100% 70% / 0.2);
+  }
+
   .glass-search {
     background: hsl(0 0% 100% / 0.95);
     backdrop-filter: blur(32px) saturate(180%);
@@ -323,7 +427,36 @@
       inset 0 2px 0 0 hsl(0 0% 100% / 0.9);
   }
 
-  /* Glass section panel - Soft floating container for category cards */
+  /* Floating glass panel for sections */
+  .glass-panel-dark {
+    background: hsl(215 45% 15% / 0.6);
+    backdrop-filter: blur(30px);
+    border: 1px solid hsl(190 80% 50% / 0.15);
+    box-shadow: 
+      0 30px 80px -20px hsl(220 80% 8% / 0.5),
+      inset 0 1px 0 0 hsl(190 100% 70% / 0.08);
+  }
+
+  /* Glass card for category items - dark immersive */
+  .glass-card-dark {
+    background: hsl(215 40% 18% / 0.7);
+    backdrop-filter: blur(24px);
+    border: 1px solid hsl(190 70% 50% / 0.12);
+    box-shadow: 
+      0 15px 50px -15px hsl(220 70% 8% / 0.4),
+      inset 0 1px 0 0 hsl(190 100% 70% / 0.06);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .glass-card-dark:hover {
+    border-color: hsl(188 100% 55% / 0.25);
+    box-shadow: 
+      0 20px 60px -15px hsl(188 100% 50% / 0.15),
+      0 25px 70px -20px hsl(220 70% 8% / 0.5),
+      inset 0 1px 0 0 hsl(188 100% 70% / 0.1);
+    transform: translateY(-4px);
+  }
+
   .glass-section {
     background: hsl(0 0% 100% / 0.5);
     backdrop-filter: blur(28px);
@@ -334,7 +467,6 @@
       inset 0 1px 0 0 hsl(0 0% 100% / 0.6);
   }
 
-  /* Glass card for category items - frosted effect */
   .glass-card {
     background: hsl(0 0% 100% / 0.85);
     backdrop-filter: blur(24px);
@@ -364,6 +496,15 @@
     background: linear-gradient(135deg, hsl(200 100% 55%) 0%, hsl(195 100% 45%) 100%);
   }
 
+  /* Dark theme card gradients */
+  .gradient-healthcare-dark {
+    background: linear-gradient(145deg, hsl(215 50% 20%) 0%, hsl(220 55% 15%) 100%);
+  }
+
+  .gradient-education-dark {
+    background: linear-gradient(145deg, hsl(195 60% 22%) 0%, hsl(200 55% 18%) 100%);
+  }
+
   /* Card gradient accents */
   .gradient-healthcare-card {
     background: linear-gradient(145deg, hsl(208 60% 94%) 0%, hsl(208 50% 97%) 50%, hsl(0 0% 100% / 0.6) 100%);
@@ -371,6 +512,15 @@
 
   .gradient-education-card {
     background: linear-gradient(145deg, hsl(200 70% 94%) 0%, hsl(195 60% 97%) 50%, hsl(0 0% 100% / 0.6) 100%);
+  }
+
+  /* CTA gradient buttons */
+  .gradient-cta-cyan {
+    background: linear-gradient(135deg, hsl(188 100% 45%) 0%, hsl(195 100% 50%) 50%, hsl(205 100% 55%) 100%);
+  }
+
+  .gradient-cta-blue {
+    background: linear-gradient(135deg, hsl(210 90% 45%) 0%, hsl(220 85% 40%) 100%);
   }
 
   /* === SHADOWS === */
@@ -399,6 +549,10 @@
 
   .shadow-glow-blue {
     box-shadow: 0 4px 24px -4px hsl(200 100% 50% / 0.25);
+  }
+
+  .shadow-glow-cyan {
+    box-shadow: 0 0 40px hsl(188 100% 55% / 0.3), 0 0 80px hsl(188 100% 55% / 0.15);
   }
 
   .shadow-card {
@@ -525,50 +679,13 @@
   }
 }
 
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-100%);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  to {
-    opacity: 0;
-    transform: translateY(-100%);
-  }
-}
-
 @keyframes subtlePulse {
   0%, 100% {
-    opacity: 0.7;
-    transform: scaleX(1);
+    opacity: 1;
   }
   50% {
-    opacity: 1;
-    transform: scaleX(1.02);
+    opacity: 0.85;
   }
-}
-
-@keyframes shimmer {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
-}
-
-.animate-shimmer {
-  animation: shimmer 2.5s ease-in-out infinite;
 }
 
 @keyframes lineGrow {
@@ -584,12 +701,12 @@
 
 @keyframes glowPulse {
   0%, 100% {
-    opacity: 0.4;
-    filter: blur(20px);
+    opacity: 1;
+    filter: blur(1px);
   }
   50% {
     opacity: 0.7;
-    filter: blur(30px);
+    filter: blur(2px);
   }
 }
 
@@ -602,91 +719,51 @@
   }
 }
 
-.animate-slide-down {
-  animation: slideDown 250ms ease-out forwards;
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 0.08;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.12;
+    transform: scale(1.05);
+  }
 }
 
-.animate-slide-up {
-  animation: slideUp 200ms ease-out forwards;
+/* Mobile-specific styles */
+@media (max-width: 768px) {
+  .search-bar-mobile {
+    @apply text-sm;
+  }
 }
 
-/* Leaflet custom styles */
-.leaflet-container {
-  @apply font-sans;
-  z-index: 0;
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
 }
 
-.leaflet-popup-content-wrapper {
-  @apply rounded-lg shadow-lg border border-border bg-card;
+/* Focus visible styles */
+*:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
 }
 
-.leaflet-popup-content {
-  @apply m-0 p-0;
-}
-
-.leaflet-popup-tip {
-  @apply bg-card;
-}
-
-.leaflet-control-zoom {
-  @apply border-none shadow-md rounded-lg overflow-hidden;
-}
-
-.leaflet-control-zoom a {
-  @apply bg-card text-foreground border-b border-border hover:bg-secondary transition-colors;
-}
-
-.leaflet-control-zoom a:first-child {
-  @apply rounded-t-lg;
-}
-
-.leaflet-control-zoom a:last-child {
-  @apply rounded-b-lg border-b-0;
-}
-
-/* Custom scrollbar - Glassmorphism style */
+/* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-transparent;
+  background: hsl(var(--muted));
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-foreground/10 rounded-full transition-colors;
+  background: hsl(var(--muted-foreground) / 0.3);
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-foreground/20;
-}
-
-/* Glassmorphism scrollbar utility */
-.scrollbar-thin::-webkit-scrollbar {
-  width: 4px;
-}
-
-.scrollbar-thin::-webkit-scrollbar-track {
-  @apply bg-transparent;
-}
-
-.scrollbar-thin::-webkit-scrollbar-thumb {
-  @apply bg-white/20 rounded-full;
-}
-
-.scrollbar-thin::-webkit-scrollbar-thumb:hover {
-  @apply bg-white/40;
-}
-
-.scrollbar-track-transparent::-webkit-scrollbar-track {
-  @apply bg-transparent;
-}
-
-.scrollbar-thumb-white\/30::-webkit-scrollbar-thumb {
-  @apply bg-white/30;
-}
-
-.scrollbar-thumb-primary\/20::-webkit-scrollbar-thumb {
-  @apply bg-primary/20;
+  background: hsl(var(--muted-foreground) / 0.5);
 }

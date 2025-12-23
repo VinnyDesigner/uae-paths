@@ -329,150 +329,177 @@ function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFu
         </div>
       </div>
 
-      {/* Mobile: Single unified control rail - bottom right (no zoom controls) */}
-      <div className="md:hidden absolute bottom-20 right-4 z-20 flex flex-col gap-2.5 pointer-events-auto safe-area-inset-bottom">
-
-        {/* Locate Me */}
-        <button
-          onClick={onLocateMe}
-          className="bg-card rounded-xl shadow-lg border border-border p-2.5 hover:bg-primary hover:text-primary-foreground active:scale-95 transition-all duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center"
-          aria-label="Find my location"
-        >
-          <LocateFixed className="w-5 h-5" />
-        </button>
-
-        {/* Legend */}
-        <div className="relative">
+      {/* Mobile: Bottom-right controls - always visible/clickable */}
+      <div className="md:hidden absolute bottom-24 right-4 z-[var(--z-panel)] flex flex-col gap-2 pointer-events-none">
+        <div className="flex flex-col gap-2 items-end pointer-events-auto">
           <button
-            onClick={() => setLegendOpen(!legendOpen)}
-            className={cn(
-              "bg-card rounded-xl shadow-lg border border-border p-2.5 active:scale-95 transition-all duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center",
-              legendOpen && "bg-secondary"
-            )}
-            aria-label="Toggle legend"
-            aria-expanded={legendOpen}
+            onClick={onResetView}
+            className="bg-card rounded-xl shadow-lg border border-border p-2.5 hover:bg-secondary active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            title="Reset to UAE"
+            aria-label="Reset map view"
           >
-            <List className="w-5 h-5 text-foreground" />
-            {visibleLayers.length > 0 && (
-              <span className="absolute -top-1 -right-1 w-4 h-4 bg-primary rounded-full flex items-center justify-center text-[9px] font-bold text-primary-foreground">
-                {visibleLayers.length}
-              </span>
-            )}
+            <Home className="w-5 h-5 text-foreground" />
           </button>
 
-          {/* Mobile Legend Panel */}
-          {legendOpen && (
-            <>
-              <div 
-                className="fixed inset-0 z-[999]" 
-                onClick={() => setLegendOpen(false)} 
-              />
-              <div className="absolute bottom-full right-0 mb-2 bg-card/95 backdrop-blur-xl rounded-xl shadow-xl border border-border overflow-hidden z-30 animate-fade-in w-[200px]">
-                <div className="px-3 py-2 border-b border-border">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-foreground">Legend</span>
-                    <span className="text-[10px] text-muted-foreground bg-secondary rounded-full px-1.5 py-0.5">
-                      {visibleLayers.length}
-                    </span>
+          <button
+            onClick={onLocateMe}
+            className="bg-card rounded-xl shadow-lg border border-border p-2.5 hover:bg-primary hover:text-primary-foreground active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            title="Locate me"
+            aria-label="Find my location"
+          >
+            <LocateFixed className="w-5 h-5" />
+          </button>
+
+          <div className="flex flex-col bg-card rounded-xl shadow-lg border border-border overflow-hidden">
+            <button
+              onClick={onZoomIn}
+              aria-label="Zoom In"
+              className="p-2.5 hover:bg-secondary active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+            >
+              <ZoomIn className="w-5 h-5 text-foreground" />
+            </button>
+            <div className="h-px bg-border" />
+            <button
+              onClick={onZoomOut}
+              aria-label="Zoom Out"
+              className="p-2.5 hover:bg-secondary active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+            >
+              <ZoomOut className="w-5 h-5 text-foreground" />
+            </button>
+          </div>
+
+          {/* Legend */}
+          <div className="relative">
+            <button
+              onClick={() => setLegendOpen(!legendOpen)}
+              className={cn(
+                "bg-card rounded-xl shadow-lg border border-border p-2.5 active:scale-95 transition-all duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center",
+                legendOpen && "bg-secondary"
+              )}
+              aria-label="Toggle legend"
+              aria-expanded={legendOpen}
+            >
+              <List className="w-5 h-5 text-foreground" />
+              {visibleLayers.length > 0 && (
+                <span className="absolute -top-1 -right-1 w-4 h-4 bg-primary rounded-full flex items-center justify-center text-[9px] font-bold text-primary-foreground">
+                  {visibleLayers.length}
+                </span>
+              )}
+            </button>
+
+            {/* Mobile Legend Panel */}
+            {legendOpen && (
+              <>
+                <div 
+                  className="fixed inset-0 z-[var(--z-popover-backdrop)]" 
+                  onClick={() => setLegendOpen(false)} 
+                />
+                <div className="absolute bottom-full right-0 mb-2 bg-card/95 backdrop-blur-xl rounded-xl shadow-xl border border-border overflow-hidden z-[var(--z-popover)] animate-fade-in w-[200px]">
+                  <div className="px-3 py-2 border-b border-border">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-semibold text-foreground">Legend</span>
+                      <span className="text-[10px] text-muted-foreground bg-secondary rounded-full px-1.5 py-0.5">
+                        {visibleLayers.length}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-2 max-h-44 overflow-y-auto">
+                    {visibleLayers.length === 0 ? (
+                      <p className="text-xs text-muted-foreground p-2 text-center">
+                        No active layers
+                      </p>
+                    ) : (
+                      <div className="space-y-1">
+                        {visibleLayers.map((layer) => {
+                          const LayerIcon = getIcon(layer.icon);
+                          return (
+                            <div
+                              key={layer.id}
+                              className="flex items-center gap-2.5 py-2 px-2 rounded-lg"
+                            >
+                              <div
+                                className="w-6 h-6 rounded-md flex items-center justify-center flex-shrink-0"
+                                style={{ backgroundColor: `${layer.color}15` }}
+                              >
+                                <LayerIcon 
+                                  className="w-3.5 h-3.5" 
+                                  style={{ color: layer.color }} 
+                                />
+                              </div>
+                              <span className="text-[11px] font-medium text-foreground truncate">{layer.name}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
                   </div>
                 </div>
-                <div className="p-2 max-h-44 overflow-y-auto">
-                  {visibleLayers.length === 0 ? (
-                    <p className="text-xs text-muted-foreground p-2 text-center">
-                      No active layers
-                    </p>
-                  ) : (
-                    <div className="space-y-1">
-                      {visibleLayers.map((layer) => {
-                        const LayerIcon = getIcon(layer.icon);
-                        return (
-                          <div
-                            key={layer.id}
-                            className="flex items-center gap-2.5 py-2 px-2 rounded-lg"
-                          >
-                            {/* Tinted background icon - consistent with side panel */}
-                            <div
-                              className="w-6 h-6 rounded-md flex items-center justify-center flex-shrink-0"
-                              style={{ backgroundColor: `${layer.color}15` }}
-                            >
-                              <LayerIcon 
-                                className="w-3.5 h-3.5" 
-                                style={{ color: layer.color }} 
-                              />
-                            </div>
-                            <span className="text-[11px] font-medium text-foreground truncate">{layer.name}</span>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </>
-          )}
-        </div>
-
-        {/* Base Map */}
-        <div className="relative">
-          <button
-            onClick={() => setBaseMapOpen(!baseMapOpen)}
-            className={cn(
-              "bg-card rounded-xl shadow-lg border border-border p-2.5 active:scale-95 transition-all duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center",
-              baseMapOpen && "bg-secondary"
+              </>
             )}
-            aria-label="Change base map"
-            aria-expanded={baseMapOpen}
-          >
-            <Map className="w-5 h-5 text-foreground" />
-          </button>
+          </div>
 
-          {/* Mobile Base Map Panel */}
-          {baseMapOpen && (
-            <>
-              <div 
-                className="fixed inset-0 z-[999]" 
-                onClick={() => setBaseMapOpen(false)} 
-              />
-              <div className="absolute bottom-full right-0 mb-2 bg-card/95 backdrop-blur-xl rounded-xl shadow-xl border border-border overflow-hidden z-30 animate-fade-in p-2 w-[180px]">
-                <div className="grid grid-cols-2 gap-1.5">
-                  {baseMaps.map((map) => (
-                    <button
-                      key={map.id}
-                      onClick={() => {
-                        onBaseMapChange(map.id);
-                        setBaseMapOpen(false);
-                      }}
-                      className={cn(
-                        "relative rounded-lg overflow-hidden border-2 transition-all",
-                        selectedBaseMap === map.id
-                          ? "border-primary"
-                          : "border-transparent"
-                      )}
-                    >
-                      <div className="aspect-square relative">
-                        <img
-                          src={map.previewImage}
-                          alt={map.name}
-                          className="w-full h-full object-cover"
-                          loading="lazy"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end justify-center pb-0.5">
-                          <span className="text-[9px] font-medium text-white truncate px-0.5">
-                            {map.name}
-                          </span>
-                        </div>
-                        {selectedBaseMap === map.id && (
-                          <div className="absolute top-0.5 right-0.5 w-3.5 h-3.5 bg-primary rounded-full flex items-center justify-center">
-                            <Check className="w-2 h-2 text-primary-foreground" />
-                          </div>
+          {/* Base Map */}
+          <div className="relative">
+            <button
+              onClick={() => setBaseMapOpen(!baseMapOpen)}
+              className={cn(
+                "bg-card rounded-xl shadow-lg border border-border p-2.5 active:scale-95 transition-all duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center",
+                baseMapOpen && "bg-secondary"
+              )}
+              aria-label="Change base map"
+              aria-expanded={baseMapOpen}
+            >
+              <Map className="w-5 h-5 text-foreground" />
+            </button>
+
+            {/* Mobile Base Map Panel */}
+            {baseMapOpen && (
+              <>
+                <div 
+                  className="fixed inset-0 z-[var(--z-popover-backdrop)]" 
+                  onClick={() => setBaseMapOpen(false)} 
+                />
+                <div className="absolute bottom-full right-0 mb-2 bg-card/95 backdrop-blur-xl rounded-xl shadow-xl border border-border overflow-hidden z-[var(--z-popover)] animate-fade-in p-2 w-[180px]">
+                  <div className="grid grid-cols-2 gap-1.5">
+                    {baseMaps.map((map) => (
+                      <button
+                        key={map.id}
+                        onClick={() => {
+                          onBaseMapChange(map.id);
+                          setBaseMapOpen(false);
+                        }}
+                        className={cn(
+                          "relative rounded-lg overflow-hidden border-2 transition-all",
+                          selectedBaseMap === map.id
+                            ? "border-primary"
+                            : "border-transparent"
                         )}
-                      </div>
-                    </button>
-                  ))}
+                      >
+                        <div className="aspect-square relative">
+                          <img
+                            src={map.previewImage}
+                            alt={map.name}
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end justify-center pb-0.5">
+                            <span className="text-[9px] font-medium text-white truncate px-0.5">
+                              {map.name}
+                            </span>
+                          </div>
+                          {selectedBaseMap === map.id && (
+                            <div className="absolute top-0.5 right-0.5 w-3.5 h-3.5 bg-primary rounded-full flex items-center justify-center">
+                              <Check className="w-2 h-2 text-primary-foreground" />
+                            </div>
+                          )}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </>
-          )}
+              </>
+            )}
+          </div>
         </div>
       </div>
     </>
@@ -874,115 +901,6 @@ export function InteractiveMap({
 
       {/* Gradient overlay at bottom (must not block UI) */}
       <div className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none bg-gradient-to-t from-background/20 to-transparent" />
-
-      {/* Mobile: Bottom-right controls (Reset, Locate, Zoom, BaseMap) - always visible/clickable */}
-      <div className="md:hidden absolute bottom-24 right-4 z-[var(--z-panel)] flex flex-col gap-2 pointer-events-none">
-        <div className="flex flex-col gap-2 items-end pointer-events-auto">
-          <button
-            onClick={onResetView}
-            className="bg-card rounded-xl shadow-lg border border-border p-2.5 hover:bg-secondary active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-            title="Reset to UAE"
-            aria-label="Reset map view"
-          >
-            <Home className="w-5 h-5 text-foreground" />
-          </button>
-
-          <button
-            onClick={onLocateMe}
-            className="bg-card rounded-xl shadow-lg border border-border p-2.5 hover:bg-primary hover:text-primary-foreground active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-            title="Locate me"
-            aria-label="Find my location"
-          >
-            <LocateFixed className="w-5 h-5" />
-          </button>
-
-          <div className="flex flex-col bg-card rounded-xl shadow-lg border border-border overflow-hidden">
-            <button
-              onClick={onZoomIn}
-              aria-label="Zoom In"
-              className="p-2.5 hover:bg-secondary active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
-            >
-              <ZoomIn className="w-5 h-5 text-foreground" />
-            </button>
-            <div className="h-px bg-border" />
-            <button
-              onClick={onZoomOut}
-              aria-label="Zoom Out"
-              className="p-2.5 hover:bg-secondary active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
-            >
-              <ZoomOut className="w-5 h-5 text-foreground" />
-            </button>
-          </div>
-
-          <div className="relative">
-            <button
-              onClick={() => setBaseMapOpen(!baseMapOpen)}
-              className={cn(
-                "bg-card rounded-xl shadow-lg border border-border p-2.5 hover:bg-secondary active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary",
-                baseMapOpen && "bg-secondary"
-              )}
-              title="Change Base Map"
-              aria-label="Change base map"
-              aria-expanded={baseMapOpen}
-            >
-              <Map className="w-5 h-5 text-foreground" />
-            </button>
-
-            {baseMapOpen && (
-              <>
-                <div 
-                  className="fixed inset-0 z-[var(--z-popover-backdrop)]" 
-                  onClick={() => setBaseMapOpen(false)} 
-                />
-                <div className="absolute bottom-full right-0 mb-2 bg-card/95 backdrop-blur-xl rounded-xl shadow-xl border border-border overflow-hidden z-[var(--z-popover)] animate-fade-in p-3 w-[280px]">
-                  <p className="text-xs text-muted-foreground font-medium px-1 pb-2 uppercase tracking-wide">
-                    Base Map
-                  </p>
-                  <div className="grid grid-cols-3 gap-2">
-                    {baseMaps.map((map) => (
-                      <button
-                        key={map.id}
-                        onClick={() => {
-                          onBaseMapChange(map.id);
-                          setBaseMapOpen(false);
-                        }}
-                        className={cn(
-                          "relative group rounded-lg overflow-hidden border-2 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-primary",
-                          selectedBaseMap === map.id
-                            ? "border-primary ring-2 ring-primary/30"
-                            : "border-transparent hover:border-primary/50"
-                        )}
-                      >
-                        <div className="aspect-square relative">
-                          <img
-                            src={map.previewImage}
-                            alt={map.name}
-                            className="w-full h-full object-cover"
-                            loading="lazy"
-                          />
-                          <div className={cn(
-                            "absolute inset-0 bg-gradient-to-t from-black/60 to-transparent",
-                            "flex items-end justify-center pb-1"
-                          )}>
-                            <span className="text-[10px] font-medium text-white truncate px-1">
-                              {map.name}
-                            </span>
-                          </div>
-                          {selectedBaseMap === map.id && (
-                            <div className="absolute top-1 right-1 w-4 h-4 bg-primary rounded-full flex items-center justify-center">
-                              <Check className="w-2.5 h-2.5 text-primary-foreground" />
-                            </div>
-                          )}
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

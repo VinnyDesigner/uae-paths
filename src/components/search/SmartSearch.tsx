@@ -275,13 +275,11 @@ export function SmartSearch({
             </>
           )}
 
-          {/* Primary action button - Circular gradient pill matching left icon */}
+          {/* Primary action button - Always active and prominent */}
           <button
             onClick={() => handleSubmit()}
-            disabled={!query.trim()}
             className={cn(
               "flex items-center justify-center rounded-full transition-all duration-250",
-              "disabled:opacity-20 disabled:cursor-not-allowed disabled:shadow-none",
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
               isDark ? [
                 "bg-gradient-to-r from-[#00D1FF] via-[#2B6BFF] to-[#7C3AED] text-white",

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, MapPin, Home, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -16,15 +16,6 @@ export function Header() {
   const location = useLocation();
   const isMapPage = location.pathname === '/map';
   const isHomePage = location.pathname === '/';
-  const headerRef = useRef<HTMLElement>(null);
-  const [headerHeight, setHeaderHeight] = useState(0);
-
-  // Measure header height for sheet positioning
-  useEffect(() => {
-    if (headerRef.current) {
-      setHeaderHeight(headerRef.current.offsetHeight);
-    }
-  }, [isMapPage]);
 
   // Close menu on route change
   useEffect(() => {
@@ -34,11 +25,10 @@ export function Header() {
   return (
     <>
       <header 
-        ref={headerRef}
         className={cn(
-          "sticky top-0 z-50 w-full transition-all duration-300",
+          "sticky top-0 z-[1000] w-full transition-all duration-300",
           isHomePage 
-            ? "bg-transparent backdrop-blur-md border-b border-white/10"
+            ? "glass-strong"
             : "glass-strong",
           isMapPage ? "h-12 md:h-auto" : ""
         )}
@@ -48,7 +38,7 @@ export function Header() {
             "flex items-center justify-between",
             isMapPage ? "h-12 md:h-16" : "h-16"
           )}>
-            {/* Logo */}
+            {/* Logo - Always visible */}
             <Link to="/" className="flex items-center group">
               <img 
                 src={sdiLogo} 
@@ -61,7 +51,7 @@ export function Header() {
               />
             </Link>
 
-            {/* Desktop Navigation */}
+            {/* Desktop Navigation - Always visible */}
             <nav className="hidden md:flex items-center gap-1">
               {navItems.map((item) => {
                 const isActive = location.pathname === item.path;
@@ -121,11 +111,11 @@ export function Header() {
         </div>
       </header>
 
-      {/* Mobile Navigation Sheet - Positioned below header */}
+      {/* Mobile Navigation Sheet */}
       <MobileNavSheet 
         isOpen={mobileMenuOpen} 
         onClose={() => setMobileMenuOpen(false)}
-        topOffset={headerHeight}
+        topOffset={64}
       />
     </>
   );

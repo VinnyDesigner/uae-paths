@@ -165,55 +165,49 @@
 }
 
 @layer utilities {
-  /* === IMMERSIVE HERO BACKGROUND — Deep blue → cyan → teal === */
+  /* === IMMERSIVE HERO BACKGROUND — Rich blue/teal gradient === */
   
-  /* Primary immersive gradient - full-width deep ocean */
+  /* Primary immersive gradient - reference image inspired */
   .bg-hero-immersive {
-    background: linear-gradient(
-      135deg,
-      hsl(220 70% 12%) 0%,
-      hsl(215 65% 15%) 15%,
-      hsl(210 60% 18%) 30%,
-      hsl(200 70% 22%) 50%,
-      hsl(190 85% 28%) 70%,
-      hsl(180 75% 32%) 85%,
-      hsl(175 70% 35%) 100%
-    );
+    background: 
+      radial-gradient(circle at 20% 20%, hsl(188 100% 50% / 0.18), transparent 45%),
+      radial-gradient(circle at 80% 30%, hsl(215 100% 50% / 0.22), transparent 50%),
+      linear-gradient(135deg, hsl(220 60% 8%) 0%, hsl(205 70% 18%) 45%, hsl(180 65% 28%) 100%);
   }
 
   /* Cyan glow center accent */
   .bg-cyan-glow-center {
     background: radial-gradient(
-      ellipse 80% 50% at 50% 40%,
-      hsl(188 100% 50% / 0.25) 0%,
-      hsl(195 100% 45% / 0.15) 30%,
-      transparent 70%
+      ellipse 70% 45% at 50% 35%,
+      hsl(188 100% 50% / 0.2) 0%,
+      hsl(195 100% 45% / 0.1) 35%,
+      transparent 65%
     );
   }
 
   /* Left indigo accent glow */
   .bg-indigo-glow-left {
     background: radial-gradient(
-      circle 600px at 5% 30%,
-      hsl(235 60% 30% / 0.4) 0%,
-      hsl(225 55% 25% / 0.2) 40%,
-      transparent 70%
+      circle 550px at 8% 25%,
+      hsl(235 60% 30% / 0.35) 0%,
+      hsl(225 55% 25% / 0.15) 45%,
+      transparent 65%
     );
   }
 
   /* Right teal accent glow */
   .bg-teal-glow-right {
     background: radial-gradient(
-      circle 500px at 95% 60%,
-      hsl(175 80% 35% / 0.3) 0%,
-      hsl(180 70% 30% / 0.15) 40%,
-      transparent 70%
+      circle 450px at 92% 55%,
+      hsl(175 80% 35% / 0.25) 0%,
+      hsl(180 70% 30% / 0.12) 45%,
+      transparent 65%
     );
   }
 
-  /* Flowing wave lines - topographic / contour-map inspired */
+  /* Flowing wave lines - subtle contour-map inspired */
   .bg-wave-flow {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1440' height='900' viewBox='0 0 1440 900'%3E%3Cg fill='none' stroke='%2300d4ff' stroke-width='0.5' opacity='0.08'%3E%3Cpath d='M-100,200 Q300,100 600,200 T1100,180 T1600,220'/%3E%3Cpath d='M-100,280 Q300,180 600,280 T1100,260 T1600,300'/%3E%3Cpath d='M-100,360 Q300,260 600,360 T1100,340 T1600,380'/%3E%3Cpath d='M-100,440 Q300,340 600,440 T1100,420 T1600,460'/%3E%3Cpath d='M-100,520 Q300,420 600,520 T1100,500 T1600,540'/%3E%3Cpath d='M-100,600 Q300,500 600,600 T1100,580 T1600,620'/%3E%3Cpath d='M-100,680 Q300,580 600,680 T1100,660 T1600,700'/%3E%3Cpath d='M-100,760 Q300,660 600,760 T1100,740 T1600,780'/%3E%3C/g%3E%3Cg fill='none' stroke='%2300ffcc' stroke-width='0.3' opacity='0.05'%3E%3Cpath d='M-100,240 Q350,150 650,240 T1150,220 T1600,260'/%3E%3Cpath d='M-100,400 Q350,310 650,400 T1150,380 T1600,420'/%3E%3Cpath d='M-100,560 Q350,470 650,560 T1150,540 T1600,580'/%3E%3Cpath d='M-100,720 Q350,630 650,720 T1150,700 T1600,740'/%3E%3C/g%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1440' height='900' viewBox='0 0 1440 900'%3E%3Cg fill='none' stroke='%2300d4ff' stroke-width='0.4' opacity='0.07'%3E%3Cpath d='M-100,200 Q300,100 600,200 T1100,180 T1600,220'/%3E%3Cpath d='M-100,320 Q300,220 600,320 T1100,300 T1600,340'/%3E%3Cpath d='M-100,440 Q300,340 600,440 T1100,420 T1600,460'/%3E%3Cpath d='M-100,560 Q300,460 600,560 T1100,540 T1600,580'/%3E%3Cpath d='M-100,680 Q300,580 600,680 T1100,660 T1600,700'/%3E%3C/g%3E%3C/svg%3E");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -222,30 +216,30 @@
   /* Animated subtle pulse glow */
   .bg-pulse-glow {
     background: radial-gradient(
-      ellipse 60% 40% at 50% 50%,
-      hsl(190 100% 50% / 0.08) 0%,
-      transparent 60%
+      ellipse 55% 35% at 50% 45%,
+      hsl(190 100% 50% / 0.06) 0%,
+      transparent 55%
     );
     animation: pulseGlow 6s ease-in-out infinite;
   }
 
   /* Ambient noise texture overlay */
   .bg-noise-overlay {
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
   }
 
   /* Bottom fade to footer */
   .bg-hero-bottom-fade {
-    background: linear-gradient(180deg, transparent 0%, hsl(215 40% 12%) 100%);
+    background: linear-gradient(180deg, transparent 0%, hsl(218 55% 10%) 100%);
   }
 
   /* Footer gradient - aligned with hero tones */
   .bg-footer-immersive {
     background: linear-gradient(
       180deg,
-      hsl(218 50% 14%) 0%,
-      hsl(220 55% 12%) 50%,
-      hsl(222 60% 10%) 100%
+      hsl(218 55% 12%) 0%,
+      hsl(220 58% 10%) 50%,
+      hsl(222 62% 8%) 100%
     );
   }
 
@@ -255,7 +249,7 @@
 
   /* Topo pattern for footer */
   .bg-topo-pattern {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220'%3E%3Cg fill='none' stroke='%2300d4ff' stroke-width='0.35' opacity='0.06'%3E%3Cpath d='M0,110 Q55,55 110,110 T220,110'/%3E%3Cpath d='M0,85 Q55,30 110,85 T220,85'/%3E%3Cpath d='M0,135 Q55,80 110,135 T220,135'/%3E%3C/g%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220'%3E%3Cg fill='none' stroke='%2300d4ff' stroke-width='0.3' opacity='0.04'%3E%3Cpath d='M0,110 Q55,55 110,110 T220,110'/%3E%3Cpath d='M0,85 Q55,30 110,85 T220,85'/%3E%3Cpath d='M0,135 Q55,80 110,135 T220,135'/%3E%3C/g%3E%3C/svg%3E");
     background-size: 220px 220px;
   }
 
@@ -310,40 +304,16 @@
 
   /* === TEXT STYLES === */
   
-  /* Gradient text - cyan → blue → indigo */
+  /* Gradient text - bright cyan → blue → purple (per spec) */
   .text-gradient-blue {
     @apply bg-clip-text text-transparent;
-    background: linear-gradient(135deg, hsl(188 100% 50%) 0%, hsl(200 100% 55%) 50%, hsl(220 90% 65%) 100%);
+    background: linear-gradient(90deg, #00D4FF 0%, #2E6BFF 50%, #7A5CFF 100%);
+    text-shadow: 0 8px 30px rgba(0, 212, 255, 0.25);
   }
 
   /* Bright cyan glow text */
   .text-glow-cyan {
     text-shadow: 0 0 30px hsl(188 100% 55% / 0.4), 0 0 60px hsl(188 100% 55% / 0.2);
-  }
-
-  /* Subtle glowing underline */
-  .glow-underline {
-    position: relative;
-    display: inline-block;
-  }
-  
-  .glow-underline::after {
-    content: '';
-    position: absolute;
-    left: 0%;
-    right: 0%;
-    bottom: -8px;
-    height: 3px;
-    background: linear-gradient(90deg, 
-      hsl(188 100% 55% / 0) 0%, 
-      hsl(188 100% 55% / 0.7) 20%, 
-      hsl(195 100% 60% / 0.9) 50%, 
-      hsl(188 100% 55% / 0.7) 80%, 
-      hsl(188 100% 55% / 0) 100%
-    );
-    border-radius: 2px;
-    filter: blur(1px);
-    animation: glowPulse 3s ease-in-out infinite;
   }
 
   .text-gradient-hero {
@@ -363,37 +333,89 @@
   }
 
   .glass-strong {
-    @apply bg-card/95 backdrop-blur-xl border border-border/60;
+    background: rgba(6, 12, 26, 0.55);
+    backdrop-filter: blur(14px) saturate(140%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   }
 
-  /* Premium glassmorphism search bar - immersive dark theme */
+  /* LIQUID GLASS SEARCH BAR - Primary CTA per spec */
+  .glass-search-liquid {
+    background: linear-gradient(135deg, rgba(255,255,255,0.14), rgba(255,255,255,0.06));
+    backdrop-filter: blur(18px) saturate(140%);
+    border: 1px solid rgba(255,255,255,0.18);
+    box-shadow: 
+      0 18px 60px rgba(0,0,0,0.35),
+      inset 0 1px 0 rgba(255,255,255,0.18);
+  }
+
+  .glass-search-liquid:hover {
+    border-color: rgba(255, 255, 255, 0.25);
+    box-shadow: 
+      0 22px 70px rgba(0,0,0,0.4),
+      inset 0 1px 0 rgba(255,255,255,0.22);
+  }
+
+  .glass-search-liquid:focus-within {
+    border-color: rgba(0, 212, 255, 0.4);
+    box-shadow: 
+      0 18px 60px rgba(0,0,0,0.35),
+      0 0 0 3px rgba(0, 212, 255, 0.15),
+      inset 0 1px 0 rgba(255,255,255,0.2);
+  }
+
+  /* Glass dropdown panel */
+  .glass-dropdown {
+    background: rgba(10, 18, 35, 0.55);
+    backdrop-filter: blur(18px) saturate(140%);
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 20px 70px rgba(0,0,0,0.45);
+  }
+
+  /* Glass panel tray for category cards */
+  .glass-tray {
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.10);
+    box-shadow: 0 24px 80px rgba(0,0,0,0.35);
+  }
+
+  /* Glass category cards with tint */
+  .glass-card-healthcare {
+    background: rgba(0, 40, 90, 0.25);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.10);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .glass-card-healthcare:hover {
+    border-color: rgba(0, 150, 255, 0.3);
+    box-shadow: 0 16px 50px rgba(0, 100, 200, 0.2);
+    transform: translateY(-4px);
+  }
+
+  .glass-card-education {
+    background: rgba(0, 110, 140, 0.22);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.10);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .glass-card-education:hover {
+    border-color: rgba(0, 212, 255, 0.3);
+    box-shadow: 0 16px 50px rgba(0, 180, 220, 0.2);
+    transform: translateY(-4px);
+  }
+
+  /* Legacy glass styles */
   .glass-search-dark {
-    background: hsl(210 40% 15% / 0.7);
-    backdrop-filter: blur(40px) saturate(180%);
-    border: 1px solid hsl(190 100% 50% / 0.2);
+    background: linear-gradient(135deg, rgba(255,255,255,0.14), rgba(255,255,255,0.06));
+    backdrop-filter: blur(18px) saturate(140%);
+    border: 1px solid rgba(255,255,255,0.18);
     box-shadow: 
-      0 0 60px -10px hsl(190 100% 50% / 0.15),
-      0 25px 80px -20px hsl(220 80% 10% / 0.5),
-      inset 0 1px 0 0 hsl(190 100% 70% / 0.1),
-      inset 0 -1px 0 0 hsl(220 50% 20% / 0.3);
-  }
-
-  .glass-search-dark:hover {
-    border-color: hsl(190 100% 55% / 0.3);
-    box-shadow: 
-      0 0 80px -10px hsl(190 100% 50% / 0.2),
-      0 30px 90px -20px hsl(220 80% 10% / 0.6),
-      inset 0 1px 0 0 hsl(190 100% 70% / 0.15),
-      inset 0 -1px 0 0 hsl(220 50% 20% / 0.3);
-  }
-
-  .glass-search-dark:focus-within {
-    border-color: hsl(188 100% 55% / 0.5);
-    box-shadow: 
-      0 0 100px -10px hsl(188 100% 55% / 0.25),
-      0 30px 90px -20px hsl(220 80% 10% / 0.6),
-      0 0 0 4px hsl(188 100% 55% / 0.1),
-      inset 0 1px 0 0 hsl(188 100% 70% / 0.2);
+      0 18px 60px rgba(0,0,0,0.35),
+      inset 0 1px 0 rgba(255,255,255,0.18);
   }
 
   .glass-search {
@@ -402,58 +424,29 @@
     border: 2px solid hsl(200 50% 92% / 0.9);
     box-shadow: 
       0 20px 60px -15px hsl(200 70% 35% / 0.18),
-      0 32px 100px -25px hsl(210 70% 30% / 0.12),
-      0 0 0 1px hsl(0 0% 100% / 0.6),
-      inset 0 2px 0 0 hsl(0 0% 100% / 0.9),
-      inset 0 -1px 0 0 hsl(210 25% 88% / 0.4);
-  }
-
-  .glass-search:hover {
-    border-color: hsl(200 60% 88% / 1);
-    box-shadow: 
-      0 24px 70px -15px hsl(200 70% 35% / 0.22),
-      0 40px 110px -25px hsl(210 70% 30% / 0.14),
-      0 0 0 1px hsl(0 0% 100% / 0.7),
-      inset 0 2px 0 0 hsl(0 0% 100% / 0.9),
-      inset 0 -1px 0 0 hsl(210 25% 88% / 0.4);
-  }
-
-  .glass-search:focus-within {
-    border-color: hsl(200 100% 55% / 0.5);
-    box-shadow: 
-      0 24px 70px -15px hsl(200 70% 35% / 0.24),
-      0 40px 110px -25px hsl(210 70% 30% / 0.16),
-      0 0 0 4px hsl(200 100% 55% / 0.1),
-      inset 0 2px 0 0 hsl(0 0% 100% / 0.9);
+      0 32px 100px -25px hsl(210 70% 30% / 0.12);
   }
 
   /* Floating glass panel for sections */
   .glass-panel-dark {
-    background: hsl(215 45% 15% / 0.6);
-    backdrop-filter: blur(30px);
-    border: 1px solid hsl(190 80% 50% / 0.15);
-    box-shadow: 
-      0 30px 80px -20px hsl(220 80% 8% / 0.5),
-      inset 0 1px 0 0 hsl(190 100% 70% / 0.08);
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.10);
+    box-shadow: 0 24px 80px rgba(0,0,0,0.35);
   }
 
   /* Glass card for category items - dark immersive */
   .glass-card-dark {
-    background: hsl(215 40% 18% / 0.7);
-    backdrop-filter: blur(24px);
-    border: 1px solid hsl(190 70% 50% / 0.12);
-    box-shadow: 
-      0 15px 50px -15px hsl(220 70% 8% / 0.4),
-      inset 0 1px 0 0 hsl(190 100% 70% / 0.06);
+    background: rgba(0, 40, 90, 0.25);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.10);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.25);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .glass-card-dark:hover {
-    border-color: hsl(188 100% 55% / 0.25);
-    box-shadow: 
-      0 20px 60px -15px hsl(188 100% 50% / 0.15),
-      0 25px 70px -20px hsl(220 70% 8% / 0.5),
-      inset 0 1px 0 0 hsl(188 100% 70% / 0.1);
+    border-color: rgba(0, 212, 255, 0.25);
+    box-shadow: 0 16px 50px rgba(0, 150, 200, 0.15);
     transform: translateY(-4px);
   }
 

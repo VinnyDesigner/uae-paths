@@ -4,9 +4,10 @@ import { cn } from '@/lib/utils';
 
 interface FooterProps {
   variant?: 'light' | 'dark';
+  compact?: boolean;
 }
 
-export function Footer({ variant = 'light' }: FooterProps) {
+export function Footer({ variant = 'light', compact = false }: FooterProps) {
   const isDark = variant === 'dark';
 
   return (
@@ -19,43 +20,49 @@ export function Footer({ variant = 'light' }: FooterProps) {
       {/* Subtle pattern */}
       <div className={cn(
         "absolute inset-0 bg-topo-pattern pointer-events-none",
-        isDark ? "opacity-[0.04]" : "opacity-[0.025]"
+        isDark ? "opacity-[0.03]" : "opacity-[0.025]"
       )} />
       
       {/* Top glow separator */}
       <div className={cn(
         "absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent to-transparent",
-        isDark ? "via-cyan-400/30" : "via-[hsl(200_100%_55%/0.25)]"
+        isDark ? "via-cyan-400/25" : "via-[hsl(200_100%_55%/0.25)]"
       )} />
 
-      <div className="container mx-auto px-4 py-14 md:py-16 relative">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8">
+      <div className={cn(
+        "container mx-auto px-4 relative",
+        compact ? "py-5 md:py-6" : "py-10 md:py-12"
+      )}>
+        <div className={cn(
+          "grid grid-cols-1 md:grid-cols-12",
+          compact ? "gap-6 md:gap-6" : "gap-8 md:gap-8"
+        )}>
           
           {/* Brand Column */}
           <div className="md:col-span-5 lg:col-span-5">
-            <Link to="/" className="inline-flex items-center gap-3 mb-6 group">
+            <Link to="/" className="inline-flex items-center gap-3 mb-3 group">
               <div className={cn(
-                "w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-105",
+                "w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300 group-hover:scale-105",
                 isDark 
-                  ? "bg-gradient-to-br from-cyan-500 to-cyan-700 shadow-[0_0_30px_-5px_hsl(188_100%_50%/0.3)]"
+                  ? "bg-gradient-to-br from-cyan-500 to-cyan-700 shadow-[0_0_25px_-5px_hsl(188_100%_50%/0.3)]"
                   : "gradient-primary shadow-soft group-hover:shadow-elevated"
               )}>
-                <MapPin className="w-5.5 h-5.5 text-white" />
+                <MapPin className="w-5 h-5 text-white" />
               </div>
               <div className="flex flex-col">
                 <span className={cn(
-                  "font-heading font-bold text-lg",
+                  "font-heading font-bold text-base",
                   isDark ? "text-white" : "text-foreground"
                 )}>SDI Smart Map</span>
                 <span className={cn(
-                  "text-xs font-medium tracking-wide",
+                  "text-[10px] font-medium tracking-wide",
                   isDark ? "text-white/40" : "text-muted-foreground/60"
                 )}>Abu Dhabi Spatial Data Infrastructure</span>
               </div>
             </Link>
             <p className={cn(
-              "text-sm max-w-xs leading-relaxed",
-              isDark ? "text-white/50" : "text-muted-foreground/65"
+              "text-xs max-w-[280px] leading-relaxed",
+              isDark ? "text-white/45" : "text-muted-foreground/65"
             )}>
               Discover healthcare and education facilities across the UAE with our intelligent, interactive map platform.
             </p>
@@ -64,19 +71,19 @@ export function Footer({ variant = 'light' }: FooterProps) {
           {/* Quick Links Column */}
           <div className="md:col-span-3 lg:col-span-3">
             <h4 className={cn(
-              "font-heading font-bold text-sm mb-6 uppercase tracking-wider",
-              isDark ? "text-white/80" : "text-foreground"
+              "font-heading font-bold text-xs mb-3 uppercase tracking-wider",
+              isDark ? "text-white/70" : "text-foreground"
             )}>Quick Links</h4>
-            <ul className="space-y-4">
+            <ul className="space-y-2">
               <li>
                 <Link to="/map" className={cn(
-                  "text-sm transition-colors inline-flex items-center gap-3 group",
+                  "text-xs transition-colors inline-flex items-center gap-2 group",
                   isDark 
-                    ? "text-white/50 hover:text-cyan-400"
+                    ? "text-white/45 hover:text-cyan-400"
                     : "text-muted-foreground/70 hover:text-primary"
                 )}>
                   <span className={cn(
-                    "w-1.5 h-1.5 rounded-full transition-colors",
+                    "w-1 h-1 rounded-full transition-colors",
                     isDark 
                       ? "bg-cyan-400/30 group-hover:bg-cyan-400"
                       : "bg-primary/25 group-hover:bg-primary"
@@ -86,13 +93,13 @@ export function Footer({ variant = 'light' }: FooterProps) {
               </li>
               <li>
                 <Link to="/about" className={cn(
-                  "text-sm transition-colors inline-flex items-center gap-3 group",
+                  "text-xs transition-colors inline-flex items-center gap-2 group",
                   isDark 
-                    ? "text-white/50 hover:text-cyan-400"
+                    ? "text-white/45 hover:text-cyan-400"
                     : "text-muted-foreground/70 hover:text-primary"
                 )}>
                   <span className={cn(
-                    "w-1.5 h-1.5 rounded-full transition-colors",
+                    "w-1 h-1 rounded-full transition-colors",
                     isDark 
                       ? "bg-cyan-400/30 group-hover:bg-cyan-400"
                       : "bg-primary/25 group-hover:bg-primary"
@@ -106,20 +113,20 @@ export function Footer({ variant = 'light' }: FooterProps) {
                   target="_blank" 
                   rel="noopener noreferrer"
                   className={cn(
-                    "text-sm transition-colors inline-flex items-center gap-3 group",
+                    "text-xs transition-colors inline-flex items-center gap-2 group",
                     isDark 
-                      ? "text-white/50 hover:text-cyan-400"
+                      ? "text-white/45 hover:text-cyan-400"
                       : "text-muted-foreground/70 hover:text-primary"
                   )}
                 >
                   <span className={cn(
-                    "w-1.5 h-1.5 rounded-full transition-colors",
+                    "w-1 h-1 rounded-full transition-colors",
                     isDark 
                       ? "bg-cyan-400/30 group-hover:bg-cyan-400"
                       : "bg-primary/25 group-hover:bg-primary"
                   )} />
                   SDI Portal
-                  <ExternalLink className="w-3 h-3 opacity-50 group-hover:opacity-100 transition-opacity" />
+                  <ExternalLink className="w-2.5 h-2.5 opacity-50 group-hover:opacity-100 transition-opacity" />
                 </a>
               </li>
             </ul>
@@ -128,28 +135,28 @@ export function Footer({ variant = 'light' }: FooterProps) {
           {/* Data Themes Column */}
           <div className="md:col-span-4 lg:col-span-4">
             <h4 className={cn(
-              "font-heading font-bold text-sm mb-6 uppercase tracking-wider",
-              isDark ? "text-white/80" : "text-foreground"
+              "font-heading font-bold text-xs mb-3 uppercase tracking-wider",
+              isDark ? "text-white/70" : "text-foreground"
             )}>Data Themes</h4>
-            <ul className="space-y-4">
+            <ul className="space-y-2">
               <li>
                 <Link 
                   to="/map" 
                   className={cn(
-                    "text-sm transition-colors inline-flex items-center gap-3 group",
+                    "text-xs transition-colors inline-flex items-center gap-2 group",
                     isDark 
-                      ? "text-white/50 hover:text-blue-400"
+                      ? "text-white/45 hover:text-blue-400"
                       : "text-muted-foreground/70 hover:text-healthcare"
                   )}
                 >
                   <span className={cn(
-                    "w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 shadow-soft",
+                    "w-6 h-6 rounded-md flex items-center justify-center transition-all duration-300",
                     isDark 
                       ? "bg-blue-500/15 group-hover:bg-blue-500/25"
                       : "bg-healthcare/8 group-hover:bg-healthcare/15"
                   )}>
                     <Heart className={cn(
-                      "w-4 h-4",
+                      "w-3 h-3",
                       isDark ? "text-blue-400" : "text-healthcare"
                     )} />
                   </span>
@@ -160,20 +167,20 @@ export function Footer({ variant = 'light' }: FooterProps) {
                 <Link 
                   to="/map" 
                   className={cn(
-                    "text-sm transition-colors inline-flex items-center gap-3 group",
+                    "text-xs transition-colors inline-flex items-center gap-2 group",
                     isDark 
-                      ? "text-white/50 hover:text-cyan-400"
+                      ? "text-white/45 hover:text-cyan-400"
                       : "text-muted-foreground/70 hover:text-education"
                   )}
                 >
                   <span className={cn(
-                    "w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 shadow-soft",
+                    "w-6 h-6 rounded-md flex items-center justify-center transition-all duration-300",
                     isDark 
                       ? "bg-cyan-500/15 group-hover:bg-cyan-500/25"
                       : "bg-education/8 group-hover:bg-education/15"
                   )}>
                     <GraduationCap className={cn(
-                      "w-4 h-4",
+                      "w-3 h-3",
                       isDark ? "text-cyan-400" : "text-education"
                     )} />
                   </span>
@@ -184,23 +191,24 @@ export function Footer({ variant = 'light' }: FooterProps) {
           </div>
         </div>
 
-        {/* Bottom bar */}
+        {/* Bottom bar - Compact */}
         <div className={cn(
-          "mt-14 pt-6 border-t flex flex-col md:flex-row justify-between items-center gap-4",
-          isDark ? "border-white/10" : "border-border/25"
+          "border-t flex flex-col md:flex-row justify-between items-center gap-2",
+          isDark ? "border-white/8" : "border-border/25",
+          compact ? "mt-5 pt-4" : "mt-8 pt-4"
         )}>
           <p className={cn(
-            "text-xs font-medium",
-            isDark ? "text-white/40" : "text-muted-foreground/55"
+            "text-[10px] font-medium",
+            isDark ? "text-white/35" : "text-muted-foreground/55"
           )}>
             © {new Date().getFullYear()} SDI Smart Map • Abu Dhabi Spatial Data Infrastructure
           </p>
           <p className={cn(
-            "text-xs flex items-center gap-2",
-            isDark ? "text-white/30" : "text-muted-foreground/45"
+            "text-[10px] flex items-center gap-1.5",
+            isDark ? "text-white/25" : "text-muted-foreground/45"
           )}>
             <span className={cn(
-              "w-1.5 h-1.5 rounded-full animate-pulse",
+              "w-1 h-1 rounded-full animate-pulse",
               isDark ? "bg-cyan-400/50" : "bg-success/50"
             )} />
             UAE Open Data Initiative

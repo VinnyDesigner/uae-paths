@@ -76,46 +76,47 @@ export function LayerFlyout({
   const [flyoutPosition, setFlyoutPosition] = useState({ top: 0, height: 0, left: 0, width: 340 });
   const [togglingLayerId, setTogglingLayerId] = useState<number | null>(null);
 
-  // Calculate flyout position: starts at 10-15% from sidebar top, ends exactly at sidebar bottom
+  // Calculate flyout position: starts at 10% from sidebar top, ends EXACTLY at sidebar bottom
   const calculatePosition = useCallback(() => {
     const gap = 16; // gap between sidebar and flyout
     const flyoutMaxWidth = 420;
-    const flyoutMinWidth = 340;
-    const minFlyoutHeight = 280;
+    const flyoutMinWidth = 360;
+    const minFlyoutHeight = 200;
+    const topOffsetRatio = 0.10; // 10% from sidebar top
 
-    // Sidebar bounds (viewport space)
-    const sidebarTop = sidebarRect?.top ?? 80;
-    const sidebarBottom = sidebarRect?.bottom ?? (window.innerHeight - 16);
-    const sidebarRight = sidebarRect?.right ?? 336;
-    const sidebarHeight = sidebarBottom - sidebarTop;
+    // Get sidebar bounds (single source of truth)
+    const sideTop = sidebarRect?.top ?? 80;
+    const sideBottom = sidebarRect?.bottom ?? (window.innerHeight - 16);
+    const sideRight = sidebarRect?.right ?? 336;
+    const sideHeight = sideBottom - sideTop;
 
-    // Flyout starts at 10% from the top of the sidebar (tighter alignment)
-    let flyoutTop = sidebarTop + (sidebarHeight * 0.10);
+    // STRICT: Flyout bottom = sideBottom (no exceptions)
+    // Calculate flyout top from 10% offset
+    let flyoutTop = sideTop + (sideHeight * topOffsetRatio);
     
-    // Flyout ends exactly at sidebar bottom
-    let flyoutHeight = sidebarBottom - flyoutTop;
+    // Height is computed to end exactly at sidebar bottom
+    let flyoutHeight = sideBottom - flyoutTop;
     
-    // Ensure minimum height is available
+    // If minimum height not available, adjust top but NEVER extend past sideBottom
     if (flyoutHeight < minFlyoutHeight) {
-      flyoutTop = Math.max(sidebarTop, sidebarBottom - minFlyoutHeight);
-      flyoutHeight = sidebarBottom - flyoutTop;
+      flyoutTop = Math.max(sideTop, sideBottom - minFlyoutHeight);
+      flyoutHeight = sideBottom - flyoutTop;
     }
 
-    // Calculate left position with gap
-    const unclampedLeft = sidebarRight + gap;
+    // Horizontal positioning
+    const flyoutLeft = sideRight + gap;
     
-    // Calculate width: min(420px, 100vw - flyoutLeft - 24px)
-    const availableWidth = window.innerWidth - unclampedLeft - 24;
-    const flyoutWidth = Math.min(flyoutMaxWidth, Math.max(flyoutMinWidth, availableWidth));
+    // Width: clamp(360px, 420px, 100vw - flyoutLeft - 24px)
+    const availableWidth = window.innerWidth - flyoutLeft - 24;
+    const flyoutWidth = Math.max(flyoutMinWidth, Math.min(flyoutMaxWidth, availableWidth));
     
-    // Ensure flyout stays on screen
-    const maxLeft = Math.max(16, window.innerWidth - flyoutWidth - 16);
-    const left = Math.min(unclampedLeft, maxLeft);
+    // Ensure flyout doesn't go off-screen horizontally
+    const finalLeft = Math.min(flyoutLeft, Math.max(16, window.innerWidth - flyoutWidth - 16));
 
     return {
       top: flyoutTop,
       height: flyoutHeight,
-      left,
+      left: finalLeft,
       width: flyoutWidth,
     };
   }, [sidebarRect]);

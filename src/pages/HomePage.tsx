@@ -3,6 +3,7 @@ import {
   Heart, 
   GraduationCap, 
   ArrowRight,
+  Sparkles,
 } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
@@ -25,154 +26,176 @@ const categories = [
   },
 ];
 
+const aiSuggestionChips = [
+  { text: 'Nearest hospital', icon: '🏥' },
+  { text: 'Emergency hospital', icon: '🚑' },
+  { text: 'Schools near me', icon: '🎓' },
+];
+
 export default function HomePage() {
   const handleSearch = (query: string) => {
     window.location.href = `/map?search=${encodeURIComponent(query)}`;
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col">
       <Header />
 
       <main className="flex-1">
-        {/* Unified Hero Section - Clean Ambient Design (no gradient blocks over text) */}
+        {/* === IMMERSIVE HERO SECTION === */}
         <section className="relative min-h-[calc(100vh-var(--header-height))] flex flex-col overflow-hidden">
           
-          {/* === AMBIENT BACKGROUND LAYERS (z-index -10, never overlaps content) === */}
-          {/* Base gradient wash - full-width ambient */}
-          <div className="absolute inset-0 bg-hero-ambient" style={{ zIndex: -10 }} />
+          {/* === LAYERED IMMERSIVE BACKGROUND === */}
+          {/* Base gradient - deep blue → cyan → teal */}
+          <div className="absolute inset-0 bg-hero-immersive" />
           
-          {/* Soft contour lines - GIS/topo inspired */}
-          <div className="absolute inset-0 bg-wave-contours" style={{ zIndex: -9 }} />
+          {/* Indigo glow - left side */}
+          <div className="absolute inset-0 bg-indigo-glow-left" />
           
-          {/* Subtle grid pattern - map tiles hint */}
-          <div className="absolute inset-0 bg-grid-subtle" style={{ zIndex: -8 }} />
+          {/* Teal glow - right side */}
+          <div className="absolute inset-0 bg-teal-glow-right" />
           
-          {/* Soft radial glow behind heading - ambient light only */}
-          <div className="absolute inset-0 bg-heading-glow" style={{ zIndex: -7 }} />
+          {/* Cyan glow - center (behind search) */}
+          <div className="absolute inset-0 bg-cyan-glow-center" />
           
-          {/* Concentrated search area glow */}
-          <div className="absolute inset-0 bg-search-ambient" style={{ zIndex: -6 }} />
+          {/* Flowing wave lines - topographic pattern */}
+          <div className="absolute inset-0 bg-wave-flow" />
           
-          {/* Decorative ambient glows (subtle) */}
-          <div className="absolute inset-0 bg-accent-glow-tl" style={{ zIndex: -5 }} />
-          <div className="absolute inset-0 bg-accent-glow-br" style={{ zIndex: -5 }} />
+          {/* Subtle pulse glow animation */}
+          <div className="absolute inset-0 bg-pulse-glow" />
+          
+          {/* Noise texture overlay */}
+          <div className="absolute inset-0 bg-noise-overlay pointer-events-none" />
 
-          {/* Bottom fade transition to footer */}
-          <div className="absolute inset-x-0 bottom-0 h-24 bg-hero-bottom-fade pointer-events-none" style={{ zIndex: -4 }} />
+          {/* Bottom fade transition */}
+          <div className="absolute inset-x-0 bottom-0 h-32 bg-hero-bottom-fade pointer-events-none" />
 
-          {/* === HERO CONTENT (z-index 1+, always above backgrounds) === */}
-          <div className="container mx-auto px-4 relative z-10 flex-1 flex flex-col justify-center py-6 md:py-8 lg:py-10">
-            <div className="max-w-[920px] mx-auto w-full">
+          {/* === HERO CONTENT === */}
+          <div className="container mx-auto px-4 relative z-10 flex-1 flex flex-col justify-center py-8 md:py-12">
+            <div className="max-w-[960px] mx-auto w-full">
               
-              {/* Hero Heading - Strong hierarchy, fully readable */}
-              <div className="text-center mb-4 md:mb-5 animate-fade-up">
-                <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.1] tracking-tight">
-                  <span className="text-[hsl(215_30%_18%)]">Smart Map</span>
+              {/* Main Heading */}
+              <div className="text-center mb-5 md:mb-6 animate-fade-up">
+                <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.08] tracking-tight">
+                  <span className="text-white drop-shadow-lg">Smart Map</span>
                   <br className="sm:hidden" />
-                  <span className="text-gradient-blue glow-underline ml-1 sm:ml-2"> for Daily Life</span>
+                  <span className="text-gradient-blue glow-underline ml-1 sm:ml-3"> for Daily Life</span>
                 </h1>
               </div>
 
-              {/* Subheading - Calm, readable, neutral gray-blue */}
-              <p className="text-center text-sm md:text-base lg:text-lg text-[hsl(210_15%_45%)] max-w-lg mx-auto mb-7 md:mb-9 animate-fade-up delay-100 leading-relaxed font-medium">
+              {/* Subheading */}
+              <p className="text-center text-sm md:text-base lg:text-lg text-white/60 max-w-md mx-auto mb-8 md:mb-10 animate-fade-up delay-100 leading-relaxed font-medium">
                 Find healthcare and education services across the UAE
               </p>
 
-              {/* === DOMINANT SEARCH BAR (Primary Visual Focus) === */}
-              <div className="animate-fade-up delay-200 mb-7 md:mb-9" style={{ overflow: 'visible' }}>
-                <div className="max-w-[760px] mx-auto w-[92%] md:w-[65%]">
+              {/* === PRIMARY SEARCH BAR === */}
+              <div className="animate-fade-up delay-200 mb-6 md:mb-8">
+                <div className="max-w-[780px] mx-auto w-[95%] md:w-[70%]">
                   <div 
                     className={cn(
-                      "relative glass-search rounded-2xl md:rounded-[26px]",
+                      "relative glass-search-dark rounded-2xl md:rounded-3xl",
                       "transition-all duration-300 ease-out",
-                      "p-1.5 md:p-2.5"
+                      "p-1.5 md:p-2"
                     )}
-                    style={{ overflow: 'visible' }}
                   >
                     <SmartSearch 
                       onSearch={handleSearch} 
                       size="large"
                       placeholder="Search healthcare, schools, or wellness centers…"
+                      variant="dark"
                     />
                   </div>
                 </div>
               </div>
 
-              {/* === EXPLORE BY CATEGORY - INTEGRATED INTO HERO === */}
-              <div className="animate-fade-up delay-300">
-                {/* Section Header - smaller than main heading */}
-                <div className="text-center mb-4 md:mb-5">
-                  <h2 className="font-heading text-sm md:text-base lg:text-lg font-semibold text-[hsl(215_20%_35%)]">
-                    Explore by Category
-                  </h2>
-                  {/* Subtle glowing divider line */}
-                  <div className="flex justify-center mt-2">
-                    <div className="h-[2px] w-16 md:w-20 rounded-full bg-gradient-to-r from-transparent via-[hsl(200_100%_55%/0.35)] to-transparent" />
+              {/* AI Suggestion Chips */}
+              <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-10 md:mb-14 animate-fade-up delay-300">
+                {aiSuggestionChips.map((chip) => (
+                  <button
+                    key={chip.text}
+                    onClick={() => handleSearch(chip.text)}
+                    className={cn(
+                      "flex items-center gap-2 px-3.5 py-2 rounded-full",
+                      "bg-white/8 backdrop-blur-md border border-white/10",
+                      "text-white/70 text-xs md:text-sm font-medium",
+                      "hover:bg-white/12 hover:border-cyan-400/30 hover:text-white",
+                      "transition-all duration-200"
+                    )}
+                  >
+                    <span>{chip.icon}</span>
+                    <span>{chip.text}</span>
+                  </button>
+                ))}
+              </div>
+
+              {/* === EXPLORE BY CATEGORY - MERGED INTO HERO === */}
+              <div className="animate-fade-up delay-400">
+                {/* Section Header */}
+                <div className="text-center mb-5 md:mb-6">
+                  <div className="inline-flex items-center gap-2 mb-2">
+                    <Sparkles className="w-4 h-4 text-cyan-400/70" />
+                    <h2 className="font-heading text-sm md:text-base font-semibold text-white/80 tracking-wide">
+                      Explore by Category
+                    </h2>
+                    <Sparkles className="w-4 h-4 text-cyan-400/70" />
+                  </div>
+                  {/* Animated glowing divider */}
+                  <div className="flex justify-center">
+                    <div className="h-[2px] w-20 md:w-24 rounded-full bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent animate-glow-pulse" />
                   </div>
                 </div>
 
-                {/* Category Cards Container - Soft floating glass panel */}
-                <div className="max-w-[720px] mx-auto glass-section rounded-2xl md:rounded-3xl p-3.5 md:p-4 lg:p-5">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+                {/* Category Cards Container */}
+                <div className="max-w-[780px] mx-auto glass-panel-dark rounded-2xl md:rounded-3xl p-4 md:p-5 lg:p-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
                     {categories.map((category) => {
                       const isHealthcare = category.colorClass === 'healthcare';
                       return (
                         <div
                           key={category.title}
                           className={cn(
-                            "relative rounded-xl md:rounded-2xl p-3.5 md:p-4 transition-all duration-300 border overflow-hidden group cursor-pointer",
-                            "glass-card hover:-translate-y-0.5",
-                            isHealthcare 
-                              ? "gradient-healthcare-card border-[hsl(208_60%_88%/0.5)] hover:border-[hsl(208_60%_80%/0.6)]" 
-                              : "gradient-education-card border-[hsl(200_70%_88%/0.5)] hover:border-[hsl(200_70%_80%/0.6)]"
+                            "relative rounded-xl md:rounded-2xl p-4 md:p-5 transition-all duration-300 overflow-hidden group cursor-pointer",
+                            "glass-card-dark"
                           )}
                         >
-                          {/* Hover glow overlay */}
+                          {/* Gradient accent overlay on hover */}
                           <div className={cn(
-                            "absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-xl md:rounded-2xl",
+                            "absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-xl md:rounded-2xl",
                             isHealthcare 
-                              ? "bg-gradient-to-br from-[hsl(208_70%_50%/0.06)] via-transparent to-transparent"
-                              : "bg-gradient-to-br from-[hsl(200_100%_55%/0.06)] via-transparent to-transparent"
+                              ? "bg-gradient-to-br from-blue-500/10 via-transparent to-transparent"
+                              : "bg-gradient-to-br from-cyan-400/10 via-transparent to-transparent"
                           )} />
 
-                          {/* Icon + Title row */}
-                          <div className="flex items-center gap-2.5 mb-2.5 relative">
-                            {/* Elevated icon container with glow */}
+                          {/* Icon + Title */}
+                          <div className="flex items-center gap-3 mb-3 relative">
+                            {/* Glowing icon container */}
                             <div
                               className={cn(
-                                "w-10 h-10 md:w-11 md:h-11 rounded-lg flex items-center justify-center flex-shrink-0",
-                                "shadow-soft ring-1 ring-white/70",
+                                "w-11 h-11 md:w-12 md:h-12 rounded-xl flex items-center justify-center flex-shrink-0",
                                 "transition-all duration-300 group-hover:scale-105",
                                 isHealthcare 
-                                  ? "gradient-healthcare group-hover:shadow-[0_4px_18px_-4px_hsl(208_88%_25%/0.3)]" 
-                                  : "gradient-education group-hover:shadow-[0_4px_18px_-4px_hsl(200_100%_50%/0.3)]"
+                                  ? "bg-gradient-to-br from-blue-600 to-blue-800 shadow-[0_0_25px_-5px_hsl(220_80%_50%/0.4)]" 
+                                  : "bg-gradient-to-br from-cyan-500 to-cyan-700 shadow-[0_0_25px_-5px_hsl(188_100%_50%/0.4)]"
                               )}
                             >
                               <category.icon
-                                className={cn(
-                                  "w-4.5 h-4.5 md:w-5 md:h-5 drop-shadow-sm",
-                                  isHealthcare ? "text-healthcare-foreground" : "text-education-foreground"
-                                )}
+                                className="w-5 h-5 md:w-5.5 md:h-5.5 text-white drop-shadow-md"
                               />
                             </div>
-                            <h3 className="font-heading text-sm md:text-base font-bold text-[hsl(215_25%_20%)] leading-tight">
+                            <h3 className="font-heading text-base md:text-lg font-bold text-white leading-tight">
                               {category.title}
                             </h3>
                           </div>
 
-                          {/* Chips - refined pills with soft borders */}
-                          <div className="flex flex-wrap gap-1.5 mb-3 relative">
+                          {/* Pills / Chips */}
+                          <div className="flex flex-wrap gap-1.5 md:gap-2 mb-4 relative">
                             {category.chips.map((chip) => (
                               <span
                                 key={chip}
                                 className={cn(
-                                  "px-2 py-0.5 rounded-full text-[10px] md:text-[11px] font-medium",
-                                  "bg-white/95 backdrop-blur-sm",
-                                  "border shadow-sm transition-all duration-200",
-                                  isHealthcare 
-                                    ? "border-[hsl(208_50%_85%/0.7)] text-[hsl(208_70%_30%)] hover:border-[hsl(208_60%_75%)] hover:bg-[hsl(208_50%_97%)]" 
-                                    : "border-[hsl(200_60%_85%/0.7)] text-[hsl(200_80%_35%)] hover:border-[hsl(200_70%_75%)] hover:bg-[hsl(200_60%_97%)]"
+                                  "px-2.5 py-1 rounded-full text-[10px] md:text-[11px] font-medium",
+                                  "bg-white/8 backdrop-blur-sm border border-white/10",
+                                  "text-white/70 hover:bg-white/12 hover:text-white transition-all duration-200"
                                 )}
                               >
                                 {chip}
@@ -180,22 +203,21 @@ export default function HomePage() {
                             ))}
                           </div>
 
-                          {/* CTA Button - Gradient styling with arrow animation */}
+                          {/* CTA Button */}
                           <Button
-                            variant={isHealthcare ? "healthcare" : "education"}
                             size="sm"
                             asChild
                             className={cn(
-                              "w-full h-9 transition-all duration-300 group/btn relative",
-                              "shadow-soft font-semibold text-xs md:text-sm rounded-lg",
+                              "w-full h-10 transition-all duration-300 group/btn relative overflow-hidden",
+                              "font-semibold text-xs md:text-sm rounded-xl border-0",
                               isHealthcare 
-                                ? "hover:shadow-[0_5px_20px_-4px_hsl(208_88%_25%/0.3)]" 
-                                : "hover:shadow-[0_5px_20px_-4px_hsl(200_100%_50%/0.3)]"
+                                ? "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 shadow-[0_8px_30px_-8px_hsl(220_80%_50%/0.4)]" 
+                                : "bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-400 hover:to-cyan-500 shadow-[0_8px_30px_-8px_hsl(188_100%_50%/0.4)]"
                             )}
                           >
-                            <Link to="/map">
-                              <span>Explore Map</span>
-                              <ArrowRight className="w-3.5 h-3.5 ml-1 transition-transform duration-300 group-hover/btn:translate-x-0.5" />
+                            <Link to="/map" className="flex items-center justify-center gap-2">
+                              <span className="text-white">Explore Map</span>
+                              <ArrowRight className="w-4 h-4 text-white transition-transform duration-300 group-hover/btn:translate-x-0.5" />
                             </Link>
                           </Button>
                         </div>
@@ -209,7 +231,7 @@ export default function HomePage() {
         </section>
       </main>
 
-      <Footer />
+      <Footer variant="dark" />
     </div>
   );
 }

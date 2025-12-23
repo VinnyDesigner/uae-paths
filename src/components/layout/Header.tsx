@@ -19,7 +19,7 @@ export function Header() {
       {/* Main Header - Sticky, Blue Glass, Always Visible */}
       <header 
         className={cn(
-          "sticky top-0 z-[1000] w-full",
+          "sticky top-0 z-[var(--z-header)] w-full",
           "bg-[linear-gradient(90deg,rgba(8,40,72,0.85),rgba(9,80,120,0.70))]",
           "backdrop-blur-[12px] saturate-[160%]",
           "border-b border-white/12"

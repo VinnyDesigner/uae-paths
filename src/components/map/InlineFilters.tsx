@@ -84,8 +84,8 @@ export function InlineFilters({ filters, onFilterChange, className }: InlineFilt
 
         {openDropdown === 'emirate' && (
           <>
-            <div className="fixed inset-0 z-40" onClick={() => setOpenDropdown(null)} />
-            <div className="absolute top-full mt-2 left-0 right-0 bg-white/90 dark:bg-card/95 backdrop-blur-xl rounded-xl shadow-2xl border border-white/30 dark:border-white/10 overflow-hidden z-50 animate-fade-in">
+            <div className="fixed inset-0 z-[var(--z-popover-backdrop)]" onClick={() => setOpenDropdown(null)} />
+            <div className="absolute top-full mt-2 left-0 right-0 bg-white/90 dark:bg-card/95 backdrop-blur-xl rounded-xl shadow-2xl border border-white/30 dark:border-white/10 overflow-hidden z-[var(--z-popover)] animate-fade-in">
               <div className="p-2.5 max-h-64 overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-primary/20">
                 {emirates.map((emirate) => (
                   <button
@@ -127,8 +127,8 @@ export function InlineFilters({ filters, onFilterChange, className }: InlineFilt
 
         {openDropdown === 'distance' && (
           <>
-            <div className="fixed inset-0 z-40" onClick={() => setOpenDropdown(null)} />
-            <div className="absolute top-full mt-2 left-0 right-0 bg-white/90 dark:bg-card/95 backdrop-blur-xl rounded-xl shadow-2xl border border-white/30 dark:border-white/10 overflow-hidden z-50 animate-fade-in p-5">
+            <div className="fixed inset-0 z-[var(--z-popover-backdrop)]" onClick={() => setOpenDropdown(null)} />
+            <div className="absolute top-full mt-2 left-0 right-0 bg-white/90 dark:bg-card/95 backdrop-blur-xl rounded-xl shadow-2xl border border-white/30 dark:border-white/10 overflow-hidden z-[var(--z-popover)] animate-fade-in p-5">
               <p className="text-sm font-medium text-foreground mb-4">Distance radius</p>
               <Slider
                 value={[filters.distance || 0]}
@@ -172,8 +172,8 @@ export function InlineFilters({ filters, onFilterChange, className }: InlineFilt
 
         {openDropdown === 'type' && (
           <>
-            <div className="fixed inset-0 z-40" onClick={() => setOpenDropdown(null)} />
-            <div className="absolute top-full mt-2 left-0 right-0 bg-white/90 dark:bg-card/95 backdrop-blur-xl rounded-xl shadow-2xl border border-white/30 dark:border-white/10 overflow-hidden z-50 animate-fade-in">
+            <div className="fixed inset-0 z-[var(--z-popover-backdrop)]" onClick={() => setOpenDropdown(null)} />
+            <div className="absolute top-full mt-2 left-0 right-0 bg-white/90 dark:bg-card/95 backdrop-blur-xl rounded-xl shadow-2xl border border-white/30 dark:border-white/10 overflow-hidden z-[var(--z-popover)] animate-fade-in">
               <div className="p-3.5 space-y-2">
                 {facilityTypes.map((type) => (
                   <label

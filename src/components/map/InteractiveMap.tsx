@@ -129,8 +129,8 @@ function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFu
 
   return (
     <>
-      {/* Desktop only: Top-right controls (Reset, Fullscreen) - Hidden on tablet - z-20 for map controls */}
-      <div className="hidden lg:flex absolute top-4 right-4 z-20 flex-col gap-2 pointer-events-none">
+      {/* Desktop only: Top-right controls (Reset, Fullscreen) - z-panel */}
+      <div className="hidden lg:flex absolute top-4 right-4 z-[var(--z-panel)] flex-col gap-2 pointer-events-none">
         <div className="flex flex-col gap-2 pointer-events-auto">
           <button
             onClick={onResetView}
@@ -152,8 +152,8 @@ function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFu
         </div>
       </div>
 
-      {/* Desktop/Tablet: Bottom-right controls (Legend, Locate, Zoom, BaseMap) - z-20 for map controls */}
-      <div className="hidden md:flex absolute bottom-8 right-4 z-20 items-end gap-2 pointer-events-none">
+      {/* Desktop/Tablet: Bottom-right controls (Legend, Locate, Zoom, BaseMap) - z-panel */}
+      <div className="hidden md:flex absolute bottom-8 right-4 z-[var(--z-panel)] items-end gap-2 pointer-events-none">
         {/* Legend Control */}
         <div className="relative pointer-events-auto">
           <button
@@ -178,10 +178,10 @@ function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFu
           {legendOpen && (
             <>
               <div 
-                className="fixed inset-0 z-[999]" 
+                className="fixed inset-0 z-[var(--z-popover-backdrop)]" 
                 onClick={() => setLegendOpen(false)} 
               />
-              <div className="absolute bottom-full right-0 mb-2 bg-card/95 backdrop-blur-xl rounded-xl shadow-xl border border-border overflow-hidden z-30 animate-fade-in w-[240px]">
+              <div className="absolute bottom-full right-0 mb-2 bg-card/95 backdrop-blur-xl rounded-xl shadow-xl border border-border overflow-hidden z-[var(--z-popover)] animate-fade-in w-[240px]">
                 <div className="px-3 py-2.5 border-b border-border">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
@@ -275,11 +275,11 @@ function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFu
             {/* Base Map Selector Panel */}
             {baseMapOpen && (
               <>
-                <div 
-                  className="fixed inset-0 z-[999]" 
-                  onClick={() => setBaseMapOpen(false)} 
-                />
-                <div className="absolute bottom-full right-0 mb-2 bg-card/95 backdrop-blur-xl rounded-xl shadow-xl border border-border overflow-hidden z-30 animate-fade-in p-3 w-[280px]">
+                  <div 
+                    className="fixed inset-0 z-[var(--z-popover-backdrop)]" 
+                    onClick={() => setBaseMapOpen(false)} 
+                  />
+                  <div className="absolute bottom-full right-0 mb-2 bg-card/95 backdrop-blur-xl rounded-xl shadow-xl border border-border overflow-hidden z-[var(--z-popover)] animate-fade-in p-3 w-[280px]">
                   <p className="text-xs text-muted-foreground font-medium px-1 pb-2 uppercase tracking-wide">
                     Base Map
                   </p>
@@ -854,10 +854,10 @@ export function InteractiveMap({
   };
 
   return (
-    <div className={cn("relative w-full h-full min-h-[500px] rounded-xl overflow-hidden", className)}>
+    <div className={cn("relative w-full h-full min-h-[500px]", className)}>
       <div
         ref={mapContainerRef}
-        className="w-full h-full"
+        className="absolute inset-0 w-full h-full rounded-xl overflow-hidden"
         style={{ minHeight: '500px' }}
       />
 
@@ -872,8 +872,117 @@ export function InteractiveMap({
         layers={layers}
       />
 
-      {/* Gradient overlay at bottom */}
+      {/* Gradient overlay at bottom (must not block UI) */}
       <div className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none bg-gradient-to-t from-background/20 to-transparent" />
+
+      {/* Mobile: Bottom-right controls (Reset, Locate, Zoom, BaseMap) - always visible/clickable */}
+      <div className="md:hidden absolute bottom-24 right-4 z-[var(--z-panel)] flex flex-col gap-2 pointer-events-none">
+        <div className="flex flex-col gap-2 items-end pointer-events-auto">
+          <button
+            onClick={onResetView}
+            className="bg-card rounded-xl shadow-lg border border-border p-2.5 hover:bg-secondary active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            title="Reset to UAE"
+            aria-label="Reset map view"
+          >
+            <Home className="w-5 h-5 text-foreground" />
+          </button>
+
+          <button
+            onClick={onLocateMe}
+            className="bg-card rounded-xl shadow-lg border border-border p-2.5 hover:bg-primary hover:text-primary-foreground active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            title="Locate me"
+            aria-label="Find my location"
+          >
+            <LocateFixed className="w-5 h-5" />
+          </button>
+
+          <div className="flex flex-col bg-card rounded-xl shadow-lg border border-border overflow-hidden">
+            <button
+              onClick={onZoomIn}
+              aria-label="Zoom In"
+              className="p-2.5 hover:bg-secondary active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+            >
+              <ZoomIn className="w-5 h-5 text-foreground" />
+            </button>
+            <div className="h-px bg-border" />
+            <button
+              onClick={onZoomOut}
+              aria-label="Zoom Out"
+              className="p-2.5 hover:bg-secondary active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+            >
+              <ZoomOut className="w-5 h-5 text-foreground" />
+            </button>
+          </div>
+
+          <div className="relative">
+            <button
+              onClick={() => setBaseMapOpen(!baseMapOpen)}
+              className={cn(
+                "bg-card rounded-xl shadow-lg border border-border p-2.5 hover:bg-secondary active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+                baseMapOpen && "bg-secondary"
+              )}
+              title="Change Base Map"
+              aria-label="Change base map"
+              aria-expanded={baseMapOpen}
+            >
+              <Map className="w-5 h-5 text-foreground" />
+            </button>
+
+            {baseMapOpen && (
+              <>
+                <div 
+                  className="fixed inset-0 z-[var(--z-popover-backdrop)]" 
+                  onClick={() => setBaseMapOpen(false)} 
+                />
+                <div className="absolute bottom-full right-0 mb-2 bg-card/95 backdrop-blur-xl rounded-xl shadow-xl border border-border overflow-hidden z-[var(--z-popover)] animate-fade-in p-3 w-[280px]">
+                  <p className="text-xs text-muted-foreground font-medium px-1 pb-2 uppercase tracking-wide">
+                    Base Map
+                  </p>
+                  <div className="grid grid-cols-3 gap-2">
+                    {baseMaps.map((map) => (
+                      <button
+                        key={map.id}
+                        onClick={() => {
+                          onBaseMapChange(map.id);
+                          setBaseMapOpen(false);
+                        }}
+                        className={cn(
+                          "relative group rounded-lg overflow-hidden border-2 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+                          selectedBaseMap === map.id
+                            ? "border-primary ring-2 ring-primary/30"
+                            : "border-transparent hover:border-primary/50"
+                        )}
+                      >
+                        <div className="aspect-square relative">
+                          <img
+                            src={map.previewImage}
+                            alt={map.name}
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                          />
+                          <div className={cn(
+                            "absolute inset-0 bg-gradient-to-t from-black/60 to-transparent",
+                            "flex items-end justify-center pb-1"
+                          )}>
+                            <span className="text-[10px] font-medium text-white truncate px-1">
+                              {map.name}
+                            </span>
+                          </div>
+                          {selectedBaseMap === map.id && (
+                            <div className="absolute top-1 right-1 w-4 h-4 bg-primary rounded-full flex items-center justify-center">
+                              <Check className="w-2.5 h-2.5 text-primary-foreground" />
+                            </div>
+                          )}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

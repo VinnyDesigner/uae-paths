@@ -14,6 +14,7 @@
     --z-map-controls: 20;
     --z-panel: 40;
     --z-header: 50;
+    --z-popover-backdrop: 59;
     --z-popover: 60;
     --z-modal: 70;
     --z-toast: 80;
@@ -764,6 +765,16 @@
     opacity: 0.12;
     transform: scale(1.05);
   }
+}
+
+/* Map (Leaflet) layering */
+.leaflet-container {
+  z-index: var(--z-map);
+}
+
+.leaflet-top,
+.leaflet-bottom {
+  z-index: var(--z-map-controls);
 }
 
 /* Mobile-specific styles */

@@ -51,10 +51,10 @@ export function LayerTogglePanel({ layers, onLayerToggle, className }: LayerTogg
       {isOpen && (
         <>
           <div 
-            className="fixed inset-0 z-[999]" 
+            className="fixed inset-0 z-[var(--z-popover-backdrop)]" 
             onClick={() => setIsOpen(false)} 
           />
-          <div className="absolute bottom-full mb-2 right-0 bg-card rounded-xl shadow-xl border border-border overflow-hidden z-30 animate-fade-in w-72">
+          <div className="absolute bottom-full mb-2 right-0 bg-card rounded-xl shadow-xl border border-border overflow-hidden z-[var(--z-popover)] animate-fade-in w-72">
             <div className="p-3 border-b border-border">
               <h3 className="text-sm font-semibold text-foreground">Map Layers</h3>
               <p className="text-xs text-muted-foreground">{totalActiveLayers} layers active</p>

@@ -563,12 +563,23 @@ export function InteractiveMap({
     };
   }, []);
 
-  // Update base map when baseMapId changes
+  // Update base map when baseMapId changes - remove old layer and add new one
   useEffect(() => {
-    if (!mapRef.current || !tileLayerRef.current) return;
+    if (!mapRef.current) return;
 
     const newBaseMap = baseMaps.find(m => m.id === baseMapId) || baseMaps[0];
-    tileLayerRef.current.setUrl(newBaseMap.url);
+    
+    // Remove existing tile layer
+    if (tileLayerRef.current) {
+      mapRef.current.removeLayer(tileLayerRef.current);
+    }
+    
+    // Add new tile layer with the selected basemap
+    const newTileLayer = L.tileLayer(newBaseMap.url, {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    }).addTo(mapRef.current);
+    
+    tileLayerRef.current = newTileLayer;
   }, [baseMapId]);
 
   // Zoom to search results when they change

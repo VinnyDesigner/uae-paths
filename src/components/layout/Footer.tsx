@@ -14,7 +14,7 @@ export function Footer({ variant = 'light', compact = false }: FooterProps) {
     <footer className={cn(
       "relative border-t overflow-hidden",
       isDark 
-        ? "bg-footer-immersive border-white/10" 
+        ? "bg-[rgba(6,20,40,0.80)] border-white/8" 
         : "bg-footer-gradient border-border/20"
     )}>
       {/* Subtle pattern */}
@@ -31,11 +31,11 @@ export function Footer({ variant = 'light', compact = false }: FooterProps) {
 
       <div className={cn(
         "container mx-auto px-4 relative",
-        compact ? "py-5 md:py-6" : "py-10 md:py-12"
+        compact ? "py-4 md:py-5" : "py-6 md:py-8"
       )}>
         <div className={cn(
           "grid grid-cols-1 md:grid-cols-12",
-          compact ? "gap-6 md:gap-6" : "gap-8 md:gap-8"
+          compact ? "gap-5 md:gap-5" : "gap-6 md:gap-6"
         )}>
           
           {/* Brand Column */}
@@ -61,10 +61,10 @@ export function Footer({ variant = 'light', compact = false }: FooterProps) {
               </div>
             </Link>
             <p className={cn(
-              "text-xs max-w-[280px] leading-relaxed",
+              "text-[11px] max-w-[280px] leading-relaxed",
               isDark ? "text-white/45" : "text-muted-foreground/65"
             )}>
-              Discover healthcare and education facilities across the UAE with our intelligent, interactive map platform.
+              Discover healthcare and education facilities across the UAE.
             </p>
           </div>
 
@@ -195,7 +195,7 @@ export function Footer({ variant = 'light', compact = false }: FooterProps) {
         <div className={cn(
           "border-t flex flex-col md:flex-row justify-between items-center gap-2",
           isDark ? "border-white/8" : "border-border/25",
-          compact ? "mt-5 pt-4" : "mt-8 pt-4"
+          compact ? "mt-4 pt-3" : "mt-6 pt-3"
         )}>
           <p className={cn(
             "text-[10px] font-medium",

@@ -304,11 +304,13 @@
 
   /* === TEXT STYLES === */
   
-  /* Gradient text - bright cyan → blue → purple (per spec) */
+  /* Gradient text - bright cyan → blue → purple (per spec) - NO shadow on gradient text */
   .text-gradient-blue {
-    @apply bg-clip-text text-transparent;
-    background: linear-gradient(90deg, #00D4FF 0%, #2E6BFF 50%, #7A5CFF 100%);
-    text-shadow: 0 8px 30px rgba(0, 212, 255, 0.25);
+    background: linear-gradient(90deg, #00D4FF 0%, #2B6CFF 55%, #7C3AED 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
   }
 
   /* Bright cyan glow text */
@@ -332,43 +334,50 @@
     @apply bg-card/80 backdrop-blur-md border border-border/50;
   }
 
+  /* Header glass - blue themed per spec */
+  .glass-header {
+    background: rgba(6, 20, 40, 0.55);
+    backdrop-filter: blur(14px) saturate(160%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+  }
+
   .glass-strong {
-    background: rgba(6, 12, 26, 0.55);
-    backdrop-filter: blur(14px) saturate(140%);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(6, 20, 40, 0.55);
+    backdrop-filter: blur(14px) saturate(160%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.10);
   }
 
   /* LIQUID GLASS SEARCH BAR - Primary CTA per spec */
   .glass-search-liquid {
-    background: linear-gradient(135deg, rgba(255,255,255,0.14), rgba(255,255,255,0.06));
-    backdrop-filter: blur(18px) saturate(140%);
+    background: rgba(10, 25, 45, 0.40);
+    backdrop-filter: blur(16px) saturate(180%);
     border: 1px solid rgba(255,255,255,0.18);
     box-shadow: 
-      0 18px 60px rgba(0,0,0,0.35),
-      inset 0 1px 0 rgba(255,255,255,0.18);
+      0 20px 60px rgba(0,0,0,0.35),
+      inset 0 1px 0 rgba(255,255,255,0.10);
   }
 
   .glass-search-liquid:hover {
     border-color: rgba(255, 255, 255, 0.25);
     box-shadow: 
-      0 22px 70px rgba(0,0,0,0.4),
-      inset 0 1px 0 rgba(255,255,255,0.22);
+      0 24px 70px rgba(0,0,0,0.40),
+      inset 0 1px 0 rgba(255,255,255,0.15);
   }
 
   .glass-search-liquid:focus-within {
-    border-color: rgba(0, 212, 255, 0.4);
+    border-color: rgba(0, 212, 255, 0.5);
     box-shadow: 
-      0 18px 60px rgba(0,0,0,0.35),
-      0 0 0 3px rgba(0, 212, 255, 0.15),
-      inset 0 1px 0 rgba(255,255,255,0.2);
+      0 20px 60px rgba(0,0,0,0.35),
+      0 0 0 3px rgba(0, 212, 255, 0.18),
+      inset 0 1px 0 rgba(255,255,255,0.15);
   }
 
-  /* Glass dropdown panel */
+  /* Glass dropdown panel - darker and more opaque per spec */
   .glass-dropdown {
-    background: rgba(10, 18, 35, 0.55);
-    backdrop-filter: blur(18px) saturate(140%);
-    border: 1px solid rgba(255,255,255,0.12);
-    box-shadow: 0 20px 70px rgba(0,0,0,0.45);
+    background: rgba(8, 18, 35, 0.78);
+    backdrop-filter: blur(18px) saturate(180%);
+    border: 1px solid rgba(255,255,255,0.14);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.55);
   }
 
   /* Glass panel tray for category cards */

@@ -163,8 +163,12 @@ export default function SmartMapPage() {
 
       {/* Map Area */}
       <main className="flex-1 relative h-full min-h-[500px]">
-        {/* Left Panel - Desktop (Glassmorphism) - z-30 for desktop panel */}
-        <div data-sidebar-panel className="hidden lg:flex flex-col w-80 absolute top-4 left-4 bottom-4 bg-white/50 dark:bg-card/40 backdrop-blur-xl border border-white/40 dark:border-white/10 rounded-2xl shadow-2xl z-30">
+        {/* Left Panel - Desktop (Glassmorphism) - Always visible, no hover behavior */}
+        <div 
+          data-sidebar-panel 
+          className="hidden lg:flex flex-col w-80 absolute top-4 left-4 bottom-4 bg-white/50 dark:bg-card/40 backdrop-blur-xl border border-white/40 dark:border-white/10 rounded-2xl shadow-2xl z-30"
+          style={{ opacity: 1, transform: 'none', pointerEvents: 'auto' }}
+        >
           {/* Search Header - Fixed */}
           <div className="relative z-20 p-4 pb-3 bg-white/70 dark:bg-card/60 backdrop-blur-xl border-b border-white/30 dark:border-white/10 rounded-t-2xl flex-shrink-0" style={{ overflow: 'visible' }}>
             <div className="relative bg-white/60 dark:bg-white/5 rounded-xl p-3 border border-white/30 dark:border-white/10 transition-all hover:bg-white/70 dark:hover:bg-white/10" style={{ overflow: 'visible' }}>

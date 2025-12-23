@@ -900,6 +900,27 @@
   }
 }
 
+@keyframes searchBarGlow {
+  0%, 100% {
+    box-shadow: 
+      0 0 15px rgba(0, 192, 255, 0.4),
+      0 0 30px rgba(0, 192, 255, 0.2),
+      0 0 45px rgba(0, 192, 255, 0.1),
+      0 8px 32px rgba(0, 0, 0, 0.25);
+  }
+  50% {
+    box-shadow: 
+      0 0 25px rgba(0, 192, 255, 0.6),
+      0 0 50px rgba(0, 192, 255, 0.35),
+      0 0 75px rgba(0, 192, 255, 0.15),
+      0 8px 32px rgba(0, 0, 0, 0.25);
+  }
+}
+
+.animate-search-glow {
+  animation: searchBarGlow 2s ease-in-out infinite;
+}
+
 /* Map (Leaflet) layering */
 .leaflet-container {
   z-index: var(--z-map);

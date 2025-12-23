@@ -921,6 +921,66 @@
   animation: searchBarGlow 2s ease-in-out infinite;
 }
 
+/* Revolving glowing dot animation */
+@keyframes revolveDot {
+  0% {
+    top: 0;
+    left: 10%;
+    opacity: 1;
+  }
+  25% {
+    top: 0;
+    left: 90%;
+    opacity: 1;
+  }
+  26% {
+    top: 0;
+    left: 90%;
+  }
+  49% {
+    top: calc(100% - 10px);
+    left: 90%;
+  }
+  50% {
+    top: calc(100% - 10px);
+    left: 90%;
+    opacity: 1;
+  }
+  75% {
+    top: calc(100% - 10px);
+    left: 10%;
+    opacity: 1;
+  }
+  76% {
+    top: calc(100% - 10px);
+    left: 10%;
+  }
+  99% {
+    top: 0;
+    left: 10%;
+  }
+  100% {
+    top: 0;
+    left: 10%;
+    opacity: 1;
+  }
+}
+
+.search-glow-dot {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(0, 212, 255, 0.9);
+  box-shadow: 
+    0 0 12px rgba(0, 212, 255, 0.8),
+    0 0 24px rgba(0, 212, 255, 0.5),
+    0 0 36px rgba(0, 212, 255, 0.3);
+  animation: revolveDot 4s linear infinite;
+  pointer-events: none;
+  z-index: 10;
+}
+
 /* Map (Leaflet) layering */
 .leaflet-container {
   z-index: var(--z-map);

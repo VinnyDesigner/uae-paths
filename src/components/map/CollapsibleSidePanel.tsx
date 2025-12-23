@@ -32,9 +32,10 @@ function RailButton({ icon: Icon, label, onClick, isActive }: RailButtonProps) {
           onClick={onClick}
           className={cn(
             "w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200",
-            "hover:bg-primary/10 active:scale-95",
+            "hover:bg-primary/15 active:scale-95",
             "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
-            isActive && "bg-primary/10 text-primary"
+            "text-muted-foreground hover:text-primary",
+            isActive && "bg-primary/15 text-primary"
           )}
           aria-label={label}
         >
@@ -82,9 +83,8 @@ export function CollapsibleSidePanel({
         data-sidebar-panel
         className={cn(
           "hidden lg:flex flex-col absolute top-4 left-4 bottom-4",
-          "bg-white/50 dark:bg-card/40 backdrop-blur-xl",
-          "border border-white/40 dark:border-white/10",
-          "rounded-2xl shadow-2xl z-40 pointer-events-auto",
+          "glass-panel",
+          "z-[var(--z-floating)] pointer-events-auto",
           "transition-all duration-250 ease-out",
           isCollapsed ? "w-16" : "w-80",
           className
@@ -93,7 +93,7 @@ export function CollapsibleSidePanel({
         aria-label="Map controls panel"
         aria-expanded={!isCollapsed}
       >
-        {/* Collapse Toggle Button */}
+        {/* Collapse Toggle Button - Premium glass effect */}
         <Tooltip>
           <TooltipTrigger asChild>
             <button
@@ -101,12 +101,11 @@ export function CollapsibleSidePanel({
               className={cn(
                 "absolute -right-3 top-16 z-50",
                 "w-6 h-12 rounded-full",
-                "bg-primary text-primary-foreground",
+                "glass-toggle",
+                "text-white",
                 "flex items-center justify-center",
-                "shadow-lg hover:shadow-xl",
-                "hover:scale-105 active:scale-95",
-                "transition-all duration-200",
-                "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                "active:scale-95",
+                "focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2"
               )}
               aria-label={isCollapsed ? "Expand Panel" : "Collapse Panel"}
             >

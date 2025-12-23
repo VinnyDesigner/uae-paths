@@ -43,9 +43,9 @@ export function Header() {
               />
             </Link>
 
-            {/* Centered Navigation Pills */}
+            {/* Centered Navigation Pills with glass effect */}
             <nav className="flex items-center justify-center">
-              <div className="flex items-center bg-white/12 backdrop-blur-[14px] rounded-full p-1.5 border border-white/10">
+              <div className="glass-nav flex items-center p-1.5">
                 {navItems.map((item) => {
                   const isActive = location.pathname === item.path;
                   return (
@@ -53,9 +53,13 @@ export function Header() {
                       key={item.name}
                       to={item.path}
                       className={cn(
-                        "flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 whitespace-nowrap",
+                        "flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 whitespace-nowrap relative",
                         isActive
-                          ? "bg-gradient-to-r from-[#00D4FF] via-[#2B6CFF] to-[#7C3AED] text-white shadow-[0_8px_24px_-6px_rgba(43,108,255,0.5)]"
+                          ? [
+                            "bg-gradient-to-r from-[#00D4FF] via-[#2B6CFF] to-[#7C3AED] text-white",
+                            "shadow-[0_8px_24px_-6px_rgba(43,108,255,0.5)]",
+                            "before:absolute before:inset-0 before:rounded-full before:bg-white/10 before:opacity-0 before:hover:opacity-100 before:transition-opacity"
+                          ]
                           : "text-white/75 hover:text-white hover:bg-white/10"
                       )}
                     >
@@ -94,9 +98,9 @@ export function Header() {
               />
             </Link>
 
-            {/* Centered Navigation Pills */}
+            {/* Centered Navigation Pills with glass effect */}
             <nav className="flex items-center justify-center">
-              <div className="flex items-center bg-white/10 backdrop-blur-[14px] rounded-full p-1 border border-white/10">
+              <div className="glass-nav flex items-center p-1">
                 {navItems.map((item) => {
                   const isActive = location.pathname === item.path;
                   return (
@@ -104,9 +108,12 @@ export function Header() {
                       key={item.name}
                       to={item.path}
                       className={cn(
-                        "flex items-center gap-1.5 px-3.5 py-2 rounded-full text-sm font-medium transition-all duration-200 whitespace-nowrap",
+                        "flex items-center gap-1.5 px-3.5 py-2 rounded-full text-sm font-medium transition-all duration-200 whitespace-nowrap relative",
                         isActive
-                          ? "bg-gradient-to-r from-[#00D4FF] via-[#2B6CFF] to-[#7C3AED] text-white shadow-[0_6px_20px_-4px_rgba(43,108,255,0.5)]"
+                          ? [
+                            "bg-gradient-to-r from-[#00D4FF] via-[#2B6CFF] to-[#7C3AED] text-white",
+                            "shadow-[0_6px_20px_-4px_rgba(43,108,255,0.5)]"
+                          ]
                           : "text-white/70 hover:text-white hover:bg-white/10"
                       )}
                     >
@@ -142,9 +149,9 @@ export function Header() {
               />
             </Link>
 
-            {/* Centered Navigation Pills - Compact */}
+            {/* Centered Navigation Pills - Compact with glass effect */}
             <nav className="flex items-center justify-center overflow-hidden">
-              <div className="flex items-center bg-white/10 backdrop-blur-[14px] rounded-full p-1 border border-white/10">
+              <div className="glass-nav flex items-center p-1">
                 {navItems.map((item) => {
                   const isActive = location.pathname === item.path;
                   return (
@@ -152,9 +159,12 @@ export function Header() {
                       key={item.name}
                       to={item.path}
                       className={cn(
-                        "flex items-center justify-center gap-1 px-3 py-2 rounded-full text-xs font-medium transition-all duration-200 min-h-[36px]",
+                        "flex items-center justify-center gap-1 px-3 py-2 rounded-full text-xs font-medium transition-all duration-200 min-h-[36px] relative",
                         isActive
-                          ? "bg-gradient-to-r from-[#00D4FF] via-[#2B6CFF] to-[#7C3AED] text-white shadow-[0_4px_16px_-4px_rgba(43,108,255,0.5)]"
+                          ? [
+                            "bg-gradient-to-r from-[#00D4FF] via-[#2B6CFF] to-[#7C3AED] text-white",
+                            "shadow-[0_4px_16px_-4px_rgba(43,108,255,0.5)]"
+                          ]
                           : "text-white/70 hover:text-white hover:bg-white/10"
                       )}
                     >

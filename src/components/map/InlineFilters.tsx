@@ -71,15 +71,15 @@ export function InlineFilters({ filters, onFilterChange, className }: InlineFilt
           className={cn(
             "w-full flex items-center justify-between gap-2 px-4 py-3.5 rounded-xl border transition-all text-sm group",
             filters.emirate !== 'All Emirates'
-              ? "bg-primary/20 text-foreground border-primary/50 shadow-sm"
+              ? "bg-primary text-primary-foreground border-primary shadow-sm"
               : "bg-white/30 dark:bg-white/5 border-white/20 dark:border-white/10 hover:bg-white/50 dark:hover:bg-white/10 text-foreground"
           )}
         >
           <div className="flex items-center gap-2">
-            <MapPin className="w-4 h-4 text-primary" />
+            <MapPin className={cn("w-4 h-4", filters.emirate !== 'All Emirates' ? "text-primary-foreground" : "text-primary")} />
             <span>{filters.emirate}</span>
           </div>
-          <ChevronDown className={cn("w-4 h-4 transition-transform text-muted-foreground", openDropdown === 'emirate' && "rotate-180")} />
+          <ChevronDown className={cn("w-4 h-4 transition-transform", filters.emirate !== 'All Emirates' ? "text-primary-foreground" : "text-muted-foreground", openDropdown === 'emirate' && "rotate-180")} />
         </button>
 
         {openDropdown === 'emirate' && (
@@ -114,15 +114,15 @@ export function InlineFilters({ filters, onFilterChange, className }: InlineFilt
           className={cn(
             "w-full flex items-center justify-between gap-2 px-4 py-3.5 rounded-xl border transition-all text-sm",
             filters.distance && filters.distance > 0
-              ? "bg-primary/20 text-foreground border-primary/50 shadow-sm"
+              ? "bg-primary text-primary-foreground border-primary shadow-sm"
               : "bg-white/30 dark:bg-white/5 border-white/20 dark:border-white/10 hover:bg-white/50 dark:hover:bg-white/10 text-foreground"
           )}
         >
           <div className="flex items-center gap-2">
-            <Ruler className="w-4 h-4 text-primary" />
+            <Ruler className={cn("w-4 h-4", filters.distance && filters.distance > 0 ? "text-primary-foreground" : "text-primary")} />
             <span>{filters.distance ? `${filters.distance} km radius` : 'Distance'}</span>
           </div>
-          <ChevronDown className={cn("w-4 h-4 transition-transform text-muted-foreground", openDropdown === 'distance' && "rotate-180")} />
+          <ChevronDown className={cn("w-4 h-4 transition-transform", filters.distance && filters.distance > 0 ? "text-primary-foreground" : "text-muted-foreground", openDropdown === 'distance' && "rotate-180")} />
         </button>
 
         {openDropdown === 'distance' && (
@@ -155,19 +155,19 @@ export function InlineFilters({ filters, onFilterChange, className }: InlineFilt
           className={cn(
             "w-full flex items-center justify-between gap-2 px-4 py-3.5 rounded-xl border transition-all text-sm",
             filters.facilityTypes && filters.facilityTypes.length > 0
-              ? "bg-primary/20 text-foreground border-primary/50 shadow-sm"
+              ? "bg-primary text-primary-foreground border-primary shadow-sm"
               : "bg-white/30 dark:bg-white/5 border-white/20 dark:border-white/10 hover:bg-white/50 dark:hover:bg-white/10 text-foreground"
           )}
         >
           <div className="flex items-center gap-2">
-            <Building2 className="w-4 h-4 text-primary" />
+            <Building2 className={cn("w-4 h-4", filters.facilityTypes && filters.facilityTypes.length > 0 ? "text-primary-foreground" : "text-primary")} />
             <span>
               {filters.facilityTypes?.length 
                 ? `${filters.facilityTypes.length} type${filters.facilityTypes.length > 1 ? 's' : ''} selected` 
                 : 'Facility Type'}
             </span>
           </div>
-          <ChevronDown className={cn("w-4 h-4 transition-transform text-muted-foreground", openDropdown === 'type' && "rotate-180")} />
+          <ChevronDown className={cn("w-4 h-4 transition-transform", filters.facilityTypes && filters.facilityTypes.length > 0 ? "text-primary-foreground" : "text-muted-foreground", openDropdown === 'type' && "rotate-180")} />
         </button>
 
         {openDropdown === 'type' && (

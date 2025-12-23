@@ -9,6 +9,15 @@
     /* Layout */
     --header-height: 64px;
     
+    /* Z-Index Scale - Standardized stacking order */
+    --z-map: 0;
+    --z-map-controls: 20;
+    --z-panel: 40;
+    --z-header: 50;
+    --z-popover: 60;
+    --z-modal: 70;
+    --z-toast: 80;
+    
     /* SDI Government Blue Palette */
     --background: 210 20% 98%;
     --foreground: 215 25% 15%;

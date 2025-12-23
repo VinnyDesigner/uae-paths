@@ -138,7 +138,7 @@ export function SmartSearch({
       {/* Liquid Glass Search Container - Continuous glowing effect */}
       <div
         className={cn(
-          "relative flex items-center transition-all duration-300 rounded-full overflow-visible z-[var(--z-dropdown)]",
+          "relative flex items-center transition-all duration-300 rounded-full overflow-hidden z-[var(--z-dropdown)]",
           isDark ? [
             "glass-search-liquid",
             "border-2 border-[rgba(0,192,255,0.4)]",
@@ -153,7 +153,8 @@ export function SmartSearch({
             : "h-12 md:h-14"
         )}
       >
-        {/* Active overlay removed - focus handled by glass-search-liquid:focus-within */}
+        {/* Revolving glowing dot */}
+        {isDark && <div className="search-glow-dot" />}
 
         <div className={cn(
           "flex items-center justify-center flex-shrink-0",

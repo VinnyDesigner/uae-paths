@@ -123,25 +123,30 @@ export function SmartSearch({
 
   return (
     <div ref={containerRef} className={cn("relative w-full", className)} style={{ overflow: 'visible' }}>
+      {/* Page dim overlay when dropdown is open */}
+      {showSuggestions && filteredSuggestions.length > 0 && (
+        <div className="fixed inset-0 bg-black/25 z-[9998] pointer-events-none" />
+      )}
+      
       {/* Liquid Glass Search Container */}
       <div
         className={cn(
           "relative flex items-center transition-all duration-300",
           isDark ? [
-            "glass-search-liquid rounded-[24px] md:rounded-[28px]",
-            isFocused && "border-[rgba(0,212,255,0.4)] shadow-[0_18px_60px_rgba(0,0,0,0.35),0_0_0_3px_rgba(0,212,255,0.15)]"
+            "glass-search-liquid rounded-full",
+            isFocused && "border-[rgba(0,212,255,0.5)] shadow-[0_20px_60px_rgba(0,0,0,0.35),0_0_0_3px_rgba(0,212,255,0.18)]"
           ] : [
             "glass-search rounded-[20px] md:rounded-[24px]"
           ],
           isLarge 
-            ? "h-[54px] md:h-[60px] lg:h-[72px]" 
+            ? "h-[60px] md:h-[66px] lg:h-[72px]" 
             : "h-12 md:h-14"
         )}
       >
-        {/* Search icon with AI sparkle */}
+        {/* Search icon with AI sparkle in glowing pill */}
         <div className={cn(
           "flex items-center justify-center flex-shrink-0",
-          isLarge ? "pl-4 md:pl-5" : "pl-3 md:pl-4"
+          isLarge ? "pl-3 md:pl-4" : "pl-3 md:pl-4"
         )}>
           {isSearching ? (
             <Loader2 className={cn(
@@ -152,22 +157,22 @@ export function SmartSearch({
           ) : (
             <div className={cn(
               "relative flex items-center justify-center rounded-xl transition-all duration-300",
-              isLarge ? "w-9 h-9 md:w-10 md:h-10" : "w-8 h-8",
+              isLarge ? "w-10 h-10 md:w-11 md:h-11" : "w-8 h-8",
               isDark 
-                ? isFocused ? "bg-cyan-500/20" : "bg-white/10"
+                ? "bg-[rgba(0,212,255,0.14)] shadow-[0_0_0_6px_rgba(0,212,255,0.08)]"
                 : isFocused ? "bg-gradient-to-br from-[hsl(195_100%_55%/0.15)] to-[hsl(210_100%_60%/0.1)]" : "bg-[hsl(210_60%_96%)]"
             )}>
               <Search className={cn(
                 "transition-colors duration-200",
                 isDark 
-                  ? isFocused ? "text-cyan-400" : "text-white/60"
+                  ? "text-cyan-400"
                   : isFocused ? "text-[hsl(200_100%_48%)]" : "text-[hsl(210_50%_45%)]",
                 isLarge ? "w-5 h-5" : "w-4 h-4"
               )} />
               <Sparkles className={cn(
                 "absolute -top-0.5 -right-0.5 transition-all duration-300",
                 isDark 
-                  ? isFocused ? "opacity-100 text-cyan-300" : "opacity-50 text-white/40"
+                  ? "opacity-80 text-cyan-300"
                   : isFocused ? "opacity-100 text-[hsl(188_100%_48%)]" : "opacity-50 text-[hsl(210_50%_55%)]",
                 isLarge ? "w-3 h-3" : "w-2.5 h-2.5"
               )} />
@@ -200,6 +205,7 @@ export function SmartSearch({
               : "text-foreground placeholder:text-muted-foreground/45",
             isLarge ? "pl-3 md:pl-4 pr-2 text-base md:text-lg font-medium" : "pl-3 pr-2 text-sm"
           )}
+          style={{ fontSize: isLarge ? '18px' : undefined }}
           aria-label="Search facilities"
         />
 
@@ -244,50 +250,50 @@ export function SmartSearch({
             </>
           )}
 
-          {/* Primary action button - Bright blue gradient pill */}
+          {/* Primary action button - Bright gradient pill */}
           <button
             onClick={() => handleSubmit()}
             disabled={!query.trim()}
             className={cn(
-              "flex items-center justify-center rounded-xl transition-all duration-250",
+              "flex items-center justify-center rounded-full transition-all duration-250",
               "disabled:opacity-20 disabled:cursor-not-allowed disabled:shadow-none",
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
               isDark ? [
-                "bg-gradient-to-r from-[#00D4FF] to-[#2E6BFF] text-white",
-                "shadow-[0_10px_24px_rgba(0,212,255,0.25)] hover:shadow-[0_12px_30px_rgba(0,212,255,0.35)]",
-                "active:scale-[0.96] focus-visible:ring-cyan-400"
+                "bg-gradient-to-r from-[#00D4FF] via-[#2B6CFF] to-[#7C3AED] text-white",
+                "shadow-[0_12px_30px_rgba(43,108,255,0.35)] hover:shadow-[0_14px_35px_rgba(43,108,255,0.45)]",
+                "active:scale-[0.96] focus-visible:ring-cyan-400 hover:brightness-110"
               ] : [
                 "bg-gradient-to-br from-[hsl(192_100%_46%)] via-[hsl(205_100%_50%)] to-[hsl(218_90%_50%)] text-white",
                 "shadow-[0_6px_22px_-5px_hsl(200_100%_45%/0.45)]",
                 "active:scale-[0.96] focus-visible:ring-[hsl(200_100%_55%)]"
               ],
-              isLarge ? "w-11 h-11 md:w-12 md:h-12 lg:w-14 lg:h-14" : "w-10 h-10"
+              isLarge ? "w-12 h-12 md:w-14 md:h-14" : "w-10 h-10"
             )}
             aria-label="Search"
           >
             <ArrowRight className={cn(
               "transition-transform duration-200",
-              isLarge ? "w-5 h-5 md:w-[22px] md:h-[22px]" : "w-4 h-4"
+              isLarge ? "w-5 h-5 md:w-6 md:h-6" : "w-4 h-4"
             )} />
           </button>
         </div>
       </div>
 
-      {/* Dropdown - appears below search with spacing, glass style */}
+      {/* Dropdown - appears below search with spacing, glass style, scrollable */}
       {showSuggestions && filteredSuggestions.length > 0 && (
         <div 
           className={cn(
-            "absolute left-0 right-0 top-full mt-3 md:mt-4 rounded-2xl z-[9999] animate-fade-in flex flex-col overflow-hidden",
-            "glass-dropdown",
-            "max-h-[min(360px,calc(100vh-280px))]"
+            "absolute left-0 right-0 top-full mt-3 md:mt-4 rounded-3xl z-[9999] animate-fade-in flex flex-col overflow-hidden",
+            "glass-dropdown"
           )}
+          style={{ maxHeight: 'min(420px, 46vh)' }}
         >
           {/* Header */}
           <div className="flex items-center gap-2 px-4 py-3 border-b border-white/10 bg-white/5 flex-shrink-0">
             <div className="w-6 h-6 rounded-lg flex items-center justify-center bg-cyan-500/20">
               <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
             </div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-white/60">
+            <p className="text-xs font-semibold uppercase tracking-wider text-white/65">
               AI-Powered Suggestions
             </p>
           </div>

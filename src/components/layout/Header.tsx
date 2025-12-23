@@ -28,8 +28,8 @@ export function Header() {
         className={cn(
           "sticky top-0 z-[1000] w-full transition-all duration-300",
           isHomePage 
-            ? "glass-strong"
-            : "glass-strong",
+            ? "glass-header"
+            : "glass-header",
           isMapPage ? "h-12 md:h-auto" : ""
         )}
       >
@@ -63,7 +63,7 @@ export function Header() {
                       "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200",
                       isHomePage ? [
                         isActive
-                          ? "bg-white/20 text-white shadow-sm backdrop-blur-sm"
+                          ? "bg-[rgba(43,108,255,0.22)] border border-[rgba(0,212,255,0.25)] text-white shadow-sm backdrop-blur-sm"
                           : "text-white/70 hover:text-white hover:bg-white/10"
                       ] : [
                         isActive

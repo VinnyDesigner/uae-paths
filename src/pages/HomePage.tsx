@@ -62,23 +62,23 @@ export default function HomePage() {
           <div className="container mx-auto px-4 relative z-10 flex-1 flex flex-col justify-center py-6 md:py-8">
             <div className="max-w-[900px] mx-auto w-full">
               
-              {/* Main Heading - NO gradient box, only text gradient */}
-              <div className="text-center mb-3 animate-fade-up">
+              {/* Main Heading - Pure text gradient, NO gradient box */}
+              <div className="text-center mb-3 animate-fade-up relative z-10">
                 <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight">
-                  <span className="text-white drop-shadow-lg">Smart Map</span>
+                  <span className="text-white drop-shadow-[0_4px_20px_rgba(0,0,0,0.3)]">Smart Map</span>
                   <br className="sm:hidden" />
-                  <span className="text-gradient-blue ml-2 sm:ml-3">for Daily Life</span>
+                  <span className="text-gradient-blue ml-2 sm:ml-3 drop-shadow-[0_8px_30px_rgba(0,212,255,0.25)]">for Daily Life</span>
                 </h1>
               </div>
 
               {/* Subheading - 12px gap from title */}
-              <p className="text-center text-sm md:text-base text-white/55 max-w-md mx-auto mb-[22px] animate-fade-up delay-100 leading-relaxed font-medium">
+              <p className="text-center text-sm md:text-base text-white/60 max-w-md mx-auto mb-5 md:mb-6 animate-fade-up delay-100 leading-relaxed font-medium">
                 Find healthcare and education services across the UAE
               </p>
 
               {/* === PRIMARY SEARCH BAR - Liquid Glass Style === */}
-              <div className="animate-fade-up delay-200 mb-[22px]">
-                <div className="max-w-[860px] mx-auto w-[92vw] md:w-[65%]">
+              <div className="animate-fade-up delay-200 mb-5 md:mb-6">
+                <div className="mx-auto" style={{ width: 'min(860px, 92vw)' }}>
                   <SmartSearch 
                     onSearch={handleSearch} 
                     size="large"
@@ -91,16 +91,16 @@ export default function HomePage() {
 
               {/* AI Suggestion Chips - Hidden when search is open */}
               {!isSearchOpen && (
-                <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-6 md:mb-8 animate-fade-up delay-300">
+                <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-5 md:mb-6 animate-fade-up delay-300">
                   {aiSuggestionChips.map((chip) => (
                     <button
                       key={chip.text}
                       onClick={() => handleSearch(chip.text)}
                       className={cn(
                         "flex items-center gap-2 px-3.5 py-2 rounded-full",
-                        "bg-white/8 backdrop-blur-md border border-white/10",
-                        "text-white/70 text-xs md:text-sm font-medium",
-                        "hover:bg-white/12 hover:border-cyan-400/30 hover:text-white",
+                        "bg-white/8 backdrop-blur-md border border-white/12",
+                        "text-white/75 text-xs md:text-sm font-medium",
+                        "hover:bg-white/14 hover:border-cyan-400/35 hover:text-white",
                         "transition-all duration-200"
                       )}
                     >

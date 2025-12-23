@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
-import { Search, MapPin, X, Loader2, Sparkles, Navigation, Building2 } from 'lucide-react';
+import { Search, MapPin, X, Loader2, Sparkles, Navigation, Building2, Send } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 
@@ -115,23 +115,30 @@ export function SmartSearch({
     <div ref={containerRef} className={cn("relative w-full", className)} style={{ overflow: 'visible' }}>
       <div
         className={cn(
-          "relative flex items-center bg-card border border-border rounded-xl md:rounded-2xl shadow-lg transition-all duration-300",
-          showSuggestions && "shadow-xl border-primary/50 ring-2 ring-primary/20",
-          !showSuggestions && "hover:shadow-xl hover:border-border/80",
+          "relative flex items-center bg-card/95 backdrop-blur-sm border rounded-[16px] md:rounded-[18px] transition-all duration-300",
+          showSuggestions 
+            ? "shadow-elevated border-primary/40 ring-2 ring-primary/15" 
+            : "shadow-soft border-border/60 hover:shadow-elevated hover:border-border/80",
           isLarge ? "h-14 md:h-16" : "h-11 md:h-12"
         )}
       >
-        {/* Search/Hospital indicator */}
+        {/* Search icon with geo styling */}
         <div className={cn(
           "flex items-center justify-center flex-shrink-0",
-          isLarge ? "pl-4 md:pl-6" : "pl-3 md:pl-4"
+          isLarge ? "pl-5 md:pl-6" : "pl-3 md:pl-4"
         )}>
           {isSearching ? (
-            <Loader2 className={cn("animate-spin text-primary", isLarge ? "w-5 h-5" : "w-4 h-4 md:w-5 md:h-5")} />
+            <Loader2 className={cn("animate-spin text-primary", isLarge ? "w-5 h-5 md:w-6 md:h-6" : "w-4 h-4 md:w-5 md:h-5")} />
           ) : (
-            <div className="relative">
-              <Search className={cn("text-muted-foreground", isLarge ? "w-5 h-5" : "w-4 h-4 md:w-5 md:h-5")} />
-              <Sparkles className="absolute -top-1 -right-1 w-2.5 h-2.5 md:w-3 md:h-3 text-primary animate-pulse" />
+            <div className={cn(
+              "relative flex items-center justify-center rounded-lg",
+              isLarge ? "w-9 h-9 md:w-10 md:h-10 bg-primary/10" : "w-7 h-7 bg-primary/10"
+            )}>
+              <Search className={cn("text-primary", isLarge ? "w-4 h-4 md:w-5 md:h-5" : "w-3.5 h-3.5 md:w-4 md:h-4")} />
+              <Sparkles className={cn(
+                "absolute -top-1 -right-1 text-primary animate-pulse",
+                isLarge ? "w-3 h-3 md:w-3.5 md:h-3.5" : "w-2.5 h-2.5"
+              )} />
             </div>
           )}
         </div>
@@ -149,36 +156,59 @@ export function SmartSearch({
           onKeyDown={handleKeyDown}
           placeholder={dynamicPlaceholder}
           className={cn(
-            "flex-1 min-w-0 bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground truncate",
-            isLarge ? "pl-3 md:pl-4 pr-2 text-sm md:text-lg" : "pl-2 md:pl-3 pr-2 text-sm"
+            "flex-1 min-w-0 bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground/60 truncate",
+            isLarge ? "pl-3 md:pl-4 pr-2 text-base md:text-lg font-medium" : "pl-2 md:pl-3 pr-2 text-sm"
           )}
           aria-label="Search facilities"
         />
 
-        <div className="flex items-center gap-0.5 md:gap-1 pr-2 md:pr-3 flex-shrink-0">
+        <div className="flex items-center gap-1 md:gap-1.5 pr-2 md:pr-3 flex-shrink-0">
           {query && (
             <button
               onClick={clearSearch}
-              className="p-1.5 text-muted-foreground hover:text-foreground transition-colors rounded-full hover:bg-secondary min-h-[36px] min-w-[36px] flex items-center justify-center"
+              className={cn(
+                "text-muted-foreground hover:text-foreground transition-all rounded-full hover:bg-secondary/80 flex items-center justify-center",
+                isLarge ? "p-2 min-h-[40px] min-w-[40px]" : "p-1.5 min-h-[32px] min-w-[32px]"
+              )}
               aria-label="Clear search"
             >
-              <X className="w-4 h-4" />
+              <X className={cn(isLarge ? "w-4 h-4 md:w-5 md:h-5" : "w-4 h-4")} />
             </button>
           )}
 
           {onLocateMe && (
             <>
-              <div className="w-px h-5 bg-border mx-0.5 md:mx-1 hidden sm:block" />
+              <div className={cn("w-px bg-border/60 mx-1 hidden sm:block", isLarge ? "h-7" : "h-5")} />
               <button
                 onClick={onLocateMe}
-                className="p-1.5 text-primary hover:text-primary/80 transition-colors rounded-full hover:bg-primary/10 min-h-[36px] min-w-[36px] flex items-center justify-center"
+                className={cn(
+                  "text-primary hover:text-primary/80 transition-all rounded-full hover:bg-primary/10 flex items-center justify-center",
+                  isLarge ? "p-2 min-h-[40px] min-w-[40px]" : "p-1.5 min-h-[32px] min-w-[32px]"
+                )}
                 title="Use my location"
                 aria-label="Use my location"
               >
-                <Navigation className={cn("w-4 h-4", isLarge && "w-5 h-5")} />
+                <Navigation className={cn(isLarge ? "w-4 h-4 md:w-5 md:h-5" : "w-4 h-4")} />
               </button>
             </>
           )}
+
+          {/* Primary action button - Send/Arrow */}
+          <button
+            onClick={() => handleSubmit()}
+            disabled={!query.trim()}
+            className={cn(
+              "flex items-center justify-center rounded-xl transition-all duration-200",
+              "bg-primary text-primary-foreground shadow-soft",
+              "hover:bg-primary/90 hover:shadow-elevated",
+              "disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:shadow-soft",
+              "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+              isLarge ? "w-10 h-10 md:w-11 md:h-11" : "w-8 h-8 md:w-9 md:h-9"
+            )}
+            aria-label="Search"
+          >
+            <Send className={cn(isLarge ? "w-4 h-4 md:w-5 md:h-5" : "w-3.5 h-3.5 md:w-4 md:h-4")} />
+          </button>
         </div>
 
       </div>

@@ -71,12 +71,12 @@ export default function HomePage() {
                   <span 
                     className="ml-2 sm:ml-3 inline-block relative z-10"
                     style={{
-                      background: 'linear-gradient(45deg, #004f7c 0%, #006f9b 100%)',
+                      background: 'linear-gradient(90deg, #4DD4FF 0%, #60A5FA 35%, #818CF8 70%, #A78BFA 100%)',
                       WebkitBackgroundClip: 'text',
                       backgroundClip: 'text',
                       WebkitTextFillColor: 'transparent',
                       color: 'transparent',
-                      filter: 'drop-shadow(0 2px 12px rgba(0, 111, 155, 0.5)) drop-shadow(0 0 20px rgba(0, 79, 124, 0.4))'
+                      filter: 'drop-shadow(0 2px 12px rgba(77, 212, 255, 0.4)) drop-shadow(0 0 30px rgba(129, 140, 248, 0.35))'
                     }}
                   >for Daily Life</span>
                 </h1>

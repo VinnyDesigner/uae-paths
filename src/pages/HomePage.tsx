@@ -48,17 +48,19 @@ export default function HomePage() {
         {/* === IMMERSIVE HERO SECTION - Fits in one screen === */}
         <section className="relative min-h-[calc(100vh-64px)] flex flex-col overflow-hidden">
           
-          {/* === LAYERED IMMERSIVE BACKGROUND (must not block UI) === */}
-          <div className="absolute inset-0 bg-hero-immersive pointer-events-none" />
-          <div className="absolute inset-0 bg-indigo-glow-left pointer-events-none" />
-          <div className="absolute inset-0 bg-teal-glow-right pointer-events-none" />
-          <div className="absolute inset-0 bg-cyan-glow-center pointer-events-none" />
-          <div className="absolute inset-0 bg-wave-flow pointer-events-none" />
-          <div className="absolute inset-0 bg-pulse-glow pointer-events-none" />
-          <div className="absolute inset-0 bg-noise-overlay pointer-events-none" />
-          <div className="absolute inset-x-0 bottom-0 h-24 bg-hero-bottom-fade pointer-events-none" />
+          {/* === LAYERED IMMERSIVE BACKGROUND - z-index 0, below content === */}
+          <div className="absolute inset-0 z-0 pointer-events-none">
+            <div className="absolute inset-0 bg-hero-immersive" />
+            <div className="absolute inset-0 bg-indigo-glow-left" />
+            <div className="absolute inset-0 bg-teal-glow-right" />
+            <div className="absolute inset-0 bg-cyan-glow-center" />
+            <div className="absolute inset-0 bg-wave-flow" />
+            <div className="absolute inset-0 bg-pulse-glow" />
+            <div className="absolute inset-0 bg-noise-overlay" />
+            <div className="absolute inset-x-0 bottom-0 h-24 bg-hero-bottom-fade" />
+          </div>
 
-          {/* === HERO CONTENT === */}
+          {/* === HERO CONTENT - z-index 10, above background === */}
           <div className="container mx-auto px-4 relative z-10 flex-1 flex flex-col justify-center py-6 md:py-8">
             <div className="max-w-[900px] mx-auto w-full">
               

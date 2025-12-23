@@ -165,58 +165,47 @@
 }
 
 @layer utilities {
-  /* Premium Hero Gradient - Refined Map-like feel */
+  /* Premium Hero Gradient - Unified full-height Geo-UI feel */
   .bg-hero-gradient {
     background: 
       linear-gradient(180deg, 
-        hsl(210 25% 99%) 0%, 
-        hsl(205 35% 97%) 35%,
-        hsl(200 30% 95%) 70%,
-        hsl(195 25% 93%) 100%
+        hsl(210 30% 99%) 0%, 
+        hsl(208 35% 97%) 25%,
+        hsl(205 40% 95%) 50%,
+        hsl(202 35% 93%) 75%,
+        hsl(200 30% 92%) 100%
       );
   }
 
-  /* Concentric location rings pattern - Premium map feel */
-  .bg-location-rings {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Cg fill='none' stroke='%231e40af' stroke-width='0.6' opacity='0.06'%3E%3Ccircle cx='100' cy='100' r='90'/%3E%3Ccircle cx='100' cy='100' r='75'/%3E%3Ccircle cx='100' cy='100' r='60'/%3E%3Ccircle cx='100' cy='100' r='45'/%3E%3Ccircle cx='100' cy='100' r='30'/%3E%3Ccircle cx='100' cy='100' r='15'/%3E%3C/g%3E%3C/svg%3E");
-    background-size: 300px 300px;
-    background-position: center center;
+  /* Topographic contour lines - premium map style */
+  .bg-contour-lines {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Cg fill='none' stroke='%230a4d8c' stroke-width='0.6' opacity='0.05'%3E%3Cpath d='M0,150 Q100,80 200,150 T400,150'/%3E%3Cpath d='M0,130 Q100,60 200,130 T400,130'/%3E%3Cpath d='M0,170 Q100,100 200,170 T400,170'/%3E%3Cpath d='M0,110 Q100,40 200,110 T400,110'/%3E%3Cpath d='M0,190 Q100,120 200,190 T400,190'/%3E%3Cpath d='M0,90 Q100,20 200,90 T400,90'/%3E%3Cpath d='M0,210 Q100,140 200,210 T400,210'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 500px 400px;
+    background-position: center;
+    background-repeat: repeat;
   }
 
-  /* Topographic contour pattern - subtle map feel */
-  .bg-topo-pattern {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%231e40af' stroke-width='0.5' opacity='0.05'%3E%3Ccircle cx='60' cy='60' r='50'/%3E%3Ccircle cx='60' cy='60' r='40'/%3E%3Ccircle cx='60' cy='60' r='30'/%3E%3Ccircle cx='60' cy='60' r='20'/%3E%3Ccircle cx='60' cy='60' r='10'/%3E%3C/g%3E%3C/svg%3E");
-    background-size: 140px 140px;
-  }
-
-  /* Subtle grid lines like map tiles */
-  .bg-grid-pattern {
+  /* Subtle grid tiles - faint map grid */
+  .bg-grid-subtle {
     background-image: 
-      linear-gradient(to right, hsl(210 50% 80% / 0.04) 1px, transparent 1px),
-      linear-gradient(to bottom, hsl(210 50% 80% / 0.04) 1px, transparent 1px);
-    background-size: 60px 60px;
+      linear-gradient(to right, hsl(210 50% 80% / 0.025) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(210 50% 80% / 0.025) 1px, transparent 1px);
+    background-size: 80px 80px;
   }
 
-  /* Large radial glow for hero focus */
-  .bg-radial-glow {
-    background: radial-gradient(ellipse 800px 500px at center 45%, hsl(210 85% 45% / 0.06) 0%, transparent 70%);
+  /* Large radial glow for hero focus - centered on search */
+  .bg-hero-radial {
+    background: radial-gradient(ellipse 900px 600px at center 40%, hsl(210 85% 50% / 0.07) 0%, transparent 65%);
   }
 
-  /* Concentrated glow behind search */
+  /* Concentrated glow behind search - more defined */
   .bg-search-glow {
-    background: radial-gradient(ellipse 500px 300px at center, hsl(210 90% 50% / 0.08) 0%, transparent 60%);
+    background: radial-gradient(ellipse 600px 350px at center, hsl(210 90% 55% / 0.1) 0%, transparent 55%);
   }
 
-  /* Section gradient for category area */
-  .bg-section-gradient {
-    background: 
-      linear-gradient(180deg, 
-        hsl(var(--background)) 0%,
-        hsl(210 25% 96%) 20%,
-        hsl(205 30% 94%) 50%,
-        hsl(200 35% 92%) 80%,
-        hsl(var(--background)) 100%
-      );
+  /* Soft bottom fade to footer transition */
+  .bg-hero-bottom-fade {
+    background: linear-gradient(180deg, transparent 0%, hsl(200 25% 91% / 0.5) 100%);
   }
 
   .bg-plus-pattern {

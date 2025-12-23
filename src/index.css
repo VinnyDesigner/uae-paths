@@ -165,67 +165,68 @@
 }
 
 @layer utilities {
-  /* === PREMIUM AMBIENT HERO BACKGROUND === */
+  /* === CLEAN AMBIENT HERO BACKGROUND (No overlapping blocks) === */
   
-  /* Base gradient - soft blue → white wash */
+  /* Base gradient - very light blue → white wash (full-width ambient) */
   .bg-hero-ambient {
     background: linear-gradient(180deg, 
-      hsl(210 30% 99%) 0%, 
-      hsl(205 40% 97%) 40%,
-      hsl(200 35% 96%) 70%,
-      hsl(195 25% 95%) 100%
+      hsl(205 35% 99%) 0%, 
+      hsl(200 30% 98%) 30%,
+      hsl(195 25% 97%) 60%,
+      hsl(200 20% 96%) 100%
     );
   }
 
-  /* Soft radial glow behind heading - ambient light */
+  /* Soft radial glow behind heading - ambient light only, no blocks */
   .bg-heading-glow {
-    background: radial-gradient(ellipse 700px 400px at center 20%, hsl(200 90% 60% / 0.06) 0%, transparent 70%);
+    background: radial-gradient(ellipse 800px 450px at center 18%, hsl(200 80% 65% / 0.05) 0%, transparent 65%);
   }
 
-  /* Concentrated search bar glow */
+  /* Concentrated search bar ambient glow */
   .bg-search-ambient {
-    background: radial-gradient(ellipse 600px 350px at center 40%, hsl(195 100% 55% / 0.08) 0%, transparent 60%);
+    background: radial-gradient(ellipse 700px 400px at center 38%, hsl(195 100% 58% / 0.06) 0%, transparent 55%);
   }
 
-  /* Flowing wave contours - GIS inspired */
+  /* Flowing contour lines - GIS/topo inspired (subtle) */
   .bg-wave-contours {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Cg fill='none' stroke='%230a5a9e' stroke-width='0.5' opacity='0.035'%3E%3Cpath d='M-50,300 Q150,200 350,300 T750,280 T1100,320'/%3E%3Cpath d='M-50,260 Q150,160 350,260 T750,240 T1100,280'/%3E%3Cpath d='M-50,340 Q150,240 350,340 T750,320 T1100,360'/%3E%3Cpath d='M-50,220 Q150,120 350,220 T750,200 T1100,240'/%3E%3Cpath d='M-50,380 Q150,280 350,380 T750,360 T1100,400'/%3E%3Cpath d='M-50,180 Q150,80 350,180 T750,160 T1100,200'/%3E%3Cpath d='M-50,420 Q150,320 350,420 T750,400 T1100,440'/%3E%3C/g%3E%3C/svg%3E");
-    background-size: 100% 100%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1000' height='700' viewBox='0 0 1000 700'%3E%3Cg fill='none' stroke='%230a5a9e' stroke-width='0.6' opacity='0.03'%3E%3Cpath d='M-100,350 Q200,220 400,350 T800,320 T1200,380'/%3E%3Cpath d='M-100,300 Q200,170 400,300 T800,270 T1200,330'/%3E%3Cpath d='M-100,400 Q200,270 400,400 T800,370 T1200,430'/%3E%3Cpath d='M-100,250 Q200,120 400,250 T800,220 T1200,280'/%3E%3Cpath d='M-100,450 Q200,320 400,450 T800,420 T1200,480'/%3E%3Cpath d='M-100,200 Q200,70 400,200 T800,170 T1200,230'/%3E%3Cpath d='M-100,500 Q200,370 400,500 T800,470 T1200,530'/%3E%3Cpath d='M-100,150 Q200,20 400,150 T800,120 T1200,180'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
   }
 
-  /* Subtle grid pattern */
+  /* Subtle grid pattern - map tiles hint */
   .bg-grid-subtle {
     background-image: 
-      linear-gradient(to right, hsl(210 50% 85% / 0.015) 1px, transparent 1px),
-      linear-gradient(to bottom, hsl(210 50% 85% / 0.015) 1px, transparent 1px);
-    background-size: 50px 50px;
+      linear-gradient(to right, hsl(210 40% 88% / 0.02) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(210 40% 88% / 0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
   }
 
-  /* Soft blue accent glow - decorative */
+  /* Decorative ambient glow - top left */
   .bg-accent-glow-tl {
-    background: radial-gradient(circle 300px at 15% 20%, hsl(200 100% 65% / 0.04) 0%, transparent 70%);
+    background: radial-gradient(circle 400px at 10% 15%, hsl(195 100% 70% / 0.035) 0%, transparent 65%);
   }
 
+  /* Decorative ambient glow - bottom right */
   .bg-accent-glow-br {
-    background: radial-gradient(circle 250px at 85% 70%, hsl(210 100% 60% / 0.035) 0%, transparent 70%);
+    background: radial-gradient(circle 350px at 88% 75%, hsl(210 100% 65% / 0.03) 0%, transparent 65%);
   }
 
-  /* Hero bottom fade transition */
+  /* Hero bottom fade - soft transition */
   .bg-hero-bottom-fade {
-    background: linear-gradient(180deg, transparent 0%, hsl(200 20% 94% / 0.5) 100%);
+    background: linear-gradient(180deg, transparent 0%, hsl(200 15% 95% / 0.4) 100%);
   }
 
-  /* Footer gradient */
+  /* Footer gradient - white to very light blue */
   .bg-footer-gradient {
-    background: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(200 25% 97%) 100%);
+    background: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(200 20% 97%) 100%);
   }
 
   /* Topo pattern for footer */
   .bg-topo-pattern {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Cg fill='none' stroke='%230a4d8c' stroke-width='0.3' opacity='0.05'%3E%3Cpath d='M0,100 Q50,50 100,100 T200,100'/%3E%3Cpath d='M0,80 Q50,30 100,80 T200,80'/%3E%3Cpath d='M0,120 Q50,70 100,120 T200,120'/%3E%3C/g%3E%3C/svg%3E");
-    background-size: 200px 200px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220'%3E%3Cg fill='none' stroke='%230a4d8c' stroke-width='0.35' opacity='0.04'%3E%3Cpath d='M0,110 Q55,55 110,110 T220,110'/%3E%3Cpath d='M0,85 Q55,30 110,85 T220,85'/%3E%3Cpath d='M0,135 Q55,80 110,135 T220,135'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 220px 220px;
   }
 
   .bg-plus-pattern {
@@ -239,28 +240,35 @@
 
   /* === TEXT GRADIENTS === */
   
-  /* Bright blue gradient text - cyan → blue → indigo */
+  /* Bright blue gradient text - cyan → blue → indigo (never covered by blocks) */
   .text-gradient-blue {
     @apply bg-clip-text text-transparent;
-    background: linear-gradient(135deg, hsl(190 100% 48%) 0%, hsl(210 100% 52%) 45%, hsl(235 75% 58%) 100%);
+    background: linear-gradient(135deg, hsl(188 100% 45%) 0%, hsl(208 100% 50%) 50%, hsl(232 70% 55%) 100%);
   }
 
-  /* Subtle glow underline for heading */
+  /* Subtle glowing underline for heading */
   .glow-underline {
     position: relative;
+    display: inline-block;
   }
   
   .glow-underline::after {
     content: '';
     position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -4px;
+    left: 5%;
+    right: 5%;
+    bottom: -6px;
     height: 3px;
-    background: linear-gradient(90deg, hsl(190 100% 50%) 0%, hsl(210 100% 55%) 50%, hsl(235 70% 55%) 100%);
+    background: linear-gradient(90deg, 
+      transparent 0%, 
+      hsl(188 100% 50% / 0.6) 20%, 
+      hsl(208 100% 55% / 0.7) 50%, 
+      hsl(232 70% 55% / 0.6) 80%, 
+      transparent 100%
+    );
     border-radius: 2px;
-    filter: blur(1px);
-    opacity: 0.7;
+    filter: blur(2px);
+    animation: glowPulse 3s ease-in-out infinite;
   }
 
   .text-gradient-hero {
@@ -283,62 +291,63 @@
     @apply bg-card/95 backdrop-blur-xl border border-border/60;
   }
 
-  /* Premium glassmorphism search bar - DOMINANT CTA */
+  /* Premium glassmorphism search bar - DOMINANT CTA (unmissable) */
   .glass-search {
-    background: hsl(0 0% 100% / 0.92);
-    backdrop-filter: blur(28px) saturate(200%);
-    border: 1.5px solid hsl(200 60% 90% / 0.8);
+    background: hsl(0 0% 100% / 0.95);
+    backdrop-filter: blur(32px) saturate(180%);
+    border: 2px solid hsl(200 50% 92% / 0.9);
     box-shadow: 
-      0 12px 48px -12px hsl(200 70% 40% / 0.15),
-      0 24px 80px -24px hsl(210 70% 35% / 0.1),
-      0 0 0 1px hsl(200 50% 95% / 0.4),
-      inset 0 2px 0 0 hsl(0 0% 100% / 0.8),
-      inset 0 -1px 0 0 hsl(210 30% 85% / 0.3);
+      0 20px 60px -15px hsl(200 70% 35% / 0.18),
+      0 32px 100px -25px hsl(210 70% 30% / 0.12),
+      0 0 0 1px hsl(0 0% 100% / 0.6),
+      inset 0 2px 0 0 hsl(0 0% 100% / 0.9),
+      inset 0 -1px 0 0 hsl(210 25% 88% / 0.4);
   }
 
   .glass-search:hover {
+    border-color: hsl(200 60% 88% / 1);
     box-shadow: 
-      0 16px 56px -12px hsl(200 70% 40% / 0.2),
-      0 28px 90px -24px hsl(210 70% 35% / 0.12),
-      0 0 0 1px hsl(200 60% 90% / 0.5),
-      inset 0 2px 0 0 hsl(0 0% 100% / 0.8),
-      inset 0 -1px 0 0 hsl(210 30% 85% / 0.3);
+      0 24px 70px -15px hsl(200 70% 35% / 0.22),
+      0 40px 110px -25px hsl(210 70% 30% / 0.14),
+      0 0 0 1px hsl(0 0% 100% / 0.7),
+      inset 0 2px 0 0 hsl(0 0% 100% / 0.9),
+      inset 0 -1px 0 0 hsl(210 25% 88% / 0.4);
   }
 
   .glass-search:focus-within {
-    border-color: hsl(200 100% 55% / 0.4);
+    border-color: hsl(200 100% 55% / 0.5);
     box-shadow: 
-      0 16px 56px -12px hsl(200 70% 40% / 0.22),
-      0 28px 90px -24px hsl(210 70% 35% / 0.14),
-      0 0 0 3px hsl(200 100% 55% / 0.12),
-      inset 0 2px 0 0 hsl(0 0% 100% / 0.8);
+      0 24px 70px -15px hsl(200 70% 35% / 0.24),
+      0 40px 110px -25px hsl(210 70% 30% / 0.16),
+      0 0 0 4px hsl(200 100% 55% / 0.1),
+      inset 0 2px 0 0 hsl(0 0% 100% / 0.9);
   }
 
-  /* Glass section panel - Floating container */
+  /* Glass section panel - Soft floating container for category cards */
   .glass-section {
-    background: hsl(0 0% 100% / 0.55);
-    backdrop-filter: blur(24px);
-    border: 1px solid hsl(210 40% 90% / 0.6);
+    background: hsl(0 0% 100% / 0.5);
+    backdrop-filter: blur(28px);
+    border: 1px solid hsl(210 35% 92% / 0.7);
     box-shadow: 
-      0 16px 48px -16px hsl(210 50% 30% / 0.12),
-      0 8px 24px -8px hsl(210 50% 30% / 0.06),
-      inset 0 1px 0 0 hsl(0 0% 100% / 0.5);
+      0 20px 56px -20px hsl(210 50% 30% / 0.1),
+      0 10px 28px -10px hsl(210 50% 30% / 0.05),
+      inset 0 1px 0 0 hsl(0 0% 100% / 0.6);
   }
 
-  /* Glass card for category items */
+  /* Glass card for category items - frosted effect */
   .glass-card {
-    background: hsl(0 0% 100% / 0.8);
-    backdrop-filter: blur(20px);
-    border: 1px solid hsl(210 40% 92% / 0.5);
+    background: hsl(0 0% 100% / 0.85);
+    backdrop-filter: blur(24px);
+    border: 1px solid hsl(210 35% 93% / 0.6);
     box-shadow: 
-      0 8px 32px -8px hsl(210 50% 30% / 0.1),
-      0 4px 12px -4px hsl(210 50% 30% / 0.05);
+      0 10px 36px -10px hsl(210 50% 30% / 0.08),
+      0 5px 14px -5px hsl(210 50% 30% / 0.04);
   }
 
   .glass-card:hover {
     box-shadow: 
-      0 12px 40px -8px hsl(210 50% 30% / 0.14),
-      0 6px 16px -4px hsl(210 50% 30% / 0.07);
+      0 14px 44px -10px hsl(210 50% 30% / 0.12),
+      0 7px 18px -5px hsl(210 50% 30% / 0.06);
   }
 
   /* === GRADIENTS === */

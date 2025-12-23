@@ -3,13 +3,12 @@ import { Link } from 'react-router-dom';
 import { 
   Heart, 
   GraduationCap, 
-  ArrowRight,
   Sparkles,
 } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { SmartSearch } from '@/components/search/SmartSearch';
-import { Button } from '@/components/ui/button';
+
 import { cn } from '@/lib/utils';
 
 const categories = [
@@ -145,67 +144,42 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                {/* Glass Tray Container */}
-                <div className="max-w-[780px] mx-auto glass-tray rounded-2xl p-5 md:p-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Simplified Category Cards - Icon + Text Only */}
+                <div className="max-w-[600px] mx-auto">
+                  <div className="flex flex-wrap justify-center gap-3 md:gap-4">
                     {categories.map((category) => {
                       const isHealthcare = category.colorClass === 'healthcare';
                       return (
-                        <div
+                        <Link
                           key={category.title}
+                          to="/map"
                           className={cn(
-                            "relative rounded-xl p-4 md:p-5 overflow-hidden group cursor-pointer",
-                            isHealthcare ? "glass-card-healthcare" : "glass-card-education"
+                            "flex items-center gap-3 px-5 py-3 md:px-6 md:py-3.5",
+                            "rounded-2xl cursor-pointer",
+                            "bg-white/10 backdrop-blur-md",
+                            "border border-white/15",
+                            "shadow-[0_8px_32px_-8px_rgba(0,0,0,0.3)]",
+                            "hover:bg-white/18 hover:border-white/25 hover:shadow-[0_12px_40px_-8px_rgba(0,0,0,0.4)]",
+                            "transition-all duration-300 group"
                           )}
                         >
-                          {/* Icon + Title */}
-                          <div className="flex items-center gap-3 mb-3 relative">
-                            <div
-                              className={cn(
-                                "w-10 h-10 md:w-11 md:h-11 rounded-xl flex items-center justify-center flex-shrink-0",
-                                "transition-all duration-300 group-hover:scale-105",
-                                isHealthcare 
-                                  ? "bg-gradient-to-br from-blue-600 to-blue-800 shadow-[0_0_20px_-5px_rgba(0,100,200,0.4)]" 
-                                  : "bg-gradient-to-br from-cyan-500 to-cyan-700 shadow-[0_0_20px_-5px_rgba(0,200,255,0.4)]"
-                              )}
-                            >
-                              <category.icon className="w-5 h-5 text-white drop-shadow-md" strokeWidth={2} />
-                            </div>
-                            <h3 className="font-heading text-base md:text-lg font-bold text-white leading-tight">
-                              {category.title}
-                            </h3>
-                          </div>
-
-                          {/* Glass Chips */}
-                          <div className="flex flex-wrap gap-1.5 md:gap-2 mb-4 relative">
-                            {category.chips.map((chip) => (
-                              <span
-                                key={chip}
-                                className="px-2.5 py-1 rounded-full text-[10px] md:text-[11px] font-medium bg-white/8 backdrop-blur-sm border border-white/10 text-white/80"
-                              >
-                                {chip}
-                              </span>
-                            ))}
-                          </div>
-
-                          {/* CTA Button - Gradient with consistent icon */}
-                          <Button
-                            size="sm"
-                            asChild
+                          {/* Icon */}
+                          <div
                             className={cn(
-                              "w-full h-11 transition-all duration-300 group/btn relative overflow-hidden",
-                              "font-semibold text-sm rounded-xl border-0",
-                              "bg-gradient-to-r from-[#00D1FF] via-[#2B6BFF] to-[#7C3AED]",
-                              "shadow-[0_10px_30px_-8px_rgba(43,107,255,0.5)]",
-                              "hover:shadow-[0_12px_35px_-8px_rgba(43,107,255,0.6)] hover:brightness-110"
+                              "w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0",
+                              "transition-transform duration-300 group-hover:scale-110",
+                              isHealthcare 
+                                ? "bg-gradient-to-br from-blue-500 to-blue-700 shadow-[0_4px_16px_-4px_rgba(59,130,246,0.5)]" 
+                                : "bg-gradient-to-br from-cyan-500 to-teal-600 shadow-[0_4px_16px_-4px_rgba(20,184,166,0.5)]"
                             )}
                           >
-                            <Link to="/map" className="flex items-center justify-center gap-2">
-                              <span className="text-white">Explore Map</span>
-                              <ArrowRight className="w-4 h-4 text-white transition-transform duration-300 group-hover/btn:translate-x-0.5" strokeWidth={2} />
-                            </Link>
-                          </Button>
-                        </div>
+                            <category.icon className="w-5 h-5 text-white" strokeWidth={2} />
+                          </div>
+                          {/* Text */}
+                          <span className="font-heading text-base md:text-lg font-bold text-white">
+                            {category.title}
+                          </span>
+                        </Link>
                       );
                     })}
                   </div>

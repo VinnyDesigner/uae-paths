@@ -17,6 +17,7 @@ import { Footer } from '@/components/layout/Footer';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import dgeLogo from '@/assets/dge-logo.png';
+import dgeLogoDark from '@/assets/dge-logo-dark.png';
 import sdiLogo from '@/assets/sdi-logo.png';
 
 const dgeFeatures = [
@@ -104,7 +105,7 @@ export default function AboutPage() {
                   <div className="flex items-center gap-4 mb-6">
                     <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20 flex items-center justify-center p-3">
                       <img 
-                        src={dgeLogo} 
+                        src={dgeLogoDark} 
                         alt="Department of Government Enablement" 
                         className="w-full h-full object-contain"
                       />

@@ -90,9 +90,9 @@ export default function HomePage() {
               </p>
 
               {/* === PRIMARY SEARCH BAR - Liquid Glass Style === */}
-              <div className="animate-fade-up delay-200 mb-5 md:mb-6">
+              <div className="animate-fade-up delay-200 mb-5 md:mb-6 relative z-[100]">
                 <div className="mx-auto" style={{ width: 'min(860px, 92vw)' }}>
-                  <SmartSearch 
+                  <SmartSearch
                     onSearch={handleSearch} 
                     size="large"
                     placeholder="Search healthcare, schools, or wellness centers…"
@@ -126,7 +126,7 @@ export default function HomePage() {
 
               {/* === EXPLORE BY CATEGORY - MERGED INTO HERO === */}
               <div className={cn(
-                "animate-fade-up delay-400 transition-all duration-300",
+                "animate-fade-up delay-400 transition-all duration-300 relative z-[1]",
                 isSearchOpen ? "mt-4" : ""
               )}>
                 {/* Section Header with glowing divider */}

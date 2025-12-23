@@ -161,13 +161,27 @@ export default function SmartMapPage() {
     <div className="h-screen flex flex-col bg-background">
       <Header />
 
-      {/* Map Area */}
+      {/* Map Area - Wrapper with proper stacking context */}
       <main className="flex-1 relative h-full min-h-[500px]">
-        {/* Left Panel - Desktop (Glassmorphism) - Always visible, no hover behavior */}
+        {/* Map Container - z-0 base layer */}
+        <div className="absolute inset-0 z-0">
+          <InteractiveMap
+            layers={layers}
+            facilities={uaeFacilities}
+            searchResults={searchResults}
+            selectedFacility={selectedFacility}
+            onFacilitySelect={handleFacilityClick}
+            suggestedZoom={searchIntent?.suggestedZoom}
+            baseMapId={baseMapId}
+            onBaseMapChange={setBaseMapId}
+            className="h-full w-full"
+          />
+        </div>
+
+        {/* Left Panel - Desktop (Glassmorphism) - Always visible, z-40 above map */}
         <div 
           data-sidebar-panel 
-          className="hidden lg:flex flex-col w-80 absolute top-4 left-4 bottom-4 bg-white/50 dark:bg-card/40 backdrop-blur-xl border border-white/40 dark:border-white/10 rounded-2xl shadow-2xl z-30"
-          style={{ opacity: 1, transform: 'none', pointerEvents: 'auto' }}
+          className="hidden lg:flex flex-col w-80 absolute top-4 left-4 bottom-4 bg-white/50 dark:bg-card/40 backdrop-blur-xl border border-white/40 dark:border-white/10 rounded-2xl shadow-2xl z-40 pointer-events-auto"
         >
           {/* Search Header - Fixed */}
           <div className="relative z-20 p-4 pb-3 bg-white/70 dark:bg-card/60 backdrop-blur-xl border-b border-white/30 dark:border-white/10 rounded-t-2xl flex-shrink-0" style={{ overflow: 'visible' }}>
@@ -255,20 +269,8 @@ export default function SmartMapPage() {
           )}
         </div>
 
-        <InteractiveMap
-            layers={layers}
-            facilities={uaeFacilities}
-            searchResults={searchResults}
-            selectedFacility={selectedFacility}
-            onFacilitySelect={handleFacilityClick}
-            suggestedZoom={searchIntent?.suggestedZoom}
-            baseMapId={baseMapId}
-            onBaseMapChange={setBaseMapId}
-            className="h-full w-full"
-          />
-
-          {/* Mobile FAB - Layers Button - z-20 for map controls */}
-          <div className="lg:hidden absolute bottom-24 left-4 z-20">
+          {/* Mobile FAB - Layers Button - z-40 for map controls */}
+          <div className="lg:hidden absolute bottom-24 left-4 z-40">
             <button
               onClick={() => setMobileSheetOpen(true)}
               className="flex items-center gap-2 bg-primary text-primary-foreground shadow-xl rounded-full px-4 py-3 min-h-[52px] hover:bg-primary/90 active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
@@ -278,7 +280,6 @@ export default function SmartMapPage() {
               <span className="text-sm font-semibold">Layers</span>
             </button>
           </div>
-
       </main>
 
       {/* Mobile Bottom Sheet - Enhanced with drag states */}

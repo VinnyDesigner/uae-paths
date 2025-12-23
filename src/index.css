@@ -488,49 +488,35 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.10);
   }
 
-  /* LIQUID GLASS SEARCH BAR - Always active with focus glow */
+  /* LIQUID GLASS SEARCH BAR - Primary CTA per spec */
   .glass-search-liquid {
-    background: rgba(255, 255, 255, 0.90);
+    background: rgba(10, 25, 45, 0.40);
     backdrop-filter: blur(var(--glass-blur)) saturate(180%);
-    border: 2px solid transparent;
+    border: 1px solid var(--glass-border-accent);
     box-shadow: 
-      0 8px 32px rgba(0, 0, 0, 0.08),
-      inset 0 1px 0 rgba(255, 255, 255, 0.5);
-    border-radius: 25px;
-    transition: all 0.3s ease;
+      var(--glass-shadow),
+      inset 0 1px 0 rgba(255,255,255,0.10);
+    border-radius: 9999px;
   }
 
   .glass-search-liquid:hover {
-    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(0, 212, 255, 0.35);
     box-shadow: 
-      0 12px 40px rgba(0, 0, 0, 0.12),
-      inset 0 1px 0 rgba(255, 255, 255, 0.6);
+      0 24px 70px rgba(0,0,0,0.40),
+      0 0 0 1px rgba(0, 212, 255, 0.12),
+      inset 0 1px 0 rgba(255,255,255,0.15);
   }
 
   .glass-search-liquid:focus-within {
-    background: rgba(255, 255, 255, 1);
-    border-color: hsl(263 70% 55%);
-    border-radius: 30px;
+    border-color: rgba(0, 212, 255, 0.45);
     box-shadow: 
-      0 0 15px rgba(106, 63, 255, 0.4),
-      0 12px 40px rgba(0, 0, 0, 0.1);
+      var(--glass-shadow),
+      var(--focus-ring-accent),
+      inset 0 1px 0 rgba(255,255,255,0.15);
   }
 
-  /* Input text styling inside liquid glass */
-  .glass-search-liquid input {
-    color: hsl(0 0% 20%) !important;
-    font-size: 16px;
-    background: transparent !important;
-    box-shadow: none !important;
-    outline: none !important;
-    border: none !important;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  .glass-search-liquid input::placeholder {
-    color: hsl(0 0% 45%);
-  }
-
+  /* Remove ALL input highlight/background on focus */
+  .glass-search-liquid input,
   .glass-search-liquid input:focus,
   .glass-search-liquid input:active,
   .glass-search-liquid input:hover {
@@ -538,25 +524,16 @@
     box-shadow: none !important;
     outline: none !important;
     border: none !important;
+    -webkit-tap-highlight-color: transparent;
   }
 
   .glass-search-liquid input:-webkit-autofill,
   .glass-search-liquid input:-webkit-autofill:focus,
   .glass-search-liquid input:-webkit-autofill:hover {
-    -webkit-text-fill-color: hsl(0 0% 20%) !important;
+    -webkit-text-fill-color: rgba(255, 255, 255, 0.95) !important;
     -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
     transition: background-color 9999s ease-in-out 0s;
     background-color: transparent !important;
-  }
-
-  /* Search icon color transition */
-  .glass-search-liquid .search-icon {
-    color: hsl(263 70% 55%);
-    transition: color 0.3s ease;
-  }
-
-  .glass-search-liquid:focus-within .search-icon {
-    color: hsl(263 70% 45%);
   }
 
   /* Glass dropdown panel - darker and more opaque per spec */

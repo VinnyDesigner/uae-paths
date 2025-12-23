@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
-import { Search, MapPin, X, Loader2, Sparkles, Navigation, Building2, Send } from 'lucide-react';
+import { Search, MapPin, X, Loader2, Sparkles, Navigation, Send } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
 
 interface SmartSearchProps {
   onSearch: (query: string) => void;
@@ -41,6 +40,7 @@ export function SmartSearch({
   const [query, setQuery] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -72,6 +72,7 @@ export function SmartSearch({
     function handleClickOutside(event: MouseEvent) {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
         setShowSuggestions(false);
+        setIsFocused(false);
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
@@ -115,14 +116,14 @@ export function SmartSearch({
     <div ref={containerRef} className={cn("relative w-full", className)} style={{ overflow: 'visible' }}>
       <div
         className={cn(
-          "relative flex items-center bg-card/95 backdrop-blur-sm border rounded-[16px] md:rounded-[18px] transition-all duration-300",
-          showSuggestions 
-            ? "shadow-elevated border-primary/40 ring-2 ring-primary/15" 
-            : "shadow-soft border-border/60 hover:shadow-elevated hover:border-border/80",
+          "relative flex items-center bg-card/98 backdrop-blur-sm border rounded-[14px] md:rounded-[16px] transition-all duration-300",
+          isFocused 
+            ? "shadow-focus border-primary/30 ring-2 ring-primary/10" 
+            : "shadow-soft border-border/40 hover:shadow-elevated hover:border-border/60",
           isLarge ? "h-14 md:h-16" : "h-11 md:h-12"
         )}
       >
-        {/* Search icon with geo styling */}
+        {/* Search icon with premium geo styling */}
         <div className={cn(
           "flex items-center justify-center flex-shrink-0",
           isLarge ? "pl-5 md:pl-6" : "pl-3 md:pl-4"
@@ -131,12 +132,18 @@ export function SmartSearch({
             <Loader2 className={cn("animate-spin text-primary", isLarge ? "w-5 h-5 md:w-6 md:h-6" : "w-4 h-4 md:w-5 md:h-5")} />
           ) : (
             <div className={cn(
-              "relative flex items-center justify-center rounded-lg",
-              isLarge ? "w-9 h-9 md:w-10 md:h-10 bg-primary/10" : "w-7 h-7 bg-primary/10"
+              "relative flex items-center justify-center rounded-xl transition-all duration-300",
+              isLarge ? "w-10 h-10 md:w-11 md:h-11" : "w-8 h-8",
+              isFocused ? "bg-primary/15" : "bg-primary/8"
             )}>
-              <Search className={cn("text-primary", isLarge ? "w-4 h-4 md:w-5 md:h-5" : "w-3.5 h-3.5 md:w-4 md:h-4")} />
+              <Search className={cn(
+                "transition-colors duration-200",
+                isFocused ? "text-primary" : "text-primary/70",
+                isLarge ? "w-4.5 h-4.5 md:w-5 md:h-5" : "w-4 h-4"
+              )} />
               <Sparkles className={cn(
-                "absolute -top-1 -right-1 text-primary animate-pulse",
+                "absolute -top-0.5 -right-0.5 text-primary transition-opacity duration-300",
+                isFocused ? "opacity-100" : "opacity-60",
                 isLarge ? "w-3 h-3 md:w-3.5 md:h-3.5" : "w-2.5 h-2.5"
               )} />
             </div>
@@ -152,22 +159,29 @@ export function SmartSearch({
             setShowSuggestions(true);
             setSelectedIndex(-1);
           }}
-          onFocus={() => setShowSuggestions(true)}
+          onFocus={() => {
+            setShowSuggestions(true);
+            setIsFocused(true);
+          }}
+          onBlur={() => {
+            // Delay to allow click on suggestions
+            setTimeout(() => setIsFocused(false), 150);
+          }}
           onKeyDown={handleKeyDown}
           placeholder={dynamicPlaceholder}
           className={cn(
-            "flex-1 min-w-0 bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground/60 truncate",
-            isLarge ? "pl-3 md:pl-4 pr-2 text-base md:text-lg font-medium" : "pl-2 md:pl-3 pr-2 text-sm"
+            "flex-1 min-w-0 bg-transparent border-none outline-none text-foreground placeholder:text-muted-foreground/50 truncate",
+            isLarge ? "pl-4 md:pl-5 pr-2 text-base md:text-lg font-medium" : "pl-3 md:pl-4 pr-2 text-sm"
           )}
           aria-label="Search facilities"
         />
 
-        <div className="flex items-center gap-1 md:gap-1.5 pr-2 md:pr-3 flex-shrink-0">
+        <div className="flex items-center gap-1.5 md:gap-2 pr-2.5 md:pr-3 flex-shrink-0">
           {query && (
             <button
               onClick={clearSearch}
               className={cn(
-                "text-muted-foreground hover:text-foreground transition-all rounded-full hover:bg-secondary/80 flex items-center justify-center",
+                "text-muted-foreground/60 hover:text-foreground transition-all rounded-full hover:bg-secondary/70 flex items-center justify-center",
                 isLarge ? "p-2 min-h-[40px] min-w-[40px]" : "p-1.5 min-h-[32px] min-w-[32px]"
               )}
               aria-label="Clear search"
@@ -178,11 +192,11 @@ export function SmartSearch({
 
           {onLocateMe && (
             <>
-              <div className={cn("w-px bg-border/60 mx-1 hidden sm:block", isLarge ? "h-7" : "h-5")} />
+              <div className={cn("w-px bg-border/50 mx-0.5 hidden sm:block", isLarge ? "h-8" : "h-6")} />
               <button
                 onClick={onLocateMe}
                 className={cn(
-                  "text-primary hover:text-primary/80 transition-all rounded-full hover:bg-primary/10 flex items-center justify-center",
+                  "text-primary/70 hover:text-primary transition-all rounded-full hover:bg-primary/10 flex items-center justify-center",
                   isLarge ? "p-2 min-h-[40px] min-w-[40px]" : "p-1.5 min-h-[32px] min-w-[32px]"
                 )}
                 title="Use my location"
@@ -193,57 +207,62 @@ export function SmartSearch({
             </>
           )}
 
-          {/* Primary action button - Send/Arrow */}
+          {/* Primary action button - Premium styling */}
           <button
             onClick={() => handleSubmit()}
             disabled={!query.trim()}
             className={cn(
-              "flex items-center justify-center rounded-xl transition-all duration-200",
-              "bg-primary text-primary-foreground shadow-soft",
-              "hover:bg-primary/90 hover:shadow-elevated",
-              "disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:shadow-soft",
+              "flex items-center justify-center rounded-xl transition-all duration-250",
+              "bg-primary text-primary-foreground",
+              "shadow-soft hover:shadow-elevated active:scale-95",
+              "disabled:opacity-35 disabled:cursor-not-allowed disabled:hover:shadow-soft disabled:active:scale-100",
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
-              isLarge ? "w-10 h-10 md:w-11 md:h-11" : "w-8 h-8 md:w-9 md:h-9"
+              isLarge ? "w-11 h-11 md:w-12 md:h-12" : "w-9 h-9 md:w-10 md:h-10"
             )}
             aria-label="Search"
           >
-            <Send className={cn(isLarge ? "w-4 h-4 md:w-5 md:h-5" : "w-3.5 h-3.5 md:w-4 md:h-4")} />
+            <Send className={cn(
+              "transition-transform duration-200",
+              isLarge ? "w-4.5 h-4.5 md:w-5 md:h-5" : "w-4 h-4"
+            )} />
           </button>
         </div>
 
       </div>
 
-      {/* AI-Powered Suggestions - Compact fixed height with internal scroll */}
+      {/* AI-Powered Suggestions - Premium dropdown */}
       {showSuggestions && filteredSuggestions.length > 0 && (
         <div 
-          className="absolute left-0 right-0 top-full mt-2 bg-card border border-border rounded-xl shadow-2xl z-[9999] animate-fade-in flex flex-col max-h-[200px] md:max-h-[280px]"
+          className="absolute left-0 right-0 top-full mt-3 bg-card/98 backdrop-blur-xl border border-border/50 rounded-2xl shadow-elevated z-[9999] animate-fade-in flex flex-col max-h-[220px] md:max-h-[300px] overflow-hidden"
         >
-          {/* Fixed Header */}
-          <div className="flex items-center gap-2 px-4 py-2.5 border-b border-border/50 flex-shrink-0">
-            <Sparkles className="w-4 h-4 text-primary" />
-            <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
+          {/* Header */}
+          <div className="flex items-center gap-2 px-4 py-3 border-b border-border/30 flex-shrink-0 bg-secondary/30">
+            <div className="w-6 h-6 rounded-lg bg-primary/10 flex items-center justify-center">
+              <Sparkles className="w-3.5 h-3.5 text-primary" />
+            </div>
+            <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider">
               AI-Powered Suggestions
             </p>
           </div>
           
           {/* Scrollable Suggestions List */}
-          <div className="flex-1 overflow-y-auto scroll-smooth px-2 py-1.5">
+          <div className="flex-1 overflow-y-auto scroll-smooth px-2 py-2">
             {filteredSuggestions.map((suggestion, index) => (
               <button
                 key={suggestion.text}
                 onClick={() => handleSubmit(suggestion.text)}
                 className={cn(
-                  "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all",
+                  "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all duration-150",
                   index === selectedIndex
-                    ? "bg-primary text-primary-foreground"
-                    : "text-foreground hover:bg-secondary"
+                    ? "bg-primary text-primary-foreground shadow-soft"
+                    : "text-foreground hover:bg-secondary/80"
                 )}
               >
                 <span className="text-lg flex-shrink-0">{suggestion.icon}</span>
                 <div className="flex-1 min-w-0">
                   <span className="text-sm font-medium">{suggestion.text}</span>
                   <span className={cn(
-                    "ml-2 text-xs px-2 py-0.5 rounded-full",
+                    "ml-2 text-xs px-2 py-0.5 rounded-full font-medium",
                     index === selectedIndex 
                       ? "bg-primary-foreground/20 text-primary-foreground" 
                       : "bg-secondary text-muted-foreground"
@@ -253,16 +272,16 @@ export function SmartSearch({
                 </div>
                 <MapPin className={cn(
                   "w-4 h-4 flex-shrink-0",
-                  index === selectedIndex ? "text-primary-foreground/60" : "text-muted-foreground/60"
+                  index === selectedIndex ? "text-primary-foreground/60" : "text-muted-foreground/40"
                 )} />
               </button>
             ))}
           </div>
           
-          {/* Fixed Footer Hint */}
-          <div className="px-4 py-2 bg-secondary/50 border-t border-border rounded-b-xl flex items-center gap-2 flex-shrink-0">
-            <Sparkles className="w-3 h-3 text-primary" />
-            <p className="text-xs text-muted-foreground">
+          {/* Footer */}
+          <div className="px-4 py-2.5 bg-secondary/40 border-t border-border/30 flex items-center gap-2 flex-shrink-0">
+            <Sparkles className="w-3 h-3 text-primary/70" />
+            <p className="text-xs text-muted-foreground/70 font-medium">
               AI understands natural language queries
             </p>
           </div>

@@ -165,29 +165,58 @@
 }
 
 @layer utilities {
-  /* Geo UI Hero Gradient - Map-like feel */
+  /* Premium Hero Gradient - Refined Map-like feel */
   .bg-hero-gradient {
     background: 
-      linear-gradient(180deg, hsl(210 30% 99%) 0%, hsl(205 40% 97%) 50%, hsl(200 35% 95%) 100%);
+      linear-gradient(180deg, 
+        hsl(210 25% 99%) 0%, 
+        hsl(205 35% 97%) 35%,
+        hsl(200 30% 95%) 70%,
+        hsl(195 25% 93%) 100%
+      );
+  }
+
+  /* Concentric location rings pattern - Premium map feel */
+  .bg-location-rings {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Cg fill='none' stroke='%231e40af' stroke-width='0.6' opacity='0.06'%3E%3Ccircle cx='100' cy='100' r='90'/%3E%3Ccircle cx='100' cy='100' r='75'/%3E%3Ccircle cx='100' cy='100' r='60'/%3E%3Ccircle cx='100' cy='100' r='45'/%3E%3Ccircle cx='100' cy='100' r='30'/%3E%3Ccircle cx='100' cy='100' r='15'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 300px 300px;
+    background-position: center center;
   }
 
   /* Topographic contour pattern - subtle map feel */
   .bg-topo-pattern {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='%231e40af' stroke-width='0.4' opacity='0.08'%3E%3Ccircle cx='50' cy='50' r='40'/%3E%3Ccircle cx='50' cy='50' r='32'/%3E%3Ccircle cx='50' cy='50' r='24'/%3E%3Ccircle cx='50' cy='50' r='16'/%3E%3Ccircle cx='50' cy='50' r='8'/%3E%3C/g%3E%3C/svg%3E");
-    background-size: 120px 120px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%231e40af' stroke-width='0.5' opacity='0.05'%3E%3Ccircle cx='60' cy='60' r='50'/%3E%3Ccircle cx='60' cy='60' r='40'/%3E%3Ccircle cx='60' cy='60' r='30'/%3E%3Ccircle cx='60' cy='60' r='20'/%3E%3Ccircle cx='60' cy='60' r='10'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 140px 140px;
   }
 
   /* Subtle grid lines like map tiles */
   .bg-grid-pattern {
     background-image: 
-      linear-gradient(to right, hsl(210 50% 80% / 0.06) 1px, transparent 1px),
-      linear-gradient(to bottom, hsl(210 50% 80% / 0.06) 1px, transparent 1px);
-    background-size: 48px 48px;
+      linear-gradient(to right, hsl(210 50% 80% / 0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(210 50% 80% / 0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
   }
 
-  /* Radial glow for search focus */
+  /* Large radial glow for hero focus */
   .bg-radial-glow {
-    background: radial-gradient(ellipse 600px 400px at center 40%, hsl(210 85% 35% / 0.08) 0%, transparent 70%);
+    background: radial-gradient(ellipse 800px 500px at center 45%, hsl(210 85% 45% / 0.06) 0%, transparent 70%);
+  }
+
+  /* Concentrated glow behind search */
+  .bg-search-glow {
+    background: radial-gradient(ellipse 500px 300px at center, hsl(210 90% 50% / 0.08) 0%, transparent 60%);
+  }
+
+  /* Section gradient for category area */
+  .bg-section-gradient {
+    background: 
+      linear-gradient(180deg, 
+        hsl(var(--background)) 0%,
+        hsl(210 25% 96%) 20%,
+        hsl(205 30% 94%) 50%,
+        hsl(200 35% 92%) 80%,
+        hsl(var(--background)) 100%
+      );
   }
 
   .bg-plus-pattern {
@@ -208,10 +237,32 @@
     @apply bg-card/95 backdrop-blur-xl border border-border/60;
   }
 
+  /* Premium glass search bar */
   .glass-search {
-    background: hsl(0 0% 100% / 0.88);
-    backdrop-filter: blur(16px) saturate(180%);
-    border: 1px solid hsl(210 20% 88% / 0.6);
+    background: hsl(0 0% 100% / 0.92);
+    backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid hsl(210 30% 92% / 0.8);
+    box-shadow: 
+      0 4px 24px -4px hsl(210 50% 30% / 0.08),
+      0 8px 48px -8px hsl(210 50% 30% / 0.04),
+      inset 0 1px 0 0 hsl(0 0% 100% / 0.5);
+  }
+
+  .glass-search:hover {
+    box-shadow: 
+      0 8px 32px -4px hsl(210 50% 30% / 0.12),
+      0 16px 64px -8px hsl(210 50% 30% / 0.06),
+      inset 0 1px 0 0 hsl(0 0% 100% / 0.5);
+  }
+
+  /* Elevated section panel */
+  .glass-section {
+    background: hsl(0 0% 100% / 0.6);
+    backdrop-filter: blur(16px);
+    border: 1px solid hsl(210 30% 90% / 0.5);
+    box-shadow: 
+      0 8px 32px -8px hsl(210 50% 30% / 0.08),
+      0 2px 8px -2px hsl(210 50% 30% / 0.04);
   }
 
   /* Gradients */
@@ -232,6 +283,12 @@
     background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
   }
 
+  /* Two-tone title gradient */
+  .text-gradient-hero {
+    @apply bg-clip-text text-transparent;
+    background: linear-gradient(135deg, hsl(var(--foreground)) 0%, hsl(var(--primary)) 100%);
+  }
+
   /* Shadows - Two levels only for clean Geo UI */
   .shadow-soft {
     box-shadow: 0 2px 8px -2px hsl(215 25% 15% / 0.08), 0 4px 16px -4px hsl(215 25% 15% / 0.06);
@@ -239,6 +296,12 @@
 
   .shadow-elevated {
     box-shadow: 0 8px 24px -8px hsl(215 25% 15% / 0.12), 0 16px 40px -12px hsl(215 25% 15% / 0.08);
+  }
+
+  .shadow-focus {
+    box-shadow: 
+      0 0 0 3px hsl(210 85% 35% / 0.15),
+      0 8px 24px -8px hsl(215 25% 15% / 0.12);
   }
 
   .shadow-glow {
@@ -257,9 +320,15 @@
     box-shadow: var(--shadow-lg);
   }
 
+  /* Premium inner glow for inputs */
+  .shadow-inner-glow {
+    box-shadow: inset 0 2px 4px 0 hsl(210 50% 90% / 0.3);
+  }
+
   /* Animations */
   .animate-fade-up {
     animation: fadeUp 0.6s ease-out forwards;
+    opacity: 0;
   }
 
   .animate-fade-in {
@@ -286,6 +355,14 @@
     animation: lineGrow 1s ease-out forwards;
   }
 
+  .animate-glow-pulse {
+    animation: glowPulse 2.5s ease-in-out infinite;
+  }
+
+  .animate-float {
+    animation: float 4s ease-in-out infinite;
+  }
+
   .delay-100 {
     animation-delay: 100ms;
   }
@@ -310,7 +387,7 @@
 @keyframes fadeUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(24px);
   }
   to {
     opacity: 1;
@@ -384,12 +461,12 @@
 
 @keyframes subtlePulse {
   0%, 100% {
-    opacity: 0.6;
+    opacity: 0.5;
     transform: scaleX(1);
   }
   50% {
     opacity: 1;
-    transform: scaleX(1.02);
+    transform: scaleX(1.05);
   }
 }
 
@@ -401,6 +478,26 @@
   to {
     transform: scaleX(1);
     opacity: 1;
+  }
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    opacity: 0.4;
+    filter: blur(20px);
+  }
+  50% {
+    opacity: 0.7;
+    filter: blur(30px);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
   }
 }
 

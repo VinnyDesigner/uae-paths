@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Home, MapPin, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -17,35 +16,36 @@ export function Header() {
 
   return (
     <>
-      {/* Main Header */}
+      {/* Main Header - Sticky, Blue Glass, Always Visible */}
       <header 
         className={cn(
           "sticky top-0 z-[1000] w-full",
-          "bg-[rgba(6,20,40,0.55)] backdrop-blur-[14px] saturate-[160%]",
-          "border-b border-white/10"
+          "bg-[linear-gradient(90deg,rgba(8,40,72,0.85),rgba(9,80,120,0.70))]",
+          "backdrop-blur-[12px] saturate-[160%]",
+          "border-b border-white/12"
         )}
       >
         <div className="container mx-auto px-4 lg:px-6">
           {/* Desktop Layout (>= 1024px): 3-column grid with centered nav */}
           <div className={cn(
-            "hidden lg:grid grid-cols-[auto_1fr_auto] items-center gap-4",
-            isMapPage ? "h-14" : "h-[72px]"
+            "hidden lg:grid grid-cols-[auto_1fr_auto] items-center gap-6",
+            isMapPage ? "h-16" : "h-[72px]"
           )}>
-            {/* DGE Logo - Left */}
+            {/* DGE Logo - Left (15-20% larger) */}
             <Link to="/" className="flex items-center shrink-0">
               <img 
                 src={dgeLogo} 
                 alt="Department of Government Enablement" 
                 className={cn(
                   "w-auto object-contain",
-                  isMapPage ? "h-7" : "h-8"
+                  isMapPage ? "h-9" : "h-10"
                 )}
               />
             </Link>
 
             {/* Centered Navigation Pills */}
             <nav className="flex items-center justify-center">
-              <div className="flex items-center bg-white/5 backdrop-blur-sm rounded-full p-1 border border-white/10">
+              <div className="flex items-center bg-white/12 backdrop-blur-[14px] rounded-full p-1.5 border border-white/10">
                 {navItems.map((item) => {
                   const isActive = location.pathname === item.path;
                   return (
@@ -53,13 +53,64 @@ export function Header() {
                       key={item.name}
                       to={item.path}
                       className={cn(
-                        "flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200",
+                        "flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 whitespace-nowrap",
                         isActive
-                          ? "bg-gradient-to-r from-[#00D4FF] via-[#2B6CFF] to-[#7C3AED] text-white shadow-lg shadow-[#2B6CFF]/25"
+                          ? "bg-gradient-to-r from-[#00D4FF] via-[#2B6CFF] to-[#7C3AED] text-white shadow-[0_8px_24px_-6px_rgba(43,108,255,0.5)]"
+                          : "text-white/75 hover:text-white hover:bg-white/10"
+                      )}
+                    >
+                      <item.icon className="w-4 h-4" strokeWidth={2} />
+                      {item.name}
+                    </Link>
+                  );
+                })}
+              </div>
+            </nav>
+
+            {/* SDI Logo - Right (15-20% larger) */}
+            <Link to="/" className="flex items-center justify-end shrink-0">
+              <img 
+                src={sdiLogo} 
+                alt="Abu Dhabi Spatial Data Infrastructure" 
+                className={cn(
+                  "w-auto object-contain brightness-0 invert",
+                  isMapPage ? "h-9" : "h-10"
+                )}
+              />
+            </Link>
+          </div>
+
+          {/* Tablet Layout (768px - 1023px): Single row with logos + centered nav */}
+          <div className={cn(
+            "hidden md:grid lg:hidden grid-cols-[auto_1fr_auto] items-center gap-4",
+            isMapPage ? "h-14" : "h-16"
+          )}>
+            {/* DGE Logo - Left */}
+            <Link to="/" className="flex items-center">
+              <img 
+                src={dgeLogo} 
+                alt="Department of Government Enablement" 
+                className="h-8 w-auto object-contain"
+              />
+            </Link>
+
+            {/* Centered Navigation Pills */}
+            <nav className="flex items-center justify-center">
+              <div className="flex items-center bg-white/10 backdrop-blur-[14px] rounded-full p-1 border border-white/10">
+                {navItems.map((item) => {
+                  const isActive = location.pathname === item.path;
+                  return (
+                    <Link
+                      key={item.name}
+                      to={item.path}
+                      className={cn(
+                        "flex items-center gap-1.5 px-3.5 py-2 rounded-full text-sm font-medium transition-all duration-200 whitespace-nowrap",
+                        isActive
+                          ? "bg-gradient-to-r from-[#00D4FF] via-[#2B6CFF] to-[#7C3AED] text-white shadow-[0_6px_20px_-4px_rgba(43,108,255,0.5)]"
                           : "text-white/70 hover:text-white hover:bg-white/10"
                       )}
                     >
-                      <item.icon className="w-4 h-4" />
+                      <item.icon className="w-4 h-4" strokeWidth={2} />
                       {item.name}
                     </Link>
                   );
@@ -68,22 +119,19 @@ export function Header() {
             </nav>
 
             {/* SDI Logo - Right */}
-            <Link to="/" className="flex items-center justify-end shrink-0">
+            <Link to="/" className="flex items-center justify-end">
               <img 
                 src={sdiLogo} 
                 alt="Abu Dhabi Spatial Data Infrastructure" 
-                className={cn(
-                  "w-auto object-contain brightness-0 invert",
-                  isMapPage ? "h-7" : "h-8"
-                )}
+                className="h-8 w-auto object-contain brightness-0 invert"
               />
             </Link>
           </div>
 
-          {/* Tablet Layout (768px - 1023px): Logos only in main header */}
+          {/* Mobile Layout (< 768px): Logos + centered compact nav */}
           <div className={cn(
-            "hidden md:flex lg:hidden items-center justify-between",
-            isMapPage ? "h-12" : "h-14"
+            "grid md:hidden grid-cols-[auto_1fr_auto] items-center gap-2",
+            isMapPage ? "h-14" : "h-16"
           )}>
             {/* DGE Logo - Left */}
             <Link to="/" className="flex items-center">
@@ -94,8 +142,32 @@ export function Header() {
               />
             </Link>
 
+            {/* Centered Navigation Pills - Compact */}
+            <nav className="flex items-center justify-center overflow-hidden">
+              <div className="flex items-center bg-white/10 backdrop-blur-[14px] rounded-full p-1 border border-white/10">
+                {navItems.map((item) => {
+                  const isActive = location.pathname === item.path;
+                  return (
+                    <Link
+                      key={item.name}
+                      to={item.path}
+                      className={cn(
+                        "flex items-center justify-center gap-1 px-3 py-2 rounded-full text-xs font-medium transition-all duration-200 min-h-[36px]",
+                        isActive
+                          ? "bg-gradient-to-r from-[#00D4FF] via-[#2B6CFF] to-[#7C3AED] text-white shadow-[0_4px_16px_-4px_rgba(43,108,255,0.5)]"
+                          : "text-white/70 hover:text-white hover:bg-white/10"
+                      )}
+                    >
+                      <item.icon className="w-4 h-4" strokeWidth={2} />
+                      <span className="hidden xs:inline">{item.name}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+            </nav>
+
             {/* SDI Logo - Right */}
-            <Link to="/" className="flex items-center">
+            <Link to="/" className="flex items-center justify-end">
               <img 
                 src={sdiLogo} 
                 alt="Abu Dhabi Spatial Data Infrastructure" 
@@ -103,97 +175,8 @@ export function Header() {
               />
             </Link>
           </div>
-
-          {/* Mobile Layout (< 768px): Logos only in main header */}
-          <div className={cn(
-            "flex md:hidden items-center justify-between",
-            isMapPage ? "h-11" : "h-12"
-          )}>
-            {/* DGE Logo - Left */}
-            <Link to="/" className="flex items-center">
-              <img 
-                src={dgeLogo} 
-                alt="Department of Government Enablement" 
-                className="h-5 w-auto object-contain"
-              />
-            </Link>
-
-            {/* SDI Logo - Right */}
-            <Link to="/" className="flex items-center">
-              <img 
-                src={sdiLogo} 
-                alt="Abu Dhabi Spatial Data Infrastructure" 
-                className="h-5 w-auto object-contain brightness-0 invert"
-              />
-            </Link>
-          </div>
         </div>
       </header>
-
-      {/* Secondary Nav Bar for Tablet (768px - 1023px) */}
-      <div className={cn(
-        "hidden md:flex lg:hidden sticky z-[999]",
-        "bg-[rgba(6,20,40,0.45)] backdrop-blur-[12px] saturate-[150%]",
-        "border-b border-white/8",
-        isMapPage ? "top-12" : "top-14"
-      )}>
-        <div className="container mx-auto px-4">
-          <nav className="flex items-center justify-center h-12">
-            <div className="flex items-center bg-white/5 backdrop-blur-sm rounded-full p-1 border border-white/10">
-              {navItems.map((item) => {
-                const isActive = location.pathname === item.path;
-                return (
-                  <Link
-                    key={item.name}
-                    to={item.path}
-                    className={cn(
-                      "flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200",
-                      isActive
-                        ? "bg-gradient-to-r from-[#00D4FF] via-[#2B6CFF] to-[#7C3AED] text-white shadow-lg shadow-[#2B6CFF]/25"
-                        : "text-white/70 hover:text-white hover:bg-white/10"
-                    )}
-                  >
-                    <item.icon className="w-4 h-4" />
-                    {item.name}
-                  </Link>
-                );
-              })}
-            </div>
-          </nav>
-        </div>
-      </div>
-
-      {/* Secondary Tab Bar for Mobile (< 768px) */}
-      <div className={cn(
-        "flex md:hidden sticky z-[999]",
-        "bg-[rgba(6,20,40,0.50)] backdrop-blur-[12px] saturate-[150%]",
-        "border-b border-white/8",
-        isMapPage ? "top-11" : "top-12"
-      )}>
-        <div className="w-full px-2">
-          <nav className="flex items-center justify-center h-[52px] gap-1">
-            {navItems.map((item) => {
-              const isActive = location.pathname === item.path;
-              return (
-                <Link
-                  key={item.name}
-                  to={item.path}
-                  className={cn(
-                    "flex flex-col items-center justify-center gap-0.5 px-4 py-2 rounded-xl min-w-[72px] min-h-[44px]",
-                    "transition-all duration-200",
-                    isActive
-                      ? "bg-gradient-to-r from-[#00D4FF] via-[#2B6CFF] to-[#7C3AED] text-white shadow-lg shadow-[#2B6CFF]/25"
-                      : "text-white/70 hover:text-white hover:bg-white/10"
-                  )}
-                >
-                  <item.icon className="w-5 h-5" />
-                  <span className="text-[10px] font-medium">{item.name}</span>
-                </Link>
-              );
-            })}
-          </nav>
-        </div>
-      </div>
     </>
   );
 }

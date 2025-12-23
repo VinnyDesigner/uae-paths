@@ -47,7 +47,7 @@ export function Footer({ variant = 'light', compact = false }: FooterProps) {
                   ? "bg-gradient-to-br from-cyan-500 to-cyan-700 shadow-[0_0_25px_-5px_hsl(188_100%_50%/0.3)]"
                   : "gradient-primary shadow-soft group-hover:shadow-elevated"
               )}>
-                <MapPin className="w-5 h-5 text-white" />
+                <MapPin className="w-5 h-5 text-white" strokeWidth={2} />
               </div>
               <div className="flex flex-col">
                 <span className={cn(
@@ -126,7 +126,7 @@ export function Footer({ variant = 'light', compact = false }: FooterProps) {
                       : "bg-primary/25 group-hover:bg-primary"
                   )} />
                   SDI Portal
-                  <ExternalLink className="w-2.5 h-2.5 opacity-50 group-hover:opacity-100 transition-opacity" />
+                  <ExternalLink className="w-2.5 h-2.5 opacity-50 group-hover:opacity-100 transition-opacity" strokeWidth={2} />
                 </a>
               </li>
             </ul>
@@ -158,7 +158,7 @@ export function Footer({ variant = 'light', compact = false }: FooterProps) {
                     <Heart className={cn(
                       "w-3 h-3",
                       isDark ? "text-blue-400" : "text-healthcare"
-                    )} />
+                    )} strokeWidth={2} />
                   </span>
                   Healthcare & Wellness
                 </Link>
@@ -182,7 +182,7 @@ export function Footer({ variant = 'light', compact = false }: FooterProps) {
                     <GraduationCap className={cn(
                       "w-3 h-3",
                       isDark ? "text-cyan-400" : "text-education"
-                    )} />
+                    )} strokeWidth={2} />
                   </span>
                   Education
                 </Link>

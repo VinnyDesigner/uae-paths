@@ -125,16 +125,18 @@ export function SmartSearch({
     <div ref={containerRef} className={cn("relative w-full", className)} style={{ overflow: 'visible' }}>
       {/* Page dim overlay when dropdown is open */}
       {showSuggestions && filteredSuggestions.length > 0 && (
-        <div className="fixed inset-0 bg-black/25 z-[9998] pointer-events-none" />
+        <div className="fixed inset-0 bg-black/30 z-[9998] pointer-events-none" />
       )}
       
       {/* Liquid Glass Search Container */}
       <div
         className={cn(
-          "relative flex items-center transition-all duration-300",
+          "relative flex items-center transition-all duration-300 rounded-full",
           isDark ? [
-            "glass-search-liquid rounded-full",
-            isFocused && "border-[rgba(0,212,255,0.5)] shadow-[0_20px_60px_rgba(0,0,0,0.35),0_0_0_3px_rgba(0,212,255,0.18)]"
+            "bg-[rgba(10,25,45,0.40)] backdrop-blur-[18px] saturate-[180%]",
+            "border border-[rgba(0,212,255,0.22)]",
+            "shadow-[0_18px_50px_rgba(0,0,0,0.35)]",
+            isFocused && "border-[rgba(0,212,255,0.5)] shadow-[0_20px_60px_rgba(0,0,0,0.4),0_0_0_3px_rgba(0,212,255,0.15)]"
           ] : [
             "glass-search rounded-[20px] md:rounded-[24px]"
           ],
@@ -143,23 +145,28 @@ export function SmartSearch({
             : "h-12 md:h-14"
         )}
       >
-        {/* Search icon with AI sparkle in glowing pill */}
+        {/* Search icon in circular container - matching right button style */}
         <div className={cn(
           "flex items-center justify-center flex-shrink-0",
-          isLarge ? "pl-3 md:pl-4" : "pl-3 md:pl-4"
+          isLarge ? "pl-2 md:pl-3" : "pl-2 md:pl-3"
         )}>
           {isSearching ? (
-            <Loader2 className={cn(
-              "animate-spin",
-              isDark ? "text-cyan-400" : "text-[hsl(200_100%_50%)]",
-              isLarge ? "w-5 h-5 md:w-6 md:h-6" : "w-4 h-4 md:w-5 md:h-5"
-            )} />
+            <div className={cn(
+              "flex items-center justify-center rounded-full",
+              isLarge ? "w-11 h-11 md:w-12 md:h-12" : "w-9 h-9",
+              "bg-[rgba(0,0,0,0.20)] border border-white/18"
+            )}>
+              <Loader2 className={cn(
+                "animate-spin text-cyan-400",
+                isLarge ? "w-5 h-5 md:w-6 md:h-6" : "w-4 h-4 md:w-5 md:h-5"
+              )} strokeWidth={2} />
+            </div>
           ) : (
             <div className={cn(
-              "relative flex items-center justify-center rounded-xl transition-all duration-300",
-              isLarge ? "w-10 h-10 md:w-11 md:h-11" : "w-8 h-8",
+              "relative flex items-center justify-center rounded-full transition-all duration-300",
+              isLarge ? "w-11 h-11 md:w-12 md:h-12" : "w-9 h-9",
               isDark 
-                ? "bg-[rgba(0,212,255,0.14)] shadow-[0_0_0_6px_rgba(0,212,255,0.08)]"
+                ? "bg-[rgba(0,0,0,0.20)] border border-white/18 shadow-[0_0_0_6px_rgba(0,212,255,0.08)]"
                 : isFocused ? "bg-gradient-to-br from-[hsl(195_100%_55%/0.15)] to-[hsl(210_100%_60%/0.1)]" : "bg-[hsl(210_60%_96%)]"
             )}>
               <Search className={cn(
@@ -168,14 +175,14 @@ export function SmartSearch({
                   ? "text-cyan-400"
                   : isFocused ? "text-[hsl(200_100%_48%)]" : "text-[hsl(210_50%_45%)]",
                 isLarge ? "w-5 h-5" : "w-4 h-4"
-              )} />
+              )} strokeWidth={2} />
               <Sparkles className={cn(
                 "absolute -top-0.5 -right-0.5 transition-all duration-300",
                 isDark 
                   ? "opacity-80 text-cyan-300"
                   : isFocused ? "opacity-100 text-[hsl(188_100%_48%)]" : "opacity-50 text-[hsl(210_50%_55%)]",
                 isLarge ? "w-3 h-3" : "w-2.5 h-2.5"
-              )} />
+              )} strokeWidth={2} />
             </div>
           )}
         </div>
@@ -199,13 +206,14 @@ export function SmartSearch({
           onKeyDown={handleKeyDown}
           placeholder={dynamicPlaceholder}
           className={cn(
-            "flex-1 min-w-0 bg-transparent border-none outline-none truncate",
+            "flex-1 min-w-0 bg-transparent border-none truncate",
+            "focus:outline-none focus:ring-0 focus:border-none",
             isDark 
               ? "text-[rgba(255,255,255,0.92)] placeholder:text-[rgba(255,255,255,0.55)]"
               : "text-foreground placeholder:text-muted-foreground/45",
             isLarge ? "pl-3 md:pl-4 pr-2 text-base md:text-lg font-medium" : "pl-3 pr-2 text-sm"
           )}
-          style={{ fontSize: isLarge ? '18px' : undefined }}
+          style={{ fontSize: isLarge ? '18px' : undefined, outline: 'none', boxShadow: 'none' }}
           aria-label="Search facilities"
         />
 
@@ -222,7 +230,7 @@ export function SmartSearch({
               )}
               aria-label="Clear search"
             >
-              <X className="w-4 h-4" />
+              <X className="w-4 h-4" strokeWidth={2} />
             </button>
           )}
 
@@ -245,12 +253,12 @@ export function SmartSearch({
                 title="Use my location"
                 aria-label="Use my location"
               >
-                <Navigation className="w-4 h-4" />
+                <Navigation className="w-4 h-4" strokeWidth={2} />
               </button>
             </>
           )}
 
-          {/* Primary action button - Bright gradient pill */}
+          {/* Primary action button - Circular gradient pill matching left icon */}
           <button
             onClick={() => handleSubmit()}
             disabled={!query.trim()}
@@ -259,8 +267,8 @@ export function SmartSearch({
               "disabled:opacity-20 disabled:cursor-not-allowed disabled:shadow-none",
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
               isDark ? [
-                "bg-gradient-to-r from-[#00D4FF] via-[#2B6CFF] to-[#7C3AED] text-white",
-                "shadow-[0_12px_30px_rgba(43,108,255,0.35)] hover:shadow-[0_14px_35px_rgba(43,108,255,0.45)]",
+                "bg-gradient-to-r from-[#00D1FF] via-[#2B6BFF] to-[#7C3AED] text-white",
+                "shadow-[0_10px_30px_rgba(43,107,255,0.35)] hover:shadow-[0_14px_35px_rgba(43,107,255,0.45)]",
                 "active:scale-[0.96] focus-visible:ring-cyan-400 hover:brightness-110"
               ] : [
                 "bg-gradient-to-br from-[hsl(192_100%_46%)] via-[hsl(205_100%_50%)] to-[hsl(218_90%_50%)] text-white",
@@ -274,24 +282,25 @@ export function SmartSearch({
             <ArrowRight className={cn(
               "transition-transform duration-200",
               isLarge ? "w-5 h-5 md:w-6 md:h-6" : "w-4 h-4"
-            )} />
+            )} strokeWidth={2} />
           </button>
         </div>
       </div>
 
-      {/* Dropdown - appears below search with spacing, glass style, scrollable */}
+      {/* Dropdown - appears below search with spacing, opaque glass for readability */}
       {showSuggestions && filteredSuggestions.length > 0 && (
         <div 
           className={cn(
-            "absolute left-0 right-0 top-full mt-3 md:mt-4 rounded-3xl z-[9999] animate-fade-in flex flex-col overflow-hidden",
-            "glass-dropdown"
+            "absolute left-0 right-0 top-full mt-3 md:mt-4 rounded-2xl z-[9999] animate-fade-in flex flex-col overflow-hidden",
+            "bg-[rgba(7,18,30,0.78)] backdrop-blur-[22px] saturate-[180%]",
+            "border border-white/16 shadow-[0_18px_60px_rgba(0,0,0,0.55)]"
           )}
           style={{ maxHeight: 'min(420px, 46vh)' }}
         >
           {/* Header */}
           <div className="flex items-center gap-2 px-4 py-3 border-b border-white/10 bg-white/5 flex-shrink-0">
             <div className="w-6 h-6 rounded-lg flex items-center justify-center bg-cyan-500/20">
-              <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+              <Sparkles className="w-3.5 h-3.5 text-cyan-400" strokeWidth={2} />
             </div>
             <p className="text-xs font-semibold uppercase tracking-wider text-white/65">
               AI-Powered Suggestions
@@ -308,7 +317,7 @@ export function SmartSearch({
                   "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all duration-150",
                   index === selectedIndex
                     ? "bg-cyan-500/20 text-white shadow-soft"
-                    : "text-white/80 hover:bg-white/10"
+                    : "text-[rgba(255,255,255,0.92)] hover:bg-white/10"
                 )}
               >
                 <span className="text-lg flex-shrink-0">{suggestion.icon}</span>
@@ -318,7 +327,7 @@ export function SmartSearch({
                     "ml-2 text-xs px-2 py-0.5 rounded-full font-medium",
                     index === selectedIndex 
                       ? "bg-cyan-400/20 text-cyan-300"
-                      : "bg-white/10 text-white/50"
+                      : "bg-white/10 text-[rgba(255,255,255,0.70)]"
                   )}>
                     {suggestion.category}
                   </span>
@@ -326,14 +335,14 @@ export function SmartSearch({
                 <MapPin className={cn(
                   "w-4 h-4 flex-shrink-0",
                   index === selectedIndex ? "text-cyan-300/60" : "text-white/30"
-                )} />
+                )} strokeWidth={2} />
               </button>
             ))}
           </div>
           
           {/* Footer */}
           <div className="px-4 py-2.5 border-t bg-white/5 border-white/10 flex items-center gap-2 flex-shrink-0">
-            <Sparkles className="w-3 h-3 text-cyan-400/70" />
+            <Sparkles className="w-3 h-3 text-cyan-400/70" strokeWidth={2} />
             <p className="text-xs font-medium text-white/40">
               AI understands natural language queries
             </p>

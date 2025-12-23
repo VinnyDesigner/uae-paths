@@ -127,9 +127,9 @@ export default function HomePage() {
                 "animate-fade-up delay-400 transition-all duration-300 relative z-[1]",
                 isSearchOpen ? "mt-4" : ""
               )}>
-                {/* Section Header with increased spacing */}
-                <div className="text-center mb-8 md:mb-10">
-                  <div className="inline-flex items-center gap-2 mb-3">
+                {/* Section Header - Reduced spacing to cards */}
+                <div className="text-center mb-4 md:mb-5">
+                  <div className="inline-flex items-center gap-2 mb-2">
                     <Sparkles className="w-3.5 h-3.5 text-cyan-400/60" strokeWidth={2} />
                     <h2 className="font-heading text-sm md:text-base font-semibold text-white/80 tracking-wide uppercase">
                       Explore by Category
@@ -141,7 +141,7 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                {/* Simplified Category Cards - Icons and Title Only, Equal Size */}
+                {/* Compact Category Cards - Single Line Text, Equal Size */}
                 <div className="max-w-[680px] mx-auto">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
                     {categories.map((category) => {
@@ -155,27 +155,27 @@ export default function HomePage() {
                             "bg-white/[0.06] backdrop-blur-lg border border-white/10",
                             "hover:bg-white/[0.10] hover:border-white/20 hover:shadow-[0_8px_30px_rgba(0,0,0,0.2)]",
                             "transition-all duration-300 hover:scale-[1.02]",
-                            "h-[140px] md:h-[160px] flex items-center justify-center"
+                            "h-[90px] md:h-[100px] flex items-center"
                           )}
                         >
-                          {/* Icon + Title - Centered Layout */}
-                          <div className="flex items-center gap-4 px-6">
+                          {/* Icon + Title - Single Line Layout */}
+                          <div className="flex items-center gap-3 md:gap-4 px-5 md:px-6 w-full">
                             <div
                               className={cn(
-                                "w-12 h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center flex-shrink-0",
+                                "w-11 h-11 md:w-12 md:h-12 rounded-xl flex items-center justify-center flex-shrink-0",
                                 "transition-all duration-300 group-hover:scale-110",
                                 isHealthcare 
                                   ? "bg-gradient-to-br from-blue-500 to-blue-700 shadow-[0_0_25px_-5px_rgba(59,130,246,0.5)]" 
                                   : "bg-gradient-to-br from-cyan-400 to-cyan-600 shadow-[0_0_25px_-5px_rgba(34,211,238,0.5)]"
                               )}
                             >
-                              <category.icon className="w-6 h-6 md:w-7 md:h-7 text-white drop-shadow-md" strokeWidth={2} />
+                              <category.icon className="w-5 h-5 md:w-6 md:h-6 text-white drop-shadow-md" strokeWidth={2} />
                             </div>
-                            <h3 className="font-heading text-lg md:text-xl font-bold text-white leading-tight">
+                            <h3 className="font-heading text-base md:text-lg font-bold text-white leading-tight whitespace-nowrap">
                               {category.title}
                             </h3>
                             {/* Arrow indicator */}
-                            <ArrowRight className="w-5 h-5 text-white/40 group-hover:text-white/80 group-hover:translate-x-1 transition-all duration-300 ml-auto" />
+                            <ArrowRight className="w-5 h-5 text-white/40 group-hover:text-white/80 group-hover:translate-x-1 transition-all duration-300 ml-auto flex-shrink-0" />
                           </div>
                         </Link>
                       );

@@ -8,6 +8,7 @@ import { DirectionsPanel } from '@/components/map/DirectionsPanel';
 import { InlineFilters } from '@/components/map/InlineFilters';
 import { SidePanelLayers } from '@/components/map/SidePanelLayers';
 import { MobileBottomSheet } from '@/components/map/MobileBottomSheet';
+import { CollapsibleSidePanel } from '@/components/map/CollapsibleSidePanel';
 import { cn } from '@/lib/utils';
 import { themeGroups } from '@/data/layers';
 import { uaeFacilities } from '@/data/facilities';
@@ -178,11 +179,8 @@ export default function SmartMapPage() {
           />
         </div>
 
-        {/* Left Panel - Desktop (Glassmorphism) - Always visible, z-40 above map */}
-        <div 
-          data-sidebar-panel 
-          className="hidden lg:flex flex-col w-80 absolute top-4 left-4 bottom-4 bg-white/50 dark:bg-card/40 backdrop-blur-xl border border-white/40 dark:border-white/10 rounded-2xl shadow-2xl z-40 pointer-events-auto"
-        >
+        {/* Left Panel - Desktop (Collapsible) */}
+        <CollapsibleSidePanel>
           {/* Search Header - Fixed */}
           <div className="relative z-20 p-4 pb-3 bg-white/70 dark:bg-card/60 backdrop-blur-xl border-b border-white/30 dark:border-white/10 rounded-t-2xl flex-shrink-0" style={{ overflow: 'visible' }}>
             <div className="relative bg-white/60 dark:bg-white/5 rounded-xl p-3 border border-white/30 dark:border-white/10 transition-all hover:bg-white/70 dark:hover:bg-white/10" style={{ overflow: 'visible' }}>
@@ -245,7 +243,7 @@ export default function SmartMapPage() {
               />
             </div>
           </div>
-        </div>
+        </CollapsibleSidePanel>
 
         {/* Mobile Search Bar - Fixed sticky at top, always visible above menus */}
         <div className="lg:hidden absolute top-3 left-3 right-3 z-[var(--z-popover)]">

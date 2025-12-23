@@ -136,7 +136,7 @@ export function SmartSearch({
             "bg-[rgba(10,25,45,0.40)] backdrop-blur-[18px] saturate-[180%]",
             "border border-[rgba(0,212,255,0.22)]",
             "shadow-[0_18px_50px_rgba(0,0,0,0.35)]",
-            isFocused && "border-[rgba(0,212,255,0.5)] shadow-[0_20px_60px_rgba(0,0,0,0.4),0_0_0_3px_rgba(0,212,255,0.15)]"
+            isFocused && "border-[rgba(0,212,255,0.5)] shadow-[0_20px_60px_rgba(0,0,0,0.4),0_0_0_4px_rgba(0,212,255,0.12)] ring-0 outline-none"
           ] : [
             "glass-search rounded-[20px] md:rounded-[24px]"
           ],
@@ -301,8 +301,8 @@ export function SmartSearch({
         <div 
           className={cn(
             "absolute left-0 right-0 top-full mt-3 md:mt-4 rounded-2xl z-[9999] animate-fade-in flex flex-col overflow-hidden",
-            "bg-[rgba(7,18,30,0.78)] backdrop-blur-[22px] saturate-[180%]",
-            "border border-white/16 shadow-[0_18px_60px_rgba(0,0,0,0.55)]"
+            "bg-[rgb(7,18,30)] backdrop-blur-[22px] saturate-[180%]",
+            "border border-white/20 shadow-[0_18px_60px_rgba(0,0,0,0.65)]"
           )}
           style={{ maxHeight: 'min(420px, 46vh)' }}
         >

@@ -165,8 +165,29 @@
 }
 
 @layer utilities {
+  /* Geo UI Hero Gradient - Map-like feel */
   .bg-hero-gradient {
-    background: linear-gradient(180deg, hsl(210 30% 99%) 0%, hsl(200 40% 96%) 100%);
+    background: 
+      linear-gradient(180deg, hsl(210 30% 99%) 0%, hsl(205 40% 97%) 50%, hsl(200 35% 95%) 100%);
+  }
+
+  /* Topographic contour pattern - subtle map feel */
+  .bg-topo-pattern {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='%231e40af' stroke-width='0.4' opacity='0.08'%3E%3Ccircle cx='50' cy='50' r='40'/%3E%3Ccircle cx='50' cy='50' r='32'/%3E%3Ccircle cx='50' cy='50' r='24'/%3E%3Ccircle cx='50' cy='50' r='16'/%3E%3Ccircle cx='50' cy='50' r='8'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 120px 120px;
+  }
+
+  /* Subtle grid lines like map tiles */
+  .bg-grid-pattern {
+    background-image: 
+      linear-gradient(to right, hsl(210 50% 80% / 0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(210 50% 80% / 0.06) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  /* Radial glow for search focus */
+  .bg-radial-glow {
+    background: radial-gradient(ellipse 600px 400px at center 40%, hsl(210 85% 35% / 0.08) 0%, transparent 70%);
   }
 
   .bg-plus-pattern {
@@ -178,6 +199,7 @@
     @apply bg-secondary/40;
   }
 
+  /* Glass effects */
   .glass {
     @apply bg-card/80 backdrop-blur-md border border-border/50;
   }
@@ -186,6 +208,13 @@
     @apply bg-card/95 backdrop-blur-xl border border-border/60;
   }
 
+  .glass-search {
+    background: hsl(0 0% 100% / 0.88);
+    backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid hsl(210 20% 88% / 0.6);
+  }
+
+  /* Gradients */
   .gradient-primary {
     background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary-dark)) 100%);
   }
@@ -203,8 +232,21 @@
     background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
   }
 
+  /* Shadows - Two levels only for clean Geo UI */
+  .shadow-soft {
+    box-shadow: 0 2px 8px -2px hsl(215 25% 15% / 0.08), 0 4px 16px -4px hsl(215 25% 15% / 0.06);
+  }
+
+  .shadow-elevated {
+    box-shadow: 0 8px 24px -8px hsl(215 25% 15% / 0.12), 0 16px 40px -12px hsl(215 25% 15% / 0.08);
+  }
+
   .shadow-glow {
     box-shadow: 0 0 40px hsl(var(--primary) / 0.15);
+  }
+
+  .shadow-glow-lg {
+    box-shadow: 0 0 80px 20px hsl(var(--primary) / 0.12);
   }
 
   .shadow-card {
@@ -215,6 +257,7 @@
     box-shadow: var(--shadow-lg);
   }
 
+  /* Animations */
   .animate-fade-up {
     animation: fadeUp 0.6s ease-out forwards;
   }
@@ -235,6 +278,14 @@
     animation: slideInRight 0.4s ease-out forwards;
   }
 
+  .animate-subtle-pulse {
+    animation: subtlePulse 3s ease-in-out infinite;
+  }
+
+  .animate-line-grow {
+    animation: lineGrow 1s ease-out forwards;
+  }
+
   .delay-100 {
     animation-delay: 100ms;
   }
@@ -249,6 +300,10 @@
 
   .delay-400 {
     animation-delay: 400ms;
+  }
+
+  .delay-500 {
+    animation-delay: 500ms;
   }
 }
 
@@ -324,6 +379,28 @@
   to {
     opacity: 0;
     transform: translateY(-100%);
+  }
+}
+
+@keyframes subtlePulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scaleX(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleX(1.02);
+  }
+}
+
+@keyframes lineGrow {
+  from {
+    transform: scaleX(0);
+    opacity: 0;
+  }
+  to {
+    transform: scaleX(1);
+    opacity: 1;
   }
 }
 

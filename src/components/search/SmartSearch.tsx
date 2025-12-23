@@ -206,14 +206,23 @@ export function SmartSearch({
           onKeyDown={handleKeyDown}
           placeholder={dynamicPlaceholder}
           className={cn(
-            "flex-1 min-w-0 bg-transparent border-none truncate",
-            "focus:outline-none focus:ring-0 focus:border-none",
+            "flex-1 min-w-0 border-none truncate",
+            "focus:outline-none focus:ring-0 focus:border-none focus:bg-transparent",
+            "active:bg-transparent active:outline-none active:ring-0",
+            "[&:focus]:bg-transparent [&:focus]:shadow-none [&:focus]:outline-none",
             isDark 
-              ? "text-[rgba(255,255,255,0.92)] placeholder:text-[rgba(255,255,255,0.55)]"
+              ? "text-[rgba(255,255,255,0.95)] placeholder:text-[rgba(255,255,255,0.50)]"
               : "text-foreground placeholder:text-muted-foreground/45",
             isLarge ? "pl-3 md:pl-4 pr-2 text-base md:text-lg font-medium" : "pl-3 pr-2 text-sm"
           )}
-          style={{ fontSize: isLarge ? '18px' : undefined, outline: 'none', boxShadow: 'none' }}
+          style={{ 
+            fontSize: isLarge ? '18px' : undefined, 
+            outline: 'none', 
+            boxShadow: 'none',
+            background: 'transparent',
+            WebkitTapHighlightColor: 'transparent',
+            caretColor: 'rgba(0, 212, 255, 0.9)'
+          }}
           aria-label="Search facilities"
         />
 

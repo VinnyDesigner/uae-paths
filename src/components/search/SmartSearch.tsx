@@ -278,28 +278,33 @@ export function SmartSearch({
             </>
           )}
 
-          {/* Primary action button - White background */}
+          {/* Primary action button - Liquid glass effect */}
           {!hideSubmitButton && (
             <button
               onClick={() => handleSubmit()}
               className={cn(
-                "flex items-center justify-center rounded-full transition-all duration-250",
+                "flex items-center justify-center rounded-full transition-all duration-300",
                 "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+                "backdrop-blur-xl border-2",
                 isDark ? [
-                  "bg-white text-[#063660]",
-                  "shadow-[0_10px_30px_rgba(255,255,255,0.25)] hover:shadow-[0_14px_35px_rgba(255,255,255,0.35)]",
-                  "active:scale-[0.96] focus-visible:ring-white hover:brightness-105"
+                  "bg-[rgba(255,255,255,0.2)] border-[rgba(255,255,255,0.4)]",
+                  "shadow-[0_8px_32px_rgba(0,212,255,0.3),inset_0_1px_1px_rgba(255,255,255,0.4)]",
+                  "hover:bg-[rgba(255,255,255,0.3)] hover:border-[rgba(0,212,255,0.6)]",
+                  "hover:shadow-[0_12px_40px_rgba(0,212,255,0.5),inset_0_1px_1px_rgba(255,255,255,0.5)]",
+                  "active:scale-[0.96] focus-visible:ring-cyan-400"
                 ] : [
-                  "bg-white text-[#063660]",
-                  "shadow-[0_6px_22px_-5px_rgba(255,255,255,0.3)]",
-                  "active:scale-[0.96] focus-visible:ring-white"
+                  "bg-[rgba(255,255,255,0.7)] border-[rgba(255,255,255,0.5)]",
+                  "shadow-[0_8px_32px_rgba(0,150,255,0.2),inset_0_1px_1px_rgba(255,255,255,0.8)]",
+                  "hover:bg-[rgba(255,255,255,0.85)] hover:shadow-[0_12px_40px_rgba(0,150,255,0.3)]",
+                  "active:scale-[0.96] focus-visible:ring-primary"
                 ],
                 isLarge ? "w-12 h-12 md:w-14 md:h-14" : "w-10 h-10"
               )}
               aria-label="Search"
             >
               <ArrowRight className={cn(
-                "transition-transform duration-200 text-[#063660] drop-shadow-sm",
+                "transition-all duration-300 drop-shadow-[0_0_8px_rgba(0,212,255,0.5)]",
+                isDark ? "text-white" : "text-primary",
                 isLarge ? "w-5 h-5 md:w-6 md:h-6" : "w-4 h-4"
               )} strokeWidth={2.5} />
             </button>

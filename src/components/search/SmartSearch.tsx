@@ -302,8 +302,7 @@ export function SmartSearch({
               aria-label="Search"
             >
               <ArrowRight className={cn(
-                "transition-all duration-300",
-                isDark ? "text-[#0F304F]" : "text-[#0F304F]",
+                "transition-all duration-300 text-white",
                 isLarge ? "w-5 h-5 md:w-6 md:h-6" : "w-4 h-4"
               )} strokeWidth={2.5} />
             </button>

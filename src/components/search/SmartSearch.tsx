@@ -283,13 +283,13 @@ export function SmartSearch({
               "flex items-center justify-center rounded-full transition-all duration-250",
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
               isDark ? [
-                "bg-[#063660] text-white",
-                "shadow-[0_10px_30px_rgba(6,54,96,0.4)] hover:shadow-[0_14px_35px_rgba(6,54,96,0.5)]",
-                "active:scale-[0.96] focus-visible:ring-[#063660] hover:brightness-110"
+                "bg-[#00DAFF] text-[#063660]",
+                "shadow-[0_10px_30px_rgba(0,218,255,0.4)] hover:shadow-[0_14px_35px_rgba(0,218,255,0.5)]",
+                "active:scale-[0.96] focus-visible:ring-[#00DAFF] hover:brightness-110"
               ] : [
-                "bg-[#063660] text-white",
-                "shadow-[0_6px_22px_-5px_rgba(6,54,96,0.45)]",
-                "active:scale-[0.96] focus-visible:ring-[#063660]"
+                "bg-[#00DAFF] text-[#063660]",
+                "shadow-[0_6px_22px_-5px_rgba(0,218,255,0.45)]",
+                "active:scale-[0.96] focus-visible:ring-[#00DAFF]"
               ],
               isLarge ? "w-12 h-12 md:w-14 md:h-14" : "w-10 h-10"
             )}

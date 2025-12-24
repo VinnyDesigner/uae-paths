@@ -43,9 +43,9 @@ export function Header() {
               />
             </Link>
 
-            {/* Centered Navigation Pills with glass effect */}
+            {/* Centered Navigation Pills with liquid glass effect */}
             <nav className="flex items-center justify-center">
-              <div className="glass-nav flex items-center p-1.5">
+              <div className="flex items-center p-1.5 rounded-full bg-white/[0.08] backdrop-blur-xl border border-white/[0.15] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_4px_20px_-4px_rgba(0,0,0,0.3)]">
                 {navItems.map((item) => {
                   const isActive = location.pathname === item.path;
                   return (
@@ -53,14 +53,19 @@ export function Header() {
                       key={item.name}
                       to={item.path}
                       className={cn(
-                        "flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 whitespace-nowrap relative",
+                        "flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 whitespace-nowrap relative overflow-hidden",
                         isActive
                           ? [
-                            "bg-gradient-to-r from-[#0D385D] via-[#0D385D] to-[#0D385D] text-white",
-                            "shadow-[0_8px_24px_-6px_rgba(13,56,93,0.5)]",
-                            "before:absolute before:inset-0 before:rounded-full before:bg-white/10 before:opacity-0 before:hover:opacity-100 before:transition-opacity"
+                            "bg-white/20 text-white backdrop-blur-md",
+                            "border border-white/30",
+                            "shadow-[inset_0_1px_2px_rgba(255,255,255,0.2),0_4px_16px_-4px_rgba(255,255,255,0.15)]",
+                            "before:absolute before:inset-0 before:rounded-full before:bg-gradient-to-b before:from-white/20 before:to-transparent before:pointer-events-none"
                           ]
-                          : "text-white/75 hover:text-white hover:bg-white/10"
+                          : [
+                            "text-white/70 hover:text-white",
+                            "hover:bg-white/10 hover:backdrop-blur-sm",
+                            "hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]"
+                          ]
                       )}
                     >
                       <item.icon className="w-4 h-4" strokeWidth={2} />
@@ -98,9 +103,9 @@ export function Header() {
               />
             </Link>
 
-            {/* Centered Navigation Pills with glass effect */}
+            {/* Centered Navigation Pills with liquid glass effect */}
             <nav className="flex items-center justify-center">
-              <div className="glass-nav flex items-center p-1">
+              <div className="flex items-center p-1 rounded-full bg-white/[0.08] backdrop-blur-xl border border-white/[0.15] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_4px_20px_-4px_rgba(0,0,0,0.3)]">
                 {navItems.map((item) => {
                   const isActive = location.pathname === item.path;
                   return (
@@ -108,13 +113,18 @@ export function Header() {
                       key={item.name}
                       to={item.path}
                       className={cn(
-                        "flex items-center gap-1.5 px-3.5 py-2 rounded-full text-sm font-medium transition-all duration-200 whitespace-nowrap relative",
+                        "flex items-center gap-1.5 px-3.5 py-2 rounded-full text-sm font-medium transition-all duration-300 whitespace-nowrap relative overflow-hidden",
                         isActive
                           ? [
-                            "bg-gradient-to-r from-[#0D385D] via-[#0D385D] to-[#0D385D] text-white",
-                            "shadow-[0_6px_20px_-4px_rgba(13,56,93,0.5)]"
+                            "bg-white/20 text-white backdrop-blur-md",
+                            "border border-white/30",
+                            "shadow-[inset_0_1px_2px_rgba(255,255,255,0.2),0_4px_16px_-4px_rgba(255,255,255,0.15)]",
+                            "before:absolute before:inset-0 before:rounded-full before:bg-gradient-to-b before:from-white/20 before:to-transparent before:pointer-events-none"
                           ]
-                          : "text-white/70 hover:text-white hover:bg-white/10"
+                          : [
+                            "text-white/70 hover:text-white",
+                            "hover:bg-white/10 hover:backdrop-blur-sm"
+                          ]
                       )}
                     >
                       <item.icon className="w-4 h-4" strokeWidth={2} />
@@ -149,9 +159,9 @@ export function Header() {
               />
             </Link>
 
-            {/* Centered Navigation Pills - Compact with glass effect */}
+            {/* Centered Navigation Pills - Compact with liquid glass effect */}
             <nav className="flex items-center justify-center overflow-hidden">
-              <div className="glass-nav flex items-center p-1">
+              <div className="flex items-center p-1 rounded-full bg-white/[0.08] backdrop-blur-xl border border-white/[0.15] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_4px_20px_-4px_rgba(0,0,0,0.3)]">
                 {navItems.map((item) => {
                   const isActive = location.pathname === item.path;
                   return (
@@ -159,13 +169,18 @@ export function Header() {
                       key={item.name}
                       to={item.path}
                       className={cn(
-                        "flex items-center justify-center gap-1 px-3 py-2 rounded-full text-xs font-medium transition-all duration-200 min-h-[36px] relative",
+                        "flex items-center justify-center gap-1 px-3 py-2 rounded-full text-xs font-medium transition-all duration-300 min-h-[36px] relative overflow-hidden",
                         isActive
                           ? [
-                            "bg-gradient-to-r from-[#0D385D] via-[#0D385D] to-[#0D385D] text-white",
-                            "shadow-[0_4px_16px_-4px_rgba(13,56,93,0.5)]"
+                            "bg-white/20 text-white backdrop-blur-md",
+                            "border border-white/30",
+                            "shadow-[inset_0_1px_2px_rgba(255,255,255,0.2),0_4px_16px_-4px_rgba(255,255,255,0.15)]",
+                            "before:absolute before:inset-0 before:rounded-full before:bg-gradient-to-b before:from-white/20 before:to-transparent before:pointer-events-none"
                           ]
-                          : "text-white/70 hover:text-white hover:bg-white/10"
+                          : [
+                            "text-white/70 hover:text-white",
+                            "hover:bg-white/10 hover:backdrop-blur-sm"
+                          ]
                       )}
                     >
                       <item.icon className="w-4 h-4" strokeWidth={2} />

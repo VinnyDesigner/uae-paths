@@ -318,7 +318,7 @@ export function SmartSearch({
               <Sparkles className="w-3.5 h-3.5 text-cyan-400" strokeWidth={2} />
             </div>
             <p className="text-xs font-semibold uppercase tracking-wider text-white/65">
-              AI-Powered Suggestions
+              AI-POWERED SUGGESTIONS FOR YOU
             </p>
           </div>
           

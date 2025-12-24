@@ -278,7 +278,7 @@ export function SmartSearch({
             </>
           )}
 
-          {/* Primary action button - Darker gradient for better visibility */}
+          {/* Primary action button - White background */}
           {!hideSubmitButton && (
             <button
               onClick={() => handleSubmit()}
@@ -286,20 +286,20 @@ export function SmartSearch({
                 "flex items-center justify-center rounded-full transition-all duration-250",
                 "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
                 isDark ? [
-                  "bg-[#00DAFF] text-[#063660]",
-                  "shadow-[0_10px_30px_rgba(0,218,255,0.4)] hover:shadow-[0_14px_35px_rgba(0,218,255,0.5)]",
-                  "active:scale-[0.96] focus-visible:ring-[#00DAFF] hover:brightness-110"
+                  "bg-white text-[#063660]",
+                  "shadow-[0_10px_30px_rgba(255,255,255,0.25)] hover:shadow-[0_14px_35px_rgba(255,255,255,0.35)]",
+                  "active:scale-[0.96] focus-visible:ring-white hover:brightness-105"
                 ] : [
-                  "bg-[#00DAFF] text-[#063660]",
-                  "shadow-[0_6px_22px_-5px_rgba(0,218,255,0.45)]",
-                  "active:scale-[0.96] focus-visible:ring-[#00DAFF]"
+                  "bg-white text-[#063660]",
+                  "shadow-[0_6px_22px_-5px_rgba(255,255,255,0.3)]",
+                  "active:scale-[0.96] focus-visible:ring-white"
                 ],
                 isLarge ? "w-12 h-12 md:w-14 md:h-14" : "w-10 h-10"
               )}
               aria-label="Search"
             >
               <ArrowRight className={cn(
-                "transition-transform duration-200 text-white drop-shadow-sm",
+                "transition-transform duration-200 text-[#063660] drop-shadow-sm",
                 isLarge ? "w-5 h-5 md:w-6 md:h-6" : "w-4 h-4"
               )} strokeWidth={2.5} />
             </button>

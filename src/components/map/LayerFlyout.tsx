@@ -181,14 +181,13 @@ export function LayerFlyout({
       ref={flyoutRef}
       className={cn(
         "fixed",
-        // Solid/glass background - consistent style
-        "bg-white dark:bg-card/95",
-        "backdrop-blur-xl backdrop-saturate-150",
-        // Border and shadow for depth - matching side panel
-        "border border-border/10 dark:border-white/15",
+        // SOLID background - no transparency to prevent layering issues
+        "bg-white dark:bg-[#1a1f2e]",
+        // Border and shadow for depth
+        "border border-border/30 dark:border-white/15",
         "rounded-[18px]",
-        "shadow-[0_10px_30px_rgba(15,23,42,0.10)]",
-        "dark:shadow-[0_10px_30px_rgba(0,0,0,0.35)]",
+        "shadow-[0_10px_40px_rgba(15,23,42,0.15),0_4px_12px_rgba(0,0,0,0.08)]",
+        "dark:shadow-[0_10px_40px_rgba(0,0,0,0.45)]",
         // Animation
         "transition-all duration-200 ease-out",
         "flex flex-col overflow-hidden",
@@ -202,8 +201,8 @@ export function LayerFlyout({
         height: `${flyoutPosition.height}px`,
         width: `${flyoutPosition.width}px`,
         maxHeight: `${flyoutPosition.height}px`,
-        // Leaflet controls/markers often sit at z-index 400–1000; keep flyout above them.
-        zIndex: 1200,
+        // High z-index to ensure flyout is above all other content
+        zIndex: 1500,
       }}
       role="dialog"
       aria-modal="true"

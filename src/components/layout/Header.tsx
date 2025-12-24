@@ -56,8 +56,8 @@ export function Header() {
                         "flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 whitespace-nowrap relative",
                         isActive
                           ? [
-                            "bg-gradient-to-r from-[#00D4FF] via-[#2B6CFF] to-[#7C3AED] text-white",
-                            "shadow-[0_8px_24px_-6px_rgba(43,108,255,0.5)]",
+                            "bg-gradient-to-r from-[#0D385D] via-[#0D385D] to-[#0D385D] text-white",
+                            "shadow-[0_8px_24px_-6px_rgba(13,56,93,0.5)]",
                             "before:absolute before:inset-0 before:rounded-full before:bg-white/10 before:opacity-0 before:hover:opacity-100 before:transition-opacity"
                           ]
                           : "text-white/75 hover:text-white hover:bg-white/10"
@@ -111,8 +111,8 @@ export function Header() {
                         "flex items-center gap-1.5 px-3.5 py-2 rounded-full text-sm font-medium transition-all duration-200 whitespace-nowrap relative",
                         isActive
                           ? [
-                            "bg-gradient-to-r from-[#00D4FF] via-[#2B6CFF] to-[#7C3AED] text-white",
-                            "shadow-[0_6px_20px_-4px_rgba(43,108,255,0.5)]"
+                            "bg-gradient-to-r from-[#0D385D] via-[#0D385D] to-[#0D385D] text-white",
+                            "shadow-[0_6px_20px_-4px_rgba(13,56,93,0.5)]"
                           ]
                           : "text-white/70 hover:text-white hover:bg-white/10"
                       )}
@@ -162,8 +162,8 @@ export function Header() {
                         "flex items-center justify-center gap-1 px-3 py-2 rounded-full text-xs font-medium transition-all duration-200 min-h-[36px] relative",
                         isActive
                           ? [
-                            "bg-gradient-to-r from-[#00D4FF] via-[#2B6CFF] to-[#7C3AED] text-white",
-                            "shadow-[0_4px_16px_-4px_rgba(43,108,255,0.5)]"
+                            "bg-gradient-to-r from-[#0D385D] via-[#0D385D] to-[#0D385D] text-white",
+                            "shadow-[0_4px_16px_-4px_rgba(13,56,93,0.5)]"
                           ]
                           : "text-white/70 hover:text-white hover:bg-white/10"
                       )}

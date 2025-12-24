@@ -903,26 +903,26 @@
 @keyframes searchBarGlow {
   0% {
     box-shadow: 
-      0 0 5px #00A0E9,
-      0 0 10px #00A0E9,
-      0 0 15px #00A0E9,
-      0 0 20px #00A0E9,
+      0 0 5px #70EAFF,
+      0 0 10px #70EAFF,
+      0 0 15px #70EAFF,
+      0 0 20px #70EAFF,
       0 8px 32px rgba(0, 0, 0, 0.25);
   }
   50% {
     box-shadow: 
-      0 0 10px #00A0E9,
-      0 0 20px #00A0E9,
-      0 0 30px #00A0E9,
-      0 0 40px #00A0E9,
+      0 0 10px #70EAFF,
+      0 0 20px #70EAFF,
+      0 0 30px #70EAFF,
+      0 0 40px #70EAFF,
       0 8px 32px rgba(0, 0, 0, 0.25);
   }
   100% {
     box-shadow: 
-      0 0 5px #00A0E9,
-      0 0 10px #00A0E9,
-      0 0 15px #00A0E9,
-      0 0 20px #00A0E9,
+      0 0 5px #70EAFF,
+      0 0 10px #70EAFF,
+      0 0 15px #70EAFF,
+      0 0 20px #70EAFF,
       0 8px 32px rgba(0, 0, 0, 0.25);
   }
 }

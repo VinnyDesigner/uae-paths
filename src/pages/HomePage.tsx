@@ -58,7 +58,7 @@ export default function HomePage() {
 
           {/* === HERO CONTENT === */}
           <div className="container mx-auto px-4 relative z-10 flex-1 flex flex-col justify-center py-6 md:py-8">
-            <div className="max-w-[900px] mx-auto w-full">
+            <div className="max-w-[920px] mx-auto w-full">
               
               {/* Main Heading - Gradient TEXT only on "for Daily Life", NO boxes */}
               <div className="text-center mb-3 animate-fade-up relative z-20">

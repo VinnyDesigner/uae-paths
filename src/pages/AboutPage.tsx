@@ -28,7 +28,7 @@ const dgeFeatures = [
   },
   {
     icon: Lightbulb,
-    title: 'AI-Native Government',
+    title: 'Smart Digital Government',
     description: 'Leading the implementation of Abu Dhabi Government Digital Strategy 2025-2027, driving 100% digitalisation and automation.'
   },
   {
@@ -126,7 +126,7 @@ export default function AboutPage() {
                     </p>
                     <p>
                       At DGE, we are the team behind the teams — the unified engine powering Abu Dhabi's 
-                      transformation into a future-ready, AI-native government. Our role is to help Abu Dhabi 
+                      transformation into a future-ready, digitally advanced government. Our role is to help Abu Dhabi 
                       Government work better by building the shared systems, platforms, and capabilities 
                       that allow every government entity to operate faster, smarter, and more seamlessly.
                     </p>
@@ -290,7 +290,7 @@ export default function AboutPage() {
                   </div>
                   <h3 className="font-semibold text-foreground mb-2">Smart Government</h3>
                   <p className="text-sm text-muted-foreground">
-                    Part of Abu Dhabi's journey towards an AI-native, digitally transformed government.
+                    Part of Abu Dhabi's journey towards a digitally transformed, intelligent government.
                   </p>
                 </div>
               </div>

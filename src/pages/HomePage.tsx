@@ -100,7 +100,7 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* AI Suggestion Chips - Subtle styling with reduced opacity */}
+              {/* Suggestion Chips - Subtle styling with reduced opacity */}
               {!isSearchOpen && (
                 <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-8 md:mb-10 animate-fade-up delay-300">
                   {aiSuggestionChips.map((chip) => (

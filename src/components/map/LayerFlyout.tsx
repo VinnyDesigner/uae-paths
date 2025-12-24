@@ -2,7 +2,6 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { 
   ArrowLeft,
   Check,
-  Circle,
   CheckCircle2,
   XCircle,
   Heart, 
@@ -351,34 +350,22 @@ export function LayerFlyout({
                 </p>
               </div>
               
-              {/* Unified check indicator - primary color only */}
+              {/* Check indicator - clean and simple */}
               <div
                 className={cn(
-                  "flex-shrink-0 flex items-center justify-center w-7 h-7 rounded-lg",
-                  "transition-all duration-120",
+                  "w-5 h-5 flex-shrink-0 rounded-full flex items-center justify-center transition-all duration-120",
                   layer.visible
-                    ? "bg-primary/10 shadow-sm"
-                    : "bg-muted/20 group-hover:bg-muted/30"
+                    ? "bg-primary"
+                    : "border-2 border-muted-foreground/25 group-hover:border-muted-foreground/40",
+                  isToggling && "scale-90"
                 )}
               >
-                <div
-                  className={cn(
-                    "w-5 h-5 rounded-full flex items-center justify-center transition-all duration-120",
-                    layer.visible
-                      ? "bg-primary border-0"
-                      : "border-2 border-muted-foreground/25 group-hover:border-muted-foreground/35",
-                    isToggling && "scale-90"
-                  )}
-                >
-                  {layer.visible ? (
-                    <Check className={cn(
-                      "w-3 h-3 text-white transition-transform duration-120",
-                      isToggling && "scale-110"
-                    )} />
-                  ) : (
-                    <Circle className="w-2 h-2 text-muted-foreground/25 group-hover:text-muted-foreground/40" />
-                  )}
-                </div>
+                {layer.visible && (
+                  <Check className={cn(
+                    "w-3 h-3 text-white transition-transform duration-120",
+                    isToggling && "scale-110"
+                  )} />
+                )}
               </div>
             </button>
           );

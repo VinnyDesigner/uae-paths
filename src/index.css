@@ -928,12 +928,12 @@
 }
 
 .animate-search-glow {
-  animation: searchBarGlow 1.5s ease-in-out infinite alternate;
+  animation: searchBarGlow 3s ease-in-out infinite alternate;
 }
 
 /* Search bar focus glow effect */
 .search-bar-glow:focus-within {
-  animation: searchBarGlow 1.5s ease-in-out infinite alternate;
+  animation: searchBarGlow 3s ease-in-out infinite alternate;
 }
 
 /* Map (Leaflet) layering */

@@ -13,6 +13,7 @@ interface SmartSearchProps {
   variant?: 'light' | 'dark';
   onOpenChange?: (isOpen: boolean) => void;
   hideSubmitButton?: boolean;
+  disableGlow?: boolean;
 }
 
 const aiSuggestions = [
@@ -40,7 +41,8 @@ export function SmartSearch({
   activeLayerId,
   variant = 'light',
   onOpenChange,
-  hideSubmitButton = false
+  hideSubmitButton = false,
+  disableGlow = false
 }: SmartSearchProps) {
   const [query, setQuery] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -140,7 +142,8 @@ export function SmartSearch({
       {/* Liquid Glass Search Container - Navy themed with always-on glow animation */}
       <div
         className={cn(
-          "relative flex items-center transition-all duration-300 rounded-full overflow-visible z-[var(--z-dropdown)] animate-search-glow",
+          "relative flex items-center transition-all duration-300 rounded-full overflow-visible z-[var(--z-dropdown)]",
+          !disableGlow && "animate-search-glow",
           isDark ? [
             "bg-[#0F304F]/80 backdrop-blur-xl",
             "border-2 border-[#7ac8ff]/30",

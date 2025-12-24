@@ -71,12 +71,8 @@ export default function HomePage() {
                   <span 
                     className="ml-2 sm:ml-3 inline-block relative z-10 tracking-[2px] font-bold"
                     style={{
-                      background: 'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)',
-                      WebkitBackgroundClip: 'text',
-                      backgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      color: 'transparent',
-                      filter: 'drop-shadow(0 2px 16px rgba(106, 17, 203, 0.5)) drop-shadow(0 0 40px rgba(37, 117, 252, 0.4))'
+                      color: '#64E8FF',
+                      textShadow: '0 2px 16px rgba(100, 232, 255, 0.5), 0 0 40px rgba(100, 232, 255, 0.4)'
                     }}
                   >Daily Life</span>
                 </h1>

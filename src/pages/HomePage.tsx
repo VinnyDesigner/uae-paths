@@ -85,7 +85,9 @@ export default function HomePage() {
 
               {/* === PRIMARY SEARCH BAR - More Prominent with wider width === */}
               <div className="animate-fade-up delay-200 mb-8 md:mb-10 relative z-[var(--z-popover)]">
-                <div className="mx-auto" style={{ width: 'min(920px, 95vw)' }}>
+                {/* Ambient glow behind search bar */}
+                <div className="absolute inset-0 bg-search-ambient pointer-events-none" />
+                <div className="mx-auto relative" style={{ width: 'min(920px, 95vw)' }}>
                   <SmartSearch
                     onSearch={handleSearch} 
                     size="large"

@@ -77,11 +77,11 @@
     --popover: 0 0% 100%;
     --popover-foreground: 215 25% 15%;
 
-    /* Primary - Government Blue */
-    --primary: 210 85% 35%;
+    /* Primary - Deep Navy Blue #0F304F */
+    --primary: 209 69% 18%;
     --primary-foreground: 0 0% 100%;
-    --primary-light: 210 75% 92%;
-    --primary-dark: 210 90% 25%;
+    --primary-light: 209 50% 92%;
+    --primary-dark: 209 75% 12%;
 
     /* Secondary - Warm Neutral */
     --secondary: 210 15% 94%;
@@ -131,7 +131,7 @@
 
     --border: 210 20% 88%;
     --input: 210 20% 88%;
-    --ring: 210 85% 35%;
+    --ring: 209 69% 18%;
 
     --radius: 0.5rem;
 
@@ -145,12 +145,12 @@
     /* Sidebar */
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 215 25% 25%;
-    --sidebar-primary: 210 85% 35%;
+    --sidebar-primary: 209 69% 18%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 210 15% 95%;
     --sidebar-accent-foreground: 215 25% 25%;
     --sidebar-border: 210 20% 90%;
-    --sidebar-ring: 210 85% 35%;
+    --sidebar-ring: 209 69% 18%;
   }
 
   .dark {

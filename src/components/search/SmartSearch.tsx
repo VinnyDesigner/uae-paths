@@ -278,24 +278,24 @@ export function SmartSearch({
             </>
           )}
 
-          {/* Primary action button - Liquid glass effect */}
+          {/* Primary action button - Liquid glass with white fill */}
           {!hideSubmitButton && (
             <button
               onClick={() => handleSubmit()}
               className={cn(
                 "flex items-center justify-center rounded-full transition-all duration-300",
                 "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-                "backdrop-blur-xl border-2",
+                "backdrop-blur-xl border",
                 isDark ? [
-                  "bg-[rgba(255,255,255,0.2)] border-[rgba(255,255,255,0.4)]",
-                  "shadow-[0_8px_32px_rgba(0,212,255,0.3),inset_0_1px_1px_rgba(255,255,255,0.4)]",
-                  "hover:bg-[rgba(255,255,255,0.3)] hover:border-[rgba(0,212,255,0.6)]",
-                  "hover:shadow-[0_12px_40px_rgba(0,212,255,0.5),inset_0_1px_1px_rgba(255,255,255,0.5)]",
+                  "bg-white/90 border-white/60",
+                  "shadow-[0_8px_32px_rgba(255,255,255,0.25),inset_0_1px_2px_rgba(255,255,255,0.8)]",
+                  "hover:bg-white hover:border-[rgba(0,212,255,0.5)]",
+                  "hover:shadow-[0_12px_40px_rgba(0,212,255,0.35),inset_0_1px_2px_rgba(255,255,255,1)]",
                   "active:scale-[0.96] focus-visible:ring-cyan-400"
                 ] : [
-                  "bg-[rgba(255,255,255,0.7)] border-[rgba(255,255,255,0.5)]",
-                  "shadow-[0_8px_32px_rgba(0,150,255,0.2),inset_0_1px_1px_rgba(255,255,255,0.8)]",
-                  "hover:bg-[rgba(255,255,255,0.85)] hover:shadow-[0_12px_40px_rgba(0,150,255,0.3)]",
+                  "bg-white/95 border-white/70",
+                  "shadow-[0_8px_32px_rgba(0,150,255,0.15),inset_0_1px_2px_rgba(255,255,255,0.9)]",
+                  "hover:bg-white hover:shadow-[0_12px_40px_rgba(0,150,255,0.25)]",
                   "active:scale-[0.96] focus-visible:ring-primary"
                 ],
                 isLarge ? "w-12 h-12 md:w-14 md:h-14" : "w-10 h-10"
@@ -303,8 +303,8 @@ export function SmartSearch({
               aria-label="Search"
             >
               <ArrowRight className={cn(
-                "transition-all duration-300 drop-shadow-[0_0_8px_rgba(0,212,255,0.5)]",
-                isDark ? "text-white" : "text-primary",
+                "transition-all duration-300",
+                isDark ? "text-[#063660]" : "text-[#063660]",
                 isLarge ? "w-5 h-5 md:w-6 md:h-6" : "w-4 h-4"
               )} strokeWidth={2.5} />
             </button>

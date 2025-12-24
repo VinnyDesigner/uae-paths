@@ -321,8 +321,8 @@ export function SmartSearch({
             <div className="w-6 h-6 rounded-lg flex items-center justify-center bg-cyan-500/20">
               <Sparkles className="w-3.5 h-3.5 text-cyan-400" strokeWidth={2} />
             </div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-white/65">
-              AI-POWERED SUGGESTIONS FOR YOU
+            <p className="text-xs font-semibold tracking-wider text-white/65">
+              Suggestions for you
             </p>
           </div>
           

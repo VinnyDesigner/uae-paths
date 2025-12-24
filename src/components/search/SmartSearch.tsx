@@ -137,16 +137,15 @@ export function SmartSearch({
         <div className="fixed inset-0 bg-black/30 z-[var(--z-popover-backdrop)] pointer-events-none" />
       )}
       
-      {/* Liquid Glass Search Container - Continuous glowing effect */}
+      {/* Liquid Glass Search Container - Navy themed */}
       <div
         className={cn(
           "relative flex items-center transition-all duration-300 rounded-full overflow-visible z-[var(--z-dropdown)]",
           isDark ? [
-            "glass-search-liquid",
-            "border-2 border-[rgba(0,192,255,0.4)]",
-            "bg-[rgba(255,255,255,0.12)]",
-            "animate-search-glow",
-            isFocused && "!bg-[rgba(255,255,255,0.18)] !border-[rgba(0,192,255,0.6)]"
+            "bg-[#0F304F]/80 backdrop-blur-xl",
+            "border-2 border-[#7ac8ff]/30",
+            "shadow-[0_8px_32px_rgba(0,0,0,0.3)]",
+            isFocused && "!bg-[#0F304F]/90 !border-[#7ac8ff]/50 shadow-[0_0_30px_rgba(122,200,255,0.2)]"
           ] : [
             "glass-search rounded-[20px] md:rounded-[24px]"
           ],
@@ -165,10 +164,10 @@ export function SmartSearch({
             <div className={cn(
               "flex items-center justify-center rounded-full",
               isLarge ? "w-11 h-11 md:w-12 md:h-12" : "w-9 h-9",
-              "bg-[rgba(0,0,0,0.20)] border border-white/18"
+              "bg-[#1A4B73] border border-[#7ac8ff]/20"
             )}>
               <Loader2 className={cn(
-                "animate-spin text-cyan-400",
+                "animate-spin text-[#7ac8ff]",
                 isLarge ? "w-5 h-5 md:w-6 md:h-6" : "w-4 h-4 md:w-5 md:h-5"
               )} strokeWidth={2} />
             </div>
@@ -177,20 +176,20 @@ export function SmartSearch({
               "relative flex items-center justify-center rounded-full transition-all duration-300",
               isLarge ? "w-11 h-11 md:w-12 md:h-12" : "w-9 h-9",
               isDark 
-                ? "bg-[rgba(0,0,0,0.20)] border border-white/18"
+                ? "bg-[#1A4B73] border border-[#7ac8ff]/20"
                 : isFocused ? "bg-gradient-to-br from-[hsl(195_100%_55%/0.15)] to-[hsl(210_100%_60%/0.1)]" : "bg-[hsl(210_60%_96%)]"
             )}>
               <Search className={cn(
                 "transition-colors duration-200",
                 isDark 
-                  ? "text-cyan-400"
+                  ? "text-[#7ac8ff]"
                   : isFocused ? "text-[hsl(200_100%_48%)]" : "text-[hsl(210_50%_45%)]",
                 isLarge ? "w-5 h-5" : "w-4 h-4"
               )} strokeWidth={2} />
               <Sparkles className={cn(
                 "absolute -top-0.5 -right-0.5 transition-all duration-300",
                 isDark 
-                  ? "opacity-80 text-cyan-300"
+                  ? "opacity-80 text-[#7ac8ff]"
                   : isFocused ? "opacity-100 text-[hsl(188_100%_48%)]" : "opacity-50 text-[hsl(210_50%_55%)]",
                 isLarge ? "w-3 h-3" : "w-2.5 h-2.5"
               )} strokeWidth={2} />
@@ -258,7 +257,7 @@ export function SmartSearch({
             <>
               <div className={cn(
                 "w-px mx-0.5 hidden sm:block",
-                isDark ? "bg-white/15" : "bg-border/40",
+                isDark ? "bg-[#7ac8ff]/20" : "bg-border/40",
                 isLarge ? "h-7" : "h-6"
               )} />
               <button
@@ -266,7 +265,7 @@ export function SmartSearch({
                 className={cn(
                   "transition-all rounded-full flex items-center justify-center",
                   isDark 
-                    ? "text-cyan-400/60 hover:text-cyan-400 hover:bg-cyan-400/10"
+                    ? "text-[#7ac8ff]/60 hover:text-[#7ac8ff] hover:bg-[#7ac8ff]/10"
                     : "text-primary/60 hover:text-primary hover:bg-primary/10",
                   isLarge ? "p-2" : "p-1.5"
                 )}
@@ -287,11 +286,11 @@ export function SmartSearch({
                 "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
                 "backdrop-blur-xl border",
                 isDark ? [
-                  "bg-white/90 border-white/60",
-                  "shadow-[0_8px_32px_rgba(255,255,255,0.25),inset_0_1px_2px_rgba(255,255,255,0.8)]",
-                  "hover:bg-white hover:border-[rgba(0,212,255,0.5)]",
-                  "hover:shadow-[0_12px_40px_rgba(0,212,255,0.35),inset_0_1px_2px_rgba(255,255,255,1)]",
-                  "active:scale-[0.96] focus-visible:ring-cyan-400"
+                  "bg-[#7ac8ff] border-[#7ac8ff]",
+                  "shadow-[0_4px_20px_rgba(122,200,255,0.3)]",
+                  "hover:bg-[#9dd5ff] hover:border-[#9dd5ff]",
+                  "hover:shadow-[0_8px_30px_rgba(122,200,255,0.4)]",
+                  "active:scale-[0.96] focus-visible:ring-[#7ac8ff]"
                 ] : [
                   "bg-white/95 border-white/70",
                   "shadow-[0_8px_32px_rgba(0,150,255,0.15),inset_0_1px_2px_rgba(255,255,255,0.9)]",
@@ -317,14 +316,15 @@ export function SmartSearch({
         <div 
           className={cn(
             "absolute left-0 right-0 top-full mt-2 z-[var(--z-dropdown)] animate-fade-in flex flex-col overflow-hidden",
-            "glass-dropdown"
+            "bg-[#0F304F]/95 backdrop-blur-xl border border-[#7ac8ff]/20 rounded-2xl",
+            "shadow-[0_20px_60px_rgba(0,0,0,0.4)]"
           )}
           style={{ maxHeight: 'min(420px, 46vh)' }}
         >
           {/* Header */}
-          <div className="flex items-center gap-2 px-5 py-3 border-b border-white/10 flex-shrink-0">
-            <div className="w-6 h-6 rounded-full flex items-center justify-center bg-cyan-500/20">
-              <Sparkles className="w-3.5 h-3.5 text-cyan-400" strokeWidth={2} />
+          <div className="flex items-center gap-2 px-5 py-3 border-b border-[#7ac8ff]/15 flex-shrink-0">
+            <div className="w-6 h-6 rounded-full flex items-center justify-center bg-[#1A4B73]">
+              <Sparkles className="w-3.5 h-3.5 text-[#7ac8ff]" strokeWidth={2} />
             </div>
             <p className="text-xs font-semibold tracking-wider text-white/65 uppercase">
               Suggestions for you
@@ -338,10 +338,10 @@ export function SmartSearch({
                 key={suggestion.text}
                 onClick={() => handleSubmit(suggestion.text)}
                 className={cn(
-                  "w-full flex items-center gap-3 px-4 py-3 rounded-[20px] text-left transition-all duration-150",
+                  "w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all duration-150",
                   index === selectedIndex
-                    ? "bg-cyan-500/20 text-white"
-                    : "text-[rgba(255,255,255,0.92)] hover:bg-white/8"
+                    ? "bg-[#1A4B73] text-white"
+                    : "text-white/85 hover:bg-[#1A4B73]/50"
                 )}
               >
                 <span className="text-lg flex-shrink-0">{suggestion.icon}</span>
@@ -350,15 +350,15 @@ export function SmartSearch({
                   <span className={cn(
                     "ml-2 text-xs px-2 py-0.5 rounded-full font-medium",
                     index === selectedIndex 
-                      ? "bg-cyan-400/20 text-cyan-300"
-                      : "bg-white/10 text-[rgba(255,255,255,0.60)]"
+                      ? "bg-[#7ac8ff]/20 text-[#7ac8ff]"
+                      : "bg-white/10 text-white/50"
                   )}>
                     {suggestion.category}
                   </span>
                 </div>
                 <MapPin className={cn(
                   "w-4 h-4 flex-shrink-0",
-                  index === selectedIndex ? "text-cyan-300/60" : "text-white/25"
+                  index === selectedIndex ? "text-[#7ac8ff]/60" : "text-white/25"
                 )} strokeWidth={2} />
               </button>
             ))}

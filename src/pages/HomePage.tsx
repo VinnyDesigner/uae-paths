@@ -71,8 +71,8 @@ export default function HomePage() {
                   <span 
                     className="ml-2 sm:ml-3 inline-block relative z-10 tracking-[2px] font-bold"
                     style={{
-                      color: '#64E8FF',
-                      textShadow: '0 2px 16px rgba(100, 232, 255, 0.5), 0 0 40px rgba(100, 232, 255, 0.4)'
+                      color: '#0F304F',
+                      textShadow: '0 2px 16px rgba(15, 48, 79, 0.5), 0 0 40px rgba(15, 48, 79, 0.3)'
                     }}
                   >Daily Life</span>
                 </h1>

@@ -183,7 +183,7 @@ export default function SmartMapPage() {
         <CollapsibleSidePanel>
           {/* Search Header - Fixed */}
           <div className="relative z-20 p-4 pb-3 bg-white/70 dark:bg-card/60 backdrop-blur-xl border-b border-white/30 dark:border-white/10 rounded-t-2xl flex-shrink-0" style={{ overflow: 'visible' }}>
-            <div className="relative bg-white/60 dark:bg-white/5 rounded-xl p-3 border border-white/30 dark:border-white/10 transition-all hover:bg-white/70 dark:hover:bg-white/10" style={{ overflow: 'visible' }}>
+            <div className="relative bg-white/40 dark:bg-white/5 rounded-xl p-4 border border-white/30 dark:border-white/10 transition-all hover:bg-white/50 dark:hover:bg-white/10" style={{ overflow: 'visible' }}>
               <SmartSearch 
                 onSearch={handleSearch} 
                 onLocateMe={handleLocateMe} 

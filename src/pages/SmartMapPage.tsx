@@ -191,6 +191,7 @@ export default function SmartMapPage() {
                 size="default"
                 activeLayerId={activeHospitalLayer}
                 hideSubmitButton
+                disableGlow
               />
             </div>
             

@@ -78,7 +78,7 @@ export function Header() {
                 alt="Abu Dhabi Spatial Data Infrastructure" 
                 className={cn(
                   "w-auto object-contain brightness-0 invert",
-                  isMapPage ? "h-9" : "h-10"
+                  isMapPage ? "h-11" : "h-12"
                 )}
               />
             </Link>

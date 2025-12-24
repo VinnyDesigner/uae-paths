@@ -137,14 +137,13 @@ export function SmartSearch({
         <div className="fixed inset-0 bg-black/30 z-[var(--z-popover-backdrop)] pointer-events-none" />
       )}
       
-      {/* Liquid Glass Search Container - Navy themed with glow animation */}
+      {/* Liquid Glass Search Container - Navy themed with always-on glow animation */}
       <div
         className={cn(
-          "relative flex items-center transition-all duration-300 rounded-full overflow-visible z-[var(--z-dropdown)] search-bar-glow",
+          "relative flex items-center transition-all duration-300 rounded-full overflow-visible z-[var(--z-dropdown)] animate-search-glow",
           isDark ? [
             "bg-[#0F304F]/80 backdrop-blur-xl",
             "border-2 border-[#7ac8ff]/30",
-            "shadow-[0_8px_32px_rgba(0,0,0,0.3)]",
             isFocused && "!bg-[#0F304F]/90 !border-[#7ac8ff]/50"
           ] : [
             "glass-search rounded-[20px] md:rounded-[24px]"

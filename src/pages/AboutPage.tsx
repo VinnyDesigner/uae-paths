@@ -208,7 +208,13 @@ export default function AboutPage() {
                     </div>
                     <div>
                       <h2 className="font-heading text-xl md:text-2xl font-bold text-foreground">
-                        Abu Dhabi Spatial Data Infrastructure
+                        <span 
+                          className="font-bold"
+                          style={{
+                            color: '#0F304F',
+                            textShadow: '0 1px 8px rgba(15, 48, 79, 0.2)'
+                          }}
+                        >Abu Dhabi Spatial Data Infrastructure</span>
                       </h2>
                       <p className="text-sm text-muted-foreground">AD-SDI Program</p>
                     </div>
@@ -316,7 +322,7 @@ export default function AboutPage() {
                 className={cn(
                   "px-8 h-12 font-semibold text-base rounded-full",
                   "backdrop-blur-xl border border-white/60",
-                  "bg-white/90 text-[#063660]",
+                  "bg-white/90 text-[#0F304F]",
                   "shadow-[0_8px_32px_rgba(255,255,255,0.25),inset_0_1px_2px_rgba(255,255,255,0.8)]",
                   "hover:bg-white hover:border-[rgba(0,212,255,0.5)]",
                   "hover:shadow-[0_12px_40px_rgba(0,212,255,0.35),inset_0_1px_2px_rgba(255,255,255,1)]",

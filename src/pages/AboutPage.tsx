@@ -314,10 +314,13 @@ export default function AboutPage() {
                 size="lg"
                 asChild
                 className={cn(
-                  "px-8 h-12 font-semibold text-base rounded-xl",
-                  "bg-gradient-to-r from-[#00D1FF] via-[#2B6BFF] to-[#7C3AED]",
-                  "shadow-[0_10px_30px_-8px_rgba(43,107,255,0.5)]",
-                  "hover:shadow-[0_12px_35px_-8px_rgba(43,107,255,0.6)] hover:brightness-110"
+                  "px-8 h-12 font-semibold text-base rounded-full",
+                  "backdrop-blur-xl border border-white/60",
+                  "bg-white/90 text-[#063660]",
+                  "shadow-[0_8px_32px_rgba(255,255,255,0.25),inset_0_1px_2px_rgba(255,255,255,0.8)]",
+                  "hover:bg-white hover:border-[rgba(0,212,255,0.5)]",
+                  "hover:shadow-[0_12px_40px_rgba(0,212,255,0.35),inset_0_1px_2px_rgba(255,255,255,1)]",
+                  "active:scale-[0.96] transition-all duration-300"
                 )}
               >
                 <Link to="/map" className="flex items-center gap-2">

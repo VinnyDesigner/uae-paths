@@ -194,7 +194,7 @@ export default function SmartMapPage() {
               />
             </div>
             
-            {/* AI Message */}
+            {/* Search Message */}
             {userMessage && (
               <div className="mt-3 flex items-center gap-2 text-sm text-foreground/80 bg-white/50 dark:bg-white/5 backdrop-blur-sm rounded-xl px-3 py-2.5 border border-white/30 dark:border-white/10">
                 <Sparkles className="w-3.5 h-3.5 text-primary flex-shrink-0" />

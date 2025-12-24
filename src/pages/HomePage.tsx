@@ -69,9 +69,14 @@ export default function HomePage() {
                   >Smart Map</span>
                   <br className="sm:hidden" />
                   <span 
-                    className="ml-2 sm:ml-3 inline-block relative z-10 tracking-[2px] text-cyan-400"
+                    className="ml-2 sm:ml-3 inline-block relative z-10 tracking-[2px]"
                     style={{
-                      textShadow: '0 2px 12px rgba(77, 212, 255, 0.5), 0 0 35px rgba(77, 212, 255, 0.3)'
+                      background: 'linear-gradient(90deg, #4DD4FF 0%, #60A5FA 35%, #818CF8 70%, #A78BFA 100%)',
+                      WebkitBackgroundClip: 'text',
+                      backgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      color: 'transparent',
+                      filter: 'drop-shadow(0 2px 12px rgba(77, 212, 255, 0.5)) drop-shadow(0 0 35px rgba(129, 140, 248, 0.4))'
                     }}
                   >for Daily Life</span>
                 </h1>

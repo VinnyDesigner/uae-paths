@@ -304,7 +304,7 @@ export function SmartSearch({
             >
               <ArrowRight className={cn(
                 "transition-all duration-300",
-                "text-[#64E8FF]",
+                isDark ? "text-[#063660]" : "text-[#063660]",
                 isLarge ? "w-5 h-5 md:w-6 md:h-6" : "w-4 h-4"
               )} strokeWidth={2.5} />
             </button>

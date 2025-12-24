@@ -38,7 +38,7 @@ export function Header() {
                 alt="Department of Government Enablement" 
                 className={cn(
                   "w-auto object-contain",
-                  isMapPage ? "h-9" : "h-10"
+                  isMapPage ? "h-11" : "h-12"
                 )}
               />
             </Link>

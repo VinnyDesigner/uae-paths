@@ -307,36 +307,36 @@ export function SmartSearch({
         </div>
       </div>
 
-      {/* Dropdown - glass-dropdown class with proper layering */}
+      {/* Dropdown - matching search bar rounded corners */}
       {showSuggestions && filteredSuggestions.length > 0 && (
         <div 
           className={cn(
-            "absolute left-0 right-0 top-full mt-3 md:mt-4 z-[var(--z-dropdown)] animate-fade-in flex flex-col overflow-hidden",
+            "absolute left-0 right-0 top-full mt-2 z-[var(--z-dropdown)] animate-fade-in flex flex-col overflow-hidden",
             "glass-dropdown"
           )}
           style={{ maxHeight: 'min(420px, 46vh)' }}
         >
           {/* Header */}
-          <div className="flex items-center gap-2 px-4 py-3 border-b border-white/10 bg-white/5 flex-shrink-0">
-            <div className="w-6 h-6 rounded-lg flex items-center justify-center bg-cyan-500/20">
+          <div className="flex items-center gap-2 px-5 py-3 border-b border-white/10 flex-shrink-0">
+            <div className="w-6 h-6 rounded-full flex items-center justify-center bg-cyan-500/20">
               <Sparkles className="w-3.5 h-3.5 text-cyan-400" strokeWidth={2} />
             </div>
-            <p className="text-xs font-semibold tracking-wider text-white/65">
+            <p className="text-xs font-semibold tracking-wider text-white/65 uppercase">
               Suggestions for you
             </p>
           </div>
           
           {/* Scrollable Suggestions List */}
-          <div className="flex-1 overflow-y-auto scroll-smooth px-2 py-2">
+          <div className="flex-1 overflow-y-auto scroll-smooth px-3 py-2">
             {filteredSuggestions.map((suggestion, index) => (
               <button
                 key={suggestion.text}
                 onClick={() => handleSubmit(suggestion.text)}
                 className={cn(
-                  "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all duration-150",
+                  "w-full flex items-center gap-3 px-4 py-3 rounded-[20px] text-left transition-all duration-150",
                   index === selectedIndex
-                    ? "bg-cyan-500/20 text-white shadow-soft"
-                    : "text-[rgba(255,255,255,0.92)] hover:bg-white/10"
+                    ? "bg-cyan-500/20 text-white"
+                    : "text-[rgba(255,255,255,0.92)] hover:bg-white/8"
                 )}
               >
                 <span className="text-lg flex-shrink-0">{suggestion.icon}</span>
@@ -346,14 +346,14 @@ export function SmartSearch({
                     "ml-2 text-xs px-2 py-0.5 rounded-full font-medium",
                     index === selectedIndex 
                       ? "bg-cyan-400/20 text-cyan-300"
-                      : "bg-white/10 text-[rgba(255,255,255,0.70)]"
+                      : "bg-white/10 text-[rgba(255,255,255,0.60)]"
                   )}>
                     {suggestion.category}
                   </span>
                 </div>
                 <MapPin className={cn(
                   "w-4 h-4 flex-shrink-0",
-                  index === selectedIndex ? "text-cyan-300/60" : "text-white/30"
+                  index === selectedIndex ? "text-cyan-300/60" : "text-white/25"
                 )} strokeWidth={2} />
               </button>
             ))}

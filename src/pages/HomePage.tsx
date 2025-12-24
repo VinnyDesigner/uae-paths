@@ -1,29 +1,34 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Heart, GraduationCap, ArrowRight, Sparkles } from "lucide-react";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
-import { SmartSearch } from "@/components/search/SmartSearch";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { 
+  Heart, 
+  GraduationCap, 
+  ArrowRight,
+  Sparkles,
+} from 'lucide-react';
+import { Header } from '@/components/layout/Header';
+import { Footer } from '@/components/layout/Footer';
+import { SmartSearch } from '@/components/search/SmartSearch';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 const categories = [
   {
     icon: Heart,
-    title: "Healthcare & Wellness",
-    colorClass: "healthcare",
+    title: 'Healthcare & Wellness',
+    colorClass: 'healthcare',
   },
   {
     icon: GraduationCap,
-    title: "Education",
-    colorClass: "education",
+    title: 'Education',
+    colorClass: 'education',
   },
 ];
 
 const aiSuggestionChips = [
-  { text: "Nearest hospital", icon: "🏥" },
-  { text: "Emergency hospital", icon: "🚑" },
-  { text: "Schools near me", icon: "🎓" },
+  { text: 'Nearest hospital', icon: '🏥' },
+  { text: 'Emergency hospital', icon: '🚑' },
+  { text: 'Schools near me', icon: '🎓' },
 ];
 
 export default function HomePage() {
@@ -40,6 +45,7 @@ export default function HomePage() {
       <main className="flex-1">
         {/* === IMMERSIVE HERO SECTION - Fits in one screen === */}
         <section className="relative min-h-[calc(100vh-64px)] flex flex-col overflow-hidden">
+          
           {/* === LAYERED IMMERSIVE BACKGROUND (must not block UI) === */}
           <div className="absolute inset-0 bg-hero-immersive pointer-events-none" />
           <div className="absolute inset-0 bg-indigo-glow-left pointer-events-none" />
@@ -53,30 +59,26 @@ export default function HomePage() {
           {/* === HERO CONTENT === */}
           <div className="container mx-auto px-4 relative z-10 flex-1 flex flex-col justify-center py-6 md:py-8">
             <div className="max-w-[900px] mx-auto w-full">
+              
               {/* Main Heading - Gradient TEXT only on "for Daily Life", NO boxes */}
               <div className="text-center mb-3 animate-fade-up relative z-20">
                 <h1 className="font-heading text-[2.75rem] md:text-5xl lg:text-[4.5rem] font-semibold leading-[1.2] tracking-[0.5px] relative z-10">
-                  <span
+                  <span 
                     className="text-white relative z-10"
-                    style={{ textShadow: "0 2px 12px rgba(0,0,0,0.15), 0 1px 4px rgba(0,0,0,0.1)" }}
-                  >
-                    Smart Map
-                  </span>
+                    style={{ textShadow: '0 2px 12px rgba(0,0,0,0.15), 0 1px 4px rgba(0,0,0,0.1)' }}
+                  >Smart Map</span>
                   <br className="sm:hidden" />
-                  <span
+                  <span 
                     className="ml-2 sm:ml-3 inline-block relative z-10 tracking-[2px]"
                     style={{
-                      background: "linear-gradient(90deg, #4DD4FF 0%, #60A5FA 35%, #818CF8 70%, #6E00E9 100%)",
-                      WebkitBackgroundClip: "text",
-                      backgroundClip: "text",
-                      WebkitTextFillColor: "transparent",
-                      color: "transparent",
-                      filter:
-                        "drop-shadow(0 2px 12px rgba(77, 212, 255, 0.5)) drop-shadow(0 0 35px rgba(129, 140, 248, 0.4))",
+                      background: 'linear-gradient(90deg, #4DD4FF 0%, #60A5FA 35%, #818CF8 70%, #A78BFA 100%)',
+                      WebkitBackgroundClip: 'text',
+                      backgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      color: 'transparent',
+                      filter: 'drop-shadow(0 2px 12px rgba(77, 212, 255, 0.5)) drop-shadow(0 0 35px rgba(129, 140, 248, 0.4))'
                     }}
-                  >
-                    for Daily Life
-                  </span>
+                  >for Daily Life</span>
                 </h1>
               </div>
 
@@ -87,9 +89,9 @@ export default function HomePage() {
 
               {/* === PRIMARY SEARCH BAR - More Prominent with wider width === */}
               <div className="animate-fade-up delay-200 mb-8 md:mb-10 relative z-[var(--z-popover)]">
-                <div className="mx-auto" style={{ width: "min(920px, 95vw)" }}>
+                <div className="mx-auto" style={{ width: 'min(920px, 95vw)' }}>
                   <SmartSearch
-                    onSearch={handleSearch}
+                    onSearch={handleSearch} 
                     size="large"
                     placeholder="Search healthcare, schools, or wellness centers…"
                     variant="dark"
@@ -110,7 +112,7 @@ export default function HomePage() {
                         "bg-white/[0.03] backdrop-blur-md border border-white/[0.06]",
                         "text-white/40 text-xs md:text-sm font-medium",
                         "hover:bg-white/10 hover:border-white/15 hover:text-white/80 hover:opacity-100",
-                        "transition-all duration-300 opacity-50 hover:scale-105",
+                        "transition-all duration-300 opacity-50 hover:scale-105"
                       )}
                     >
                       <span className="opacity-70">{chip.icon}</span>
@@ -121,12 +123,10 @@ export default function HomePage() {
               )}
 
               {/* === EXPLORE BY CATEGORY - MERGED INTO HERO === */}
-              <div
-                className={cn(
-                  "animate-fade-up delay-400 transition-all duration-300 relative z-[1]",
-                  isSearchOpen ? "mt-4" : "",
-                )}
-              >
+              <div className={cn(
+                "animate-fade-up delay-400 transition-all duration-300 relative z-[1]",
+                isSearchOpen ? "mt-4" : ""
+              )}>
                 {/* Section Header - Less prominent */}
                 <div className="text-center mb-4 md:mb-5">
                   <div className="inline-flex items-center gap-2 mb-2">
@@ -145,7 +145,7 @@ export default function HomePage() {
                 <div className="max-w-[640px] mx-auto">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                     {categories.map((category) => {
-                      const isHealthcare = category.colorClass === "healthcare";
+                      const isHealthcare = category.colorClass === 'healthcare';
                       return (
                         <Link
                           to="/map"
@@ -155,7 +155,7 @@ export default function HomePage() {
                             "bg-white/[0.04] backdrop-blur-md border border-white/[0.08]",
                             "hover:bg-white/[0.08] hover:border-white/15",
                             "transition-all duration-300 hover:scale-[1.01]",
-                            "h-[80px] md:h-[88px] flex items-center",
+                            "h-[80px] md:h-[88px] flex items-center"
                           )}
                         >
                           {/* Icon + Title - Single Line Layout */}
@@ -164,15 +164,12 @@ export default function HomePage() {
                               className={cn(
                                 "w-10 h-10 md:w-11 md:h-11 rounded-lg flex items-center justify-center flex-shrink-0",
                                 "transition-all duration-300 group-hover:scale-105",
-                                isHealthcare
-                                  ? "bg-gradient-to-br from-blue-500/80 to-blue-700/80 shadow-[0_0_15px_-5px_rgba(59,130,246,0.3)]"
-                                  : "bg-gradient-to-br from-cyan-400/80 to-cyan-600/80 shadow-[0_0_15px_-5px_rgba(34,211,238,0.3)]",
+                                isHealthcare 
+                                  ? "bg-gradient-to-br from-blue-500/80 to-blue-700/80 shadow-[0_0_15px_-5px_rgba(59,130,246,0.3)]" 
+                                  : "bg-gradient-to-br from-cyan-400/80 to-cyan-600/80 shadow-[0_0_15px_-5px_rgba(34,211,238,0.3)]"
                               )}
                             >
-                              <category.icon
-                                className="w-4 h-4 md:w-5 md:h-5 text-white/90 drop-shadow-sm"
-                                strokeWidth={2}
-                              />
+                              <category.icon className="w-4 h-4 md:w-5 md:h-5 text-white/90 drop-shadow-sm" strokeWidth={2} />
                             </div>
                             <h3 className="font-heading text-sm md:text-base font-semibold text-white/70 leading-tight whitespace-nowrap group-hover:text-white/90 transition-colors">
                               {category.title}

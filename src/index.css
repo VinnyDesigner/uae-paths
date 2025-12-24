@@ -536,14 +536,14 @@
     background-color: transparent !important;
   }
 
-  /* Glass dropdown panel - darker and more opaque per spec */
+  /* Glass dropdown panel - matching search bar rounded style */
   .glass-dropdown {
-    background: rgba(7, 18, 32, 0.92);
+    background: rgba(20, 35, 55, 0.95);
     backdrop-filter: blur(var(--glass-blur-strong)) saturate(180%);
-    border: 1px solid rgba(0, 212, 255, 0.18);
-    border-radius: var(--radius-lg);
+    border: 1px solid rgba(0, 212, 255, 0.25);
+    border-radius: 30px;
     box-shadow: 
-      var(--glass-shadow-strong),
+      0 8px 32px rgba(0, 0, 0, 0.35),
       0 0 0 1px rgba(255, 255, 255, 0.05),
       inset 0 1px 0 rgba(255, 255, 255, 0.08);
   }

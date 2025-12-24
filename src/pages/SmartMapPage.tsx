@@ -190,6 +190,7 @@ export default function SmartMapPage() {
                 isSearching={isSearching} 
                 size="default"
                 activeLayerId={activeHospitalLayer}
+                hideSubmitButton
               />
             </div>
             

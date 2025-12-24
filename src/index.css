@@ -34,13 +34,14 @@
     --z-map: 0;
     --z-overlay: 20;
     --z-map-controls: 30;
-    --z-header: 40;
-    --z-floating: 60;
-    --z-panel: 60;
-    --z-popover-backdrop: 79;
-    --z-dropdown: 80;
-    --z-popover: 80;
-    --z-modal: 100;
+    --z-panel: 40;
+    --z-floating: 50;
+    --z-flyout: 60;
+    --z-popover-backdrop: 69;
+    --z-dropdown: 70;
+    --z-popover: 70;
+    --z-header: 100;
+    --z-modal: 110;
     --z-toast: 120;
     
     /* Liquid Glass Design Tokens */

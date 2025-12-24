@@ -12,6 +12,7 @@ interface SmartSearchProps {
   activeLayerId?: number | null;
   variant?: 'light' | 'dark';
   onOpenChange?: (isOpen: boolean) => void;
+  hideSubmitButton?: boolean;
 }
 
 const aiSuggestions = [
@@ -38,7 +39,8 @@ export function SmartSearch({
   placeholder = "Search for nearest healthcare, schools, or wellness centers...",
   activeLayerId,
   variant = 'light',
-  onOpenChange
+  onOpenChange,
+  hideSubmitButton = false
 }: SmartSearchProps) {
   const [query, setQuery] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -277,29 +279,31 @@ export function SmartSearch({
           )}
 
           {/* Primary action button - Darker gradient for better visibility */}
-          <button
-            onClick={() => handleSubmit()}
-            className={cn(
-              "flex items-center justify-center rounded-full transition-all duration-250",
-              "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-              isDark ? [
-                "bg-[#00DAFF] text-[#063660]",
-                "shadow-[0_10px_30px_rgba(0,218,255,0.4)] hover:shadow-[0_14px_35px_rgba(0,218,255,0.5)]",
-                "active:scale-[0.96] focus-visible:ring-[#00DAFF] hover:brightness-110"
-              ] : [
-                "bg-[#00DAFF] text-[#063660]",
-                "shadow-[0_6px_22px_-5px_rgba(0,218,255,0.45)]",
-                "active:scale-[0.96] focus-visible:ring-[#00DAFF]"
-              ],
-              isLarge ? "w-12 h-12 md:w-14 md:h-14" : "w-10 h-10"
-            )}
-            aria-label="Search"
-          >
-            <ArrowRight className={cn(
-              "transition-transform duration-200 text-white drop-shadow-sm",
-              isLarge ? "w-5 h-5 md:w-6 md:h-6" : "w-4 h-4"
-            )} strokeWidth={2.5} />
-          </button>
+          {!hideSubmitButton && (
+            <button
+              onClick={() => handleSubmit()}
+              className={cn(
+                "flex items-center justify-center rounded-full transition-all duration-250",
+                "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+                isDark ? [
+                  "bg-[#00DAFF] text-[#063660]",
+                  "shadow-[0_10px_30px_rgba(0,218,255,0.4)] hover:shadow-[0_14px_35px_rgba(0,218,255,0.5)]",
+                  "active:scale-[0.96] focus-visible:ring-[#00DAFF] hover:brightness-110"
+                ] : [
+                  "bg-[#00DAFF] text-[#063660]",
+                  "shadow-[0_6px_22px_-5px_rgba(0,218,255,0.45)]",
+                  "active:scale-[0.96] focus-visible:ring-[#00DAFF]"
+                ],
+                isLarge ? "w-12 h-12 md:w-14 md:h-14" : "w-10 h-10"
+              )}
+              aria-label="Search"
+            >
+              <ArrowRight className={cn(
+                "transition-transform duration-200 text-white drop-shadow-sm",
+                isLarge ? "w-5 h-5 md:w-6 md:h-6" : "w-4 h-4"
+              )} strokeWidth={2.5} />
+            </button>
+          )}
         </div>
       </div>
 

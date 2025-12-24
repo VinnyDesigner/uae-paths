@@ -541,7 +541,7 @@
     background: rgba(7, 18, 32, 0.92);
     backdrop-filter: blur(var(--glass-blur-strong)) saturate(180%);
     border: 1px solid rgba(0, 212, 255, 0.18);
-    border-radius: var(--radius-lg);
+    border-radius: 9999px;
     box-shadow: 
       var(--glass-shadow-strong),
       0 0 0 1px rgba(255, 255, 255, 0.05),

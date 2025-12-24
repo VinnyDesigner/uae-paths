@@ -278,18 +278,18 @@ export function SmartSearch({
 
           {/* Primary action button - Liquid glass with white fill */}
           {!hideSubmitButton && (
-            <button
+          <button
               onClick={() => handleSubmit()}
               className={cn(
                 "flex items-center justify-center rounded-full transition-all duration-300",
                 "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
                 "backdrop-blur-xl border",
                 isDark ? [
-                  "bg-[#7ac8ff] border-[#7ac8ff]",
-                  "shadow-[0_4px_20px_rgba(122,200,255,0.3)]",
-                  "hover:bg-[#9dd5ff] hover:border-[#9dd5ff]",
-                  "hover:shadow-[0_8px_30px_rgba(122,200,255,0.4)]",
-                  "active:scale-[0.96] focus-visible:ring-[#7ac8ff]"
+                  "bg-[#6EB9EE] border-[#6EB9EE]",
+                  "shadow-[0_4px_20px_rgba(110,185,238,0.3)]",
+                  "hover:bg-[#8ec9f3] hover:border-[#8ec9f3]",
+                  "hover:shadow-[0_8px_30px_rgba(110,185,238,0.4)]",
+                  "active:scale-[0.96] focus-visible:ring-[#6EB9EE]"
                 ] : [
                   "bg-white/95 border-white/70",
                   "shadow-[0_8px_32px_rgba(0,150,255,0.15),inset_0_1px_2px_rgba(255,255,255,0.9)]",

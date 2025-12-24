@@ -60,25 +60,25 @@ export default function HomePage() {
           <div className="container mx-auto px-4 relative z-10 flex-1 flex flex-col justify-center py-6 md:py-8">
             <div className="max-w-[920px] mx-auto w-full">
               
-              {/* Main Heading - Gradient TEXT only on "for Daily Life", NO boxes */}
+              {/* Main Heading - "Smart Map for" plain, "Daily Life" gradient highlighted */}
               <div className="text-center mb-3 animate-fade-up relative z-20">
                 <h1 className="font-heading text-[2.75rem] md:text-5xl lg:text-[4.5rem] font-semibold leading-[1.2] tracking-[0.5px] relative z-10">
                   <span 
                     className="text-white relative z-10"
                     style={{ textShadow: '0 2px 12px rgba(0,0,0,0.15), 0 1px 4px rgba(0,0,0,0.1)' }}
-                  >Smart Map</span>
+                  >Smart Map for</span>
                   <br className="sm:hidden" />
                   <span 
-                    className="ml-2 sm:ml-3 inline-block relative z-10 tracking-[2px]"
+                    className="ml-2 sm:ml-3 inline-block relative z-10 tracking-[2px] font-bold"
                     style={{
-                      background: 'linear-gradient(90deg, #4DD4FF 0%, #60A5FA 35%, #818CF8 70%, #A78BFA 100%)',
+                      background: 'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)',
                       WebkitBackgroundClip: 'text',
                       backgroundClip: 'text',
                       WebkitTextFillColor: 'transparent',
                       color: 'transparent',
-                      filter: 'drop-shadow(0 2px 12px rgba(77, 212, 255, 0.5)) drop-shadow(0 0 35px rgba(129, 140, 248, 0.4))'
+                      filter: 'drop-shadow(0 2px 16px rgba(106, 17, 203, 0.5)) drop-shadow(0 0 40px rgba(37, 117, 252, 0.4))'
                     }}
-                  >for Daily Life</span>
+                  >Daily Life</span>
                 </h1>
               </div>
 

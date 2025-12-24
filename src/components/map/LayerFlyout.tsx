@@ -287,15 +287,15 @@ export function LayerFlyout({
               }}
               className={cn(
                 "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left group",
-                "transition-all duration-120 ease-out",
+                "transition-all duration-150 ease-out",
                 "active:scale-[0.98]",
                 "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1",
                 isHighlighted && "ring-2 ring-primary ring-offset-1 ring-offset-background",
                 isToggling && "scale-[0.98]",
-                // Unified selection styling - primary color only
+                // SELECTED STATE - prominent blue background and border
                 layer.visible
-                  ? "bg-[var(--selection-bg)] border-2 border-[var(--selection-border)] shadow-sm"
-                  : "bg-transparent border border-border/50 hover:bg-[var(--selection-bg-hover)] hover:border-border"
+                  ? "bg-primary/10 border-2 border-primary/40 shadow-sm hover:bg-primary/15 hover:border-primary/50"
+                  : "bg-white/50 dark:bg-white/5 border border-border/40 hover:bg-muted/50 hover:border-border/60"
               )}
               aria-pressed={layer.visible}
               aria-selected={layer.visible}

@@ -176,11 +176,14 @@ export function LayerFlyout({
         "fixed",
         // SOLID background - no transparency to prevent layering issues
         "bg-white dark:bg-[#1a1f2e]",
-        // Border and shadow for depth
+        // Border and shadow for depth - NO shadow on hover to prevent header interference
         "border border-border/30 dark:border-white/15",
         "rounded-[18px]",
         "shadow-[0_10px_40px_rgba(15,23,42,0.15),0_4px_12px_rgba(0,0,0,0.08)]",
         "dark:shadow-[0_10px_40px_rgba(0,0,0,0.45)]",
+        // Remove hover shadow effects
+        "hover:shadow-[0_10px_40px_rgba(15,23,42,0.15),0_4px_12px_rgba(0,0,0,0.08)]",
+        "dark:hover:shadow-[0_10px_40px_rgba(0,0,0,0.45)]",
         // Animation
         "transition-all duration-200 ease-out",
         "flex flex-col overflow-hidden",
@@ -194,8 +197,8 @@ export function LayerFlyout({
         height: `${flyoutPosition.height}px`,
         width: `${flyoutPosition.width}px`,
         maxHeight: `${flyoutPosition.height}px`,
-        // High z-index to ensure flyout is above all other content
-        zIndex: 1500,
+        // Below header but above other content
+        zIndex: 'var(--z-flyout)',
       }}
       role="dialog"
       aria-modal="true"

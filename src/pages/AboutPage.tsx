@@ -235,8 +235,8 @@ export default function AboutPage() {
                   </div>
 
                   <a 
-                    href="https://sdi.gov.abudhabi/" 
-                    target="_blank" 
+                    href="https://sdi.gov.abudhabi/sdi/index.html" 
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 mt-6 text-cyan-500 hover:text-cyan-400 font-medium transition-colors"
                   >

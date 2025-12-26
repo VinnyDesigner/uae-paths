@@ -65,40 +65,40 @@ export function LayerFlyout({
   sidebarRect,
 }: LayerFlyoutProps) {
   const flyoutRef = useRef<HTMLDivElement>(null);
-  const [flyoutPosition, setFlyoutPosition] = useState({ top: 0, height: 0, left: 0, width: 340 });
+  const [flyoutPosition, setFlyoutPosition] = useState({ top: 0, height: 0, left: 0, width: 320 });
   const [togglingLayerId, setTogglingLayerId] = useState<number | null>(null);
 
-  // Calculate flyout position: stop at 90vh (10% above viewport bottom)
+  // Calculate flyout position: align with sidebar bounds
   const calculatePosition = useCallback(() => {
-    const gap = 16; // gap between sidebar and flyout
-    const flyoutMaxWidth = 420;
-    const flyoutMinWidth = 360;
-    const bottomSpacing = window.innerHeight * 0.1; // 10% from bottom
+    const gap = 12; // gap between sidebar and flyout
+    const internalPadding = 12; // padding inside for narrower appearance
 
     // Get sidebar bounds (single source of truth)
     const sideTop = sidebarRect?.top ?? 80;
     const sideRight = sidebarRect?.right ?? 336;
+    const sideBottom = sidebarRect?.bottom ?? (window.innerHeight - 24);
+    const sideWidth = sidebarRect?.width ?? 320;
 
-    // Flyout starts at sidebar top, ends at 90vh (10% above bottom)
+    // Flyout starts at sidebar top, ends at sidebar bottom (aligned)
     const flyoutTop = sideTop;
-    const maxBottom = window.innerHeight - bottomSpacing;
-    const flyoutHeight = maxBottom - flyoutTop;
+    const flyoutHeight = sideBottom - sideTop;
 
-    // Horizontal positioning
+    // Horizontal positioning - right next to sidebar
     const flyoutLeft = sideRight + gap;
     
-    // Width: clamp(360px, 420px, 100vw - flyoutLeft - 24px)
-    const availableWidth = window.innerWidth - flyoutLeft - 24;
-    const flyoutWidth = Math.max(flyoutMinWidth, Math.min(flyoutMaxWidth, availableWidth));
+    // Width: match sidebar width minus internal padding for slightly narrower look
+    const flyoutWidth = Math.max(280, sideWidth - internalPadding);
     
     // Ensure flyout doesn't go off-screen horizontally
-    const finalLeft = Math.min(flyoutLeft, Math.max(16, window.innerWidth - flyoutWidth - 16));
+    const availableWidth = window.innerWidth - flyoutLeft - 16;
+    const finalWidth = Math.min(flyoutWidth, availableWidth);
+    const finalLeft = Math.min(flyoutLeft, Math.max(16, window.innerWidth - finalWidth - 16));
 
     return {
       top: flyoutTop,
       height: flyoutHeight,
       left: finalLeft,
-      width: flyoutWidth,
+      width: finalWidth,
     };
   }, [sidebarRect]);
 

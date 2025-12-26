@@ -68,21 +68,21 @@ export function LayerFlyout({
   const [flyoutPosition, setFlyoutPosition] = useState({ top: 0, height: 0, left: 0, width: 340 });
   const [togglingLayerId, setTogglingLayerId] = useState<number | null>(null);
 
-  // Calculate flyout position: 90% of sidebar height
+  // Calculate flyout position: stop at 90vh (10% above viewport bottom)
   const calculatePosition = useCallback(() => {
     const gap = 16; // gap between sidebar and flyout
     const flyoutMaxWidth = 420;
     const flyoutMinWidth = 360;
+    const bottomSpacing = window.innerHeight * 0.1; // 10% from bottom
 
     // Get sidebar bounds (single source of truth)
     const sideTop = sidebarRect?.top ?? 80;
-    const sideBottom = sidebarRect?.bottom ?? (window.innerHeight - 16);
     const sideRight = sidebarRect?.right ?? 336;
 
-    // Calculate sidebar height and use 90% of it
-    const sidebarHeight = sideBottom - sideTop;
-    const flyoutHeight = sidebarHeight * 0.9;
+    // Flyout starts at sidebar top, ends at 90vh (10% above bottom)
     const flyoutTop = sideTop;
+    const maxBottom = window.innerHeight - bottomSpacing;
+    const flyoutHeight = maxBottom - flyoutTop;
 
     // Horizontal positioning
     const flyoutLeft = sideRight + gap;

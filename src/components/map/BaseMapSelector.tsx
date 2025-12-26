@@ -48,10 +48,17 @@ export const baseMaps: BaseMapOption[] = [
   },
   {
     id: 'satellite',
-    name: 'Orthophoto',
+    name: 'Satellite',
     url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
     preview: '🛰️',
     previewImage: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/6/22/32'
+  },
+  {
+    id: 'satellite-labels',
+    name: 'Satellite + Labels',
+    url: 'https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',
+    preview: '🌐',
+    previewImage: 'https://mt1.google.com/vt/lyrs=y&x=32&y=22&z=6'
   },
   {
     id: 'terrain',

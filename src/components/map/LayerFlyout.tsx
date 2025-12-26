@@ -221,8 +221,15 @@ export function LayerFlyout({
           </h3>
         </div>
 
-        {/* Row 2: Actions only */}
-        <div className="flex items-center justify-end">
+        {/* Row 2: Counter + Actions (single row) */}
+        <div className="flex items-center justify-between">
+          <span className="text-xs text-muted-foreground">
+            <span className="font-semibold text-foreground">{visibleCount}</span>
+            <span className="mx-0.5">of</span>
+            <span>{totalCount}</span>
+            <span className="ml-0.5">visible</span>
+          </span>
+
           <div className="flex items-center gap-1">
             <button
               onClick={() => onSelectAll(theme.id)}

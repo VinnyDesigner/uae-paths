@@ -235,21 +235,11 @@ export function SidePanelLayers({
                   {getThemeIcon(theme.icon)}
                 </div>
                 
-                {/* Content - Title & Count inline */}
+                {/* Content - Title */}
                 <div className="flex-1 min-w-0 text-left">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-sm font-semibold text-foreground truncate">
-                      {theme.name}
-                    </span>
-                    <span className={cn(
-                      "text-xs font-medium px-1.5 py-0.5 rounded-md flex-shrink-0",
-                      hasVisibleLayers 
-                        ? "bg-primary/15 text-primary" 
-                        : "bg-muted/50 text-muted-foreground"
-                    )}>
-                      {visibleCount}/{totalCount}
-                    </span>
-                  </div>
+                  <span className="text-sm font-semibold text-foreground truncate block">
+                    {theme.name}
+                  </span>
                 </div>
                 
                 {/* Chevron */}

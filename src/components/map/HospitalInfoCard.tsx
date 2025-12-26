@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 interface HospitalInfoCardProps {
   facility: Facility;
   onClose?: () => void;
-  onGetDirections?: (facility: Facility) => void;
   onViewDetails?: () => void;
   className?: string;
 }
@@ -14,14 +13,15 @@ interface HospitalInfoCardProps {
 export function HospitalInfoCard({ 
   facility, 
   onClose, 
-  onGetDirections,
   onViewDetails,
   className 
 }: HospitalInfoCardProps) {
   const isHospital = facility.type === 'Hospitals';
 
-  const handleGetDirections = () => {
-    onGetDirections?.(facility);
+  const openGoogleMaps = () => {
+    const [lng, lat] = facility.coordinates;
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+    window.open(url, '_blank');
   };
 
   return (
@@ -122,22 +122,14 @@ export function HospitalInfoCard({
       </div>
 
       {/* Actions */}
-      <div className="p-4 pt-0 flex gap-2">
+      <div className="p-4 pt-0">
         <Button
           variant="default"
-          className="flex-1 gradient-primary text-white"
-          onClick={handleGetDirections}
+          className="w-full gradient-primary text-white"
+          onClick={openGoogleMaps}
         >
-          <Navigation className="w-4 h-4 mr-2" />
-          Get Directions
-        </Button>
-        <Button 
-          variant="outline" 
-          size="icon"
-          onClick={onViewDetails}
-          title="View Details"
-        >
-          <ExternalLink className="w-4 h-4" />
+          <ExternalLink className="w-4 h-4 mr-2" />
+          Open with Google Maps
         </Button>
       </div>
     </div>

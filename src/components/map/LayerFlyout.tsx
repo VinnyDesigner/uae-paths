@@ -264,7 +264,7 @@ export function LayerFlyout({
       </div>
 
       {/* Scrollable Layer List - only this area scrolls */}
-      <div className="flex-1 overflow-y-auto px-3.5 py-3 pb-4 space-y-1.5 overscroll-contain">
+      <div className="flex-1 overflow-y-auto px-3 py-3 pb-4 space-y-2 overscroll-contain scrollbar-thin scrollbar-thumb-muted-foreground/20 scrollbar-track-transparent">
         {theme.layers.map((layer) => {
           const isHighlighted = highlightedLayerId === layer.id;
           const isToggling = togglingLayerId === layer.id;
@@ -278,26 +278,16 @@ export function LayerFlyout({
                 handleLayerToggle(theme.id, layer.id);
               }}
               className={cn(
-                "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left group",
-                "transition-all duration-200 ease-out",
+                "w-full flex items-center gap-3 px-3 py-3 rounded-xl text-left group cursor-pointer",
+                "transition-all duration-150 ease-out",
                 "active:scale-[0.98]",
                 "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1",
                 isHighlighted && "ring-2 ring-primary ring-offset-1 ring-offset-background",
                 isToggling && "scale-[0.98]",
-                // SELECTED STATE - prominent styling with immediate visual feedback
+                // SELECTED STATE - Dark navy background matching reference
                 layer.visible
-                  ? [
-                    "bg-[#0F304F] text-white",
-                    "border-2 border-primary/60",
-                    "shadow-md",
-                    "font-semibold"
-                  ]
-                  : [
-                    "bg-white/80 dark:bg-white/5",
-                    "border border-border/40",
-                    "hover:bg-muted/60 hover:border-border/60",
-                    "text-foreground"
-                  ]
+                  ? "bg-[#0F304F] text-white shadow-lg border-0"
+                  : "bg-white dark:bg-white/5 border border-border/30 hover:bg-muted/40 hover:border-border/50 text-foreground"
               )}
               aria-pressed={layer.visible}
               aria-selected={layer.visible}
@@ -305,66 +295,59 @@ export function LayerFlyout({
               tabIndex={0}
               aria-label={`${layer.name}: ${layer.visible ? 'visible' : 'hidden'}`}
             >
-              {/* Icon with proper contrast for selected state */}
+              {/* Icon container */}
               <div
                 className={cn(
-                  "w-9 h-9 flex-shrink-0 rounded-lg flex items-center justify-center",
-                  "transition-all duration-200",
+                  "w-10 h-10 flex-shrink-0 rounded-lg flex items-center justify-center transition-all duration-150",
                   layer.visible 
-                    ? "bg-white/20 shadow-sm" 
-                    : "bg-muted/30 opacity-60 group-hover:opacity-80"
+                    ? "bg-white/15" 
+                    : "bg-muted/40"
                 )}
               >
-                <div 
-                  className={cn(
-                    "transition-transform duration-200",
-                    layer.visible 
-                      ? "scale-100 text-white" 
-                      : "scale-95 group-hover:scale-100 text-muted-foreground"
-                  )}
-                >
+                <div className={cn(
+                  "transition-transform duration-150",
+                  layer.visible ? "text-white" : "text-muted-foreground"
+                )}>
                   {LayerIcon ? (
-                    <LayerIcon className="w-4.5 h-4.5" />
+                    <LayerIcon className="w-5 h-5" />
                   ) : (
-                    <div
-                      className={cn(
-                        "w-4 h-4 rounded",
-                        layer.visible ? "bg-white" : "bg-muted-foreground/40"
-                      )}
-                    />
+                    <div className={cn(
+                      "w-4 h-4 rounded",
+                      layer.visible ? "bg-white" : "bg-muted-foreground/40"
+                    )} />
                   )}
                 </div>
               </div>
               
-              {/* Text with proper contrast */}
+              {/* Text content */}
               <div className="flex-1 min-w-0">
                 <span className={cn(
-                  "block text-sm truncate transition-colors duration-200",
-                  layer.visible ? "font-semibold text-white" : "font-medium text-foreground/75"
+                  "block text-sm truncate transition-colors duration-150",
+                  layer.visible ? "font-semibold text-white" : "font-medium text-foreground"
                 )}>
                   {layer.name}
                 </span>
                 <p className={cn(
-                  "text-[11px] truncate mt-0.5 transition-colors duration-200",
-                  layer.visible ? "text-white/70" : "text-muted-foreground/60"
+                  "text-xs truncate mt-0.5 transition-colors duration-150",
+                  layer.visible ? "text-white/70" : "text-muted-foreground"
                 )}>
                   {layer.description}
                 </p>
               </div>
               
-              {/* Check indicator - white on selected */}
+              {/* Check indicator - filled circle with checkmark when selected, empty circle otherwise */}
               <div
                 className={cn(
-                  "w-5 h-5 flex-shrink-0 rounded-full flex items-center justify-center transition-all duration-200",
+                  "w-6 h-6 flex-shrink-0 rounded-full flex items-center justify-center transition-all duration-150",
                   layer.visible
                     ? "bg-white"
-                    : "border-2 border-muted-foreground/25 group-hover:border-muted-foreground/40",
+                    : "border-2 border-muted-foreground/30 group-hover:border-muted-foreground/50",
                   isToggling && "scale-90"
                 )}
               >
                 {layer.visible && (
                   <Check className={cn(
-                    "w-3 h-3 text-[#0F304F] transition-transform duration-200",
+                    "w-3.5 h-3.5 text-[#0F304F] stroke-[3]",
                     isToggling && "scale-110"
                   )} />
                 )}

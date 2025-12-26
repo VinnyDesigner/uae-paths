@@ -57,12 +57,17 @@ export function SidePanelLayers({
   highlightedLayerId, 
   className 
 }: SidePanelLayersProps) {
-  const [selectedTheme, setSelectedTheme] = useState<ThemeGroup | null>(null);
+  const [selectedThemeId, setSelectedThemeId] = useState<number | null>(null);
   const [sectionRect, setSectionRect] = useState<DOMRect | null>(null);
   const [sidebarRect, setSidebarRect] = useState<DOMRect | null>(null);
   const categoryRefs = useRef<Map<number, HTMLDivElement>>(new Map());
   const containerRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+
+  // Derive selectedTheme from layers prop to ensure it always reflects current state
+  const selectedTheme = selectedThemeId !== null 
+    ? layers.find(t => t.id === selectedThemeId) ?? null 
+    : null;
 
   // Get sidebar and section bounds on mount and resize
   useEffect(() => {
@@ -174,11 +179,11 @@ export function SidePanelLayers({
       if (header) setSectionRect(header.getBoundingClientRect());
     }
 
-    setSelectedTheme(theme);
+    setSelectedThemeId(theme.id);
   }, []);
 
   const handleCloseFlyout = useCallback(() => {
-    setSelectedTheme(null);
+    setSelectedThemeId(null);
   }, []);
 
   const setRef = useCallback((themeId: number) => (el: HTMLDivElement | null) => {

@@ -6,13 +6,18 @@ import { Button } from '@/components/ui/button';
 interface FacilityCardProps {
   facility: Facility;
   onClose?: () => void;
-  onGetDirections?: (facility: Facility) => void;
   compact?: boolean;
   className?: string;
 }
 
-export function FacilityCard({ facility, onClose, onGetDirections, compact = false, className }: FacilityCardProps) {
+export function FacilityCard({ facility, onClose, compact = false, className }: FacilityCardProps) {
   const isHealthcare = facility.theme === 'healthcare';
+
+  const openGoogleMaps = () => {
+    const [lng, lat] = facility.coordinates;
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+    window.open(url, '_blank');
+  };
 
   if (compact) {
     return (
@@ -112,17 +117,14 @@ export function FacilityCard({ facility, onClose, onGetDirections, compact = fal
       </div>
 
       {/* Actions */}
-      <div className="p-4 pt-0 flex gap-2">
+      <div className="p-4 pt-0">
         <Button
           variant={isHealthcare ? "healthcare" : "education"}
-          className="flex-1"
-          onClick={() => onGetDirections?.(facility)}
+          className="w-full"
+          onClick={openGoogleMaps}
         >
-          <Navigation className="w-4 h-4 mr-2" />
-          Get Directions
-        </Button>
-        <Button variant="outline" size="icon">
-          <ExternalLink className="w-4 h-4" />
+          <ExternalLink className="w-4 h-4 mr-2" />
+          Open with Google Maps
         </Button>
       </div>
     </div>

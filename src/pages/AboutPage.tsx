@@ -184,8 +184,8 @@ export default function AboutPage() {
                       className="p-5 rounded-xl bg-card border border-border hover:border-primary/30 transition-colors"
                     >
                       <div className="flex items-start gap-4">
-                        <div className="w-10 h-10 rounded-lg bg-cyan-500/10 flex items-center justify-center flex-shrink-0">
-                          <feature.icon className="w-5 h-5 text-cyan-500" strokeWidth={2} />
+                        <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <feature.icon className="w-5 h-5 text-primary" strokeWidth={2} />
                         </div>
                         <div>
                           <h3 className="font-semibold text-foreground mb-1">{feature.title}</h3>
@@ -199,7 +199,7 @@ export default function AboutPage() {
                 {/* Content */}
                 <div className="lg:order-1">
                   <div className="flex items-center gap-4 mb-6">
-                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-cyan-500/5 border border-cyan-500/20 flex items-center justify-center p-3">
+                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20 flex items-center justify-center p-3">
                       <img 
                         src={sdiLogo} 
                         alt="Abu Dhabi Spatial Data Infrastructure" 
@@ -244,7 +244,7 @@ export default function AboutPage() {
                     href="https://sdi.gov.abudhabi/sdi/index.html" 
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 mt-6 text-cyan-500 hover:text-cyan-400 font-medium transition-colors"
+                    className="inline-flex items-center gap-2 mt-6 text-primary hover:text-primary/80 font-medium transition-colors"
                   >
                     Visit AD-SDI Portal
                     <ExternalLink className="w-4 h-4" />

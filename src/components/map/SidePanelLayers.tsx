@@ -60,7 +60,7 @@ export function SidePanelLayers({
   const [selectedThemeId, setSelectedThemeId] = useState<number | null>(null);
   const [sectionRect, setSectionRect] = useState<DOMRect | null>(null);
   const [sidebarRect, setSidebarRect] = useState<DOMRect | null>(null);
-  const categoryRefs = useRef<Map<number, HTMLDivElement>>(new Map());
+  const categoryRefs = useRef<Map<number, HTMLButtonElement>>(new Map());
   const containerRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
@@ -186,7 +186,7 @@ export function SidePanelLayers({
     setSelectedThemeId(null);
   }, []);
 
-  const setRef = useCallback((themeId: number) => (el: HTMLDivElement | null) => {
+  const setRef = useCallback((themeId: number) => (el: HTMLButtonElement | null) => {
     if (el) {
       categoryRefs.current.set(themeId, el);
     } else {
@@ -196,79 +196,71 @@ export function SidePanelLayers({
 
   return (
     <div ref={containerRef} className={cn("relative", className)} data-sidebar-layers>
-      <div className="space-y-3">
+      <div className="space-y-2">
         {layers.map((theme) => {
           const visibleCount = getVisibleLayerCount(theme);
           const totalCount = theme.layers.length;
           const isSelected = selectedTheme?.id === theme.id;
+          const hasVisibleLayers = visibleCount > 0;
 
           return (
-            <div
+            <button
               key={theme.id}
               ref={setRef(theme.id)}
+              onClick={() => handleCategoryClick(theme)}
               className={cn(
-                "rounded-2xl border overflow-hidden transition-all duration-200",
-                "bg-white/50 dark:bg-white/5 backdrop-blur-sm",
-                "hover:shadow-md",
+                "w-full rounded-xl border overflow-hidden transition-all duration-200",
+                "bg-white/60 dark:bg-white/5 backdrop-blur-sm",
+                "hover:bg-white/80 dark:hover:bg-white/8",
+                "active:scale-[0.98]",
+                "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1",
                 isSelected 
-                  ? "border-primary/40 ring-2 ring-primary/20 shadow-md" 
-                  : "border-white/40 dark:border-white/10 shadow-sm hover:border-white/60"
+                  ? "border-primary/40 ring-1 ring-primary/20 shadow-md" 
+                  : "border-white/50 dark:border-white/10 shadow-sm hover:border-primary/20 hover:shadow-md"
               )}
+              aria-label={`Open ${theme.name} layers`}
             >
-              {/* Card Content - 16px padding consistent */}
-              <div className="p-4 bg-gradient-to-br from-primary/5 via-transparent to-transparent">
-                {/* Row 1: 3-Column Grid - Icon (44px) | Title (flex) | Chevron (40px) */}
-                <button
-                  onClick={() => handleCategoryClick(theme)}
+              {/* Compact Card Layout */}
+              <div className="flex items-center gap-3 px-3 py-2.5">
+                {/* Icon - Compact 36x36px */}
+                <div
                   className={cn(
-                    "w-full grid grid-cols-[44px_1fr_40px] items-center gap-2 group/row",
-                    "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 rounded-xl",
-                    "-mx-1 px-1 py-1"
+                    "w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0",
+                    "transition-all duration-150",
+                    hasVisibleLayers 
+                      ? "bg-primary text-white shadow-sm shadow-primary/30" 
+                      : "bg-primary/10 text-primary"
                   )}
-                  aria-label={`Open ${theme.name} layers`}
                 >
-                  {/* Icon container - Fixed 44x44px, unified primary color */}
-                  <div
-                    className={cn(
-                      "w-11 h-11 rounded-xl flex items-center justify-center",
-                      "transition-all duration-150 group-hover/row:scale-105",
-                      "bg-primary/10 text-primary shadow-sm shadow-primary/10"
-                    )}
-                  >
-                    {getThemeIcon(theme.icon)}
-                  </div>
-                  
-                  {/* Title - Flexible with proper truncation */}
-                  <span className="text-left text-[15px] font-semibold text-foreground leading-snug line-clamp-2">
-                    {theme.name}
-                  </span>
-                  
-                  {/* Chevron - Fixed 40x40px */}
-                  <div
-                    className={cn(
-                      "w-10 h-10 rounded-xl flex items-center justify-center",
-                      "transition-all duration-150",
-                      "group-hover/row:bg-white/40 dark:group-hover/row:bg-white/10",
-                      isSelected && "bg-primary/10"
-                    )}
-                  >
-                    <ChevronRight
-                      className={cn(
-                        "w-5 h-5 transition-all duration-150 ease-out",
-                        "group-hover/row:translate-x-0.5",
-                        isSelected ? "text-primary translate-x-0.5" : "text-muted-foreground"
-                      )}
-                    />
-                  </div>
-                </button>
-
-                {/* Row 2: Visibility summary - clean status only */}
-                <div className="flex items-center gap-1.5 mt-2 pl-1">
-                  <span className="text-sm font-semibold text-foreground">{visibleCount}</span>
-                  <span className="text-sm text-muted-foreground">of {totalCount} visible</span>
+                  {getThemeIcon(theme.icon)}
                 </div>
+                
+                {/* Content - Title & Count inline */}
+                <div className="flex-1 min-w-0 text-left">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-sm font-semibold text-foreground truncate">
+                      {theme.name}
+                    </span>
+                    <span className={cn(
+                      "text-xs font-medium px-1.5 py-0.5 rounded-md flex-shrink-0",
+                      hasVisibleLayers 
+                        ? "bg-primary/15 text-primary" 
+                        : "bg-muted/50 text-muted-foreground"
+                    )}>
+                      {visibleCount}/{totalCount}
+                    </span>
+                  </div>
+                </div>
+                
+                {/* Chevron */}
+                <ChevronRight
+                  className={cn(
+                    "w-4 h-4 flex-shrink-0 transition-all duration-150",
+                    isSelected ? "text-primary translate-x-0.5" : "text-muted-foreground/60"
+                  )}
+                />
               </div>
-            </div>
+            </button>
           );
         })}
       </div>

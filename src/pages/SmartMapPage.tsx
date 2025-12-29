@@ -1,14 +1,12 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Sparkles, Filter, Map, MapPin, Layers } from 'lucide-react';
+import { Sparkles, MapPin, Layers } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { SmartSearch } from '@/components/search/SmartSearch';
 import { InteractiveMap } from '@/components/map/InteractiveMap';
 import { DirectionsPanel } from '@/components/map/DirectionsPanel';
-import { InlineFilters } from '@/components/map/InlineFilters';
-import { SidePanelLayers } from '@/components/map/SidePanelLayers';
+import { FilterPills } from '@/components/map/FilterPills';
 import { MobileBottomSheet } from '@/components/map/MobileBottomSheet';
-import { CollapsibleSidePanel } from '@/components/map/CollapsibleSidePanel';
 import { cn } from '@/lib/utils';
 import { themeGroups } from '@/data/layers';
 import { uaeFacilities } from '@/data/facilities';
@@ -175,77 +173,59 @@ export default function SmartMapPage() {
             suggestedZoom={searchIntent?.suggestedZoom}
             baseMapId={baseMapId}
             onBaseMapChange={setBaseMapId}
+            onLayerToggle={handleLayerToggle}
+            onSelectAll={handleSelectAll}
+            onClearAll={handleClearAll}
+            highlightedLayerId={highlightedLayerId}
             className="h-full w-full"
           />
         </div>
 
-        {/* Left Panel - Desktop (Collapsible) */}
-        <CollapsibleSidePanel>
-          {/* Search Header - Fixed */}
-          <div className="relative z-20 p-4 pb-3 bg-white/70 dark:bg-card/60 backdrop-blur-xl border-b border-white/30 dark:border-white/10 rounded-t-2xl flex-shrink-0" style={{ overflow: 'visible' }}>
-            <div className="relative bg-white/40 dark:bg-white/5 rounded-xl p-4 border border-white/30 dark:border-white/10 transition-all hover:bg-white/50 dark:hover:bg-white/10" style={{ overflow: 'visible' }}>
-              <SmartSearch 
-                onSearch={handleSearch} 
-                onLocateMe={handleLocateMe} 
-                isSearching={isSearching} 
-                size="default"
-                activeLayerId={activeHospitalLayer}
-                hideSubmitButton
-                disableGlow
-              />
-            </div>
-            
-            {/* Search Message */}
-            {userMessage && (
-              <div className="mt-3 flex items-center gap-2 text-sm text-foreground/80 bg-white/50 dark:bg-white/5 backdrop-blur-sm rounded-xl px-3 py-2.5 border border-white/30 dark:border-white/10">
-                <Sparkles className="w-3.5 h-3.5 text-primary flex-shrink-0" />
-                <span className="line-clamp-2">{userMessage}</span>
-              </div>
-            )}
-
-            {/* Result Count Badge */}
-            {searchResults.length > 0 && (
-              <div className="mt-3 flex items-center gap-2">
-                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-medium border border-primary/20">
-                  <MapPin className="w-3 h-3" />
-                  <span>{searchResults.length} {searchResults.length === 1 ? 'facility' : 'facilities'}</span>
-                </div>
-                {searchIntent?.responseMessage && (
-                  <span className="text-xs text-muted-foreground truncate">
-                    {searchIntent.responseMessage}
-                  </span>
-                )}
-              </div>
-            )}
+        {/* Floating Search Bar - Desktop (Top-left) */}
+        <div className="hidden lg:block absolute top-4 left-4 z-[var(--z-floating)] w-[420px]">
+          <div className="bg-card/95 backdrop-blur-xl rounded-2xl shadow-xl border border-border/50 p-3">
+            <SmartSearch 
+              onSearch={handleSearch} 
+              onLocateMe={handleLocateMe} 
+              isSearching={isSearching} 
+              size="default"
+              activeLayerId={activeHospitalLayer}
+              hideSubmitButton={false}
+              disableGlow
+            />
           </div>
           
-          {/* Scrollable Content */}
-          <div className="relative z-10 p-4 pt-3 space-y-4 overflow-y-auto overflow-x-visible flex-1 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-white/30 hover:scrollbar-thumb-white/50">
-            {/* Filters */}
-            <div className="bg-white/40 dark:bg-white/5 rounded-xl p-4 border border-white/30 dark:border-white/10">
-              <h4 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
-                <Filter className="w-4 h-4 text-primary" />
-                Filters
-              </h4>
-              <InlineFilters filters={filters} onFilterChange={setFilters} className="flex-col gap-3" />
+          {/* Search Message */}
+          {userMessage && (
+            <div className="mt-2 flex items-center gap-2 text-sm text-foreground/80 bg-card/95 backdrop-blur-xl rounded-xl px-4 py-3 shadow-lg border border-border/50">
+              <Sparkles className="w-3.5 h-3.5 text-primary flex-shrink-0" />
+              <span className="line-clamp-2">{userMessage}</span>
             </div>
-            
-            {/* Map Layers */}
-            <div className="relative" data-map-layers-section>
-              <h4 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2 px-1" data-map-layers-header>
-                <Map className="w-4 h-4 text-primary" />
-                Map Layers
-              </h4>
-              <SidePanelLayers 
-                layers={layers} 
-                onLayerToggle={handleLayerToggle}
-                onSelectAll={handleSelectAll}
-                onClearAll={handleClearAll}
-                highlightedLayerId={highlightedLayerId}
-              />
+          )}
+
+          {/* Result Count Badge */}
+          {searchResults.length > 0 && (
+            <div className="mt-2 flex items-center gap-2">
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary text-primary-foreground text-xs font-medium shadow-lg">
+                <MapPin className="w-3 h-3" />
+                <span>{searchResults.length} {searchResults.length === 1 ? 'facility' : 'facilities'}</span>
+              </div>
+              {searchIntent?.responseMessage && (
+                <span className="text-xs text-muted-foreground bg-card/95 backdrop-blur-sm px-2 py-1 rounded-lg">
+                  {searchIntent.responseMessage}
+                </span>
+              )}
             </div>
-          </div>
-        </CollapsibleSidePanel>
+          )}
+        </div>
+
+        {/* Floating Filter Pills - Desktop (Top-center or below search) */}
+        <div className="hidden lg:block absolute top-4 left-[450px] z-[var(--z-floating)]">
+          <FilterPills 
+            filters={filters} 
+            onFilterChange={setFilters} 
+          />
+        </div>
 
         {/* Mobile Search Bar - Fixed sticky at top, always visible above menus */}
         <div className="lg:hidden absolute top-3 left-3 right-3 z-[var(--z-popover)]">
@@ -269,17 +249,17 @@ export default function SmartMapPage() {
           )}
         </div>
 
-          {/* Mobile FAB - Layers Button - z-40 for map controls */}
-          <div className="lg:hidden absolute bottom-24 left-4 z-40">
-            <button
-              onClick={() => setMobileSheetOpen(true)}
-              className="flex items-center gap-2 bg-primary text-primary-foreground shadow-xl rounded-full px-4 py-3 min-h-[52px] hover:bg-primary/90 active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-              aria-label="Open layers and filters"
-            >
-              <Layers className="w-5 h-5" />
-              <span className="text-sm font-semibold">Layers</span>
-            </button>
-          </div>
+        {/* Mobile FAB - Layers Button - z-40 for map controls */}
+        <div className="lg:hidden absolute bottom-24 left-4 z-40">
+          <button
+            onClick={() => setMobileSheetOpen(true)}
+            className="flex items-center gap-2 bg-primary text-primary-foreground shadow-xl rounded-full px-4 py-3 min-h-[52px] hover:bg-primary/90 active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+            aria-label="Open layers and filters"
+          >
+            <Layers className="w-5 h-5" />
+            <span className="text-sm font-semibold">Layers</span>
+          </button>
+        </div>
       </main>
 
       {/* Mobile Bottom Sheet - Enhanced with drag states */}

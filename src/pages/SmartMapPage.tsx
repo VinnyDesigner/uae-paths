@@ -184,7 +184,7 @@ export default function SmartMapPage() {
         {/* Floating Search + Filters Row - Desktop */}
         <div className="hidden lg:flex absolute top-4 left-4 z-[var(--z-floating)] items-center gap-4">
           {/* Search Bar */}
-          <div className="w-[400px]">
+          <div className="w-[340px]">
             <SmartSearch 
               onSearch={handleSearch} 
               onLocateMe={handleLocateMe} 

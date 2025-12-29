@@ -119,50 +119,28 @@ export function FloatingLayersPanel({
 
   return (
     <div ref={panelRef} className={cn("relative", className)}>
-      {/* Floating Button - Matches legend card style when compact */}
+      {/* Floating Button - Icon only, matches other map controls */}
       <button
         onClick={() => {
           setIsOpen(!isOpen);
           if (!isOpen) setSelectedTheme(null);
         }}
         className={cn(
-          "flex items-center transition-all duration-200",
-          "bg-card/95 backdrop-blur-sm border shadow-lg",
-          "hover:bg-secondary/50 active:scale-[0.98]",
-          compact 
-            ? "gap-2 px-3 py-2.5 rounded-xl" 
-            : "gap-2 px-4 py-3 rounded-xl",
-          isOpen
-            ? "border-primary/50"
-            : "border-border"
+          "bg-card rounded-xl shadow-lg border border-border p-3",
+          "hover:bg-secondary active:scale-95 transition-all duration-200",
+          "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+          "relative",
+          isOpen && "bg-secondary"
         )}
         aria-expanded={isOpen}
         aria-label="Toggle map layers"
         title="Map Layers"
       >
-        <Layers className={cn(
-          "w-4 h-4 transition-colors",
-          isOpen ? "text-primary" : "text-primary"
-        )} />
-        {compact && (
-          <>
-            <span className="text-sm font-semibold text-foreground">Layers</span>
-            {totalVisible > 0 && (
-              <span className="text-xs text-muted-foreground bg-secondary rounded-full px-2 py-0.5">
-                {totalVisible}
-              </span>
-            )}
-          </>
-        )}
-        {!compact && (
-          <>
-            <span className="text-sm font-semibold text-foreground">Layers</span>
-            {totalVisible > 0 && (
-              <span className="text-xs text-muted-foreground bg-secondary rounded-full px-2 py-0.5">
-                {totalVisible}
-              </span>
-            )}
-          </>
+        <Layers className="w-5 h-5 text-foreground" />
+        {totalVisible > 0 && (
+          <span className="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] text-[10px] font-bold rounded-full bg-primary text-primary-foreground flex items-center justify-center px-1">
+            {totalVisible}
+          </span>
         )}
       </button>
 

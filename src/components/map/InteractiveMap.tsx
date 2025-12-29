@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { ZoomIn, ZoomOut, Maximize, LocateFixed, Home, Map, Check, List, Layers, Building2, Heart, GraduationCap, Stethoscope, Pill, HeartPulse, Siren, Accessibility, Truck, Microscope, School, Building, BookOpen, Baby, Users } from 'lucide-react';
+import { ZoomIn, ZoomOut, Maximize, LocateFixed, Home, Map, Check, List, Layers, ChevronRight, Building2, Heart, GraduationCap, Stethoscope, Pill, HeartPulse, Siren, Accessibility, Truck, Microscope, School, Building, BookOpen, Baby, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ThemeGroup, Facility, MapLayer } from '@/types/map';
 import { baseMaps, BaseMapOption } from './BaseMapSelector';
@@ -124,6 +124,8 @@ function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFu
   const [baseMapOpen, setBaseMapOpen] = useState(false);
   const [legendOpen, setLegendOpen] = useState(false);
   const [layersOpen, setLayersOpen] = useState(false);
+  // Accordion state - first category expanded by default
+  const [expandedCategoryId, setExpandedCategoryId] = useState<number | null>(layers[0]?.id ?? null);
 
   // Get visible layers for legend
   const visibleLayers = layers.flatMap(theme =>
@@ -199,13 +201,23 @@ function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFu
                       const ThemeIcon = getIcon(theme.icon);
                       const visibleCount = theme.layers.filter(l => l.visible).length;
                       const hasVisibleLayers = visibleCount > 0;
+                      const isExpanded = expandedCategoryId === theme.id;
 
                       return (
                         <div key={theme.id} className="rounded-lg overflow-hidden">
-                          <div className="flex items-center gap-3 p-2.5 rounded-lg bg-secondary/30">
+                          {/* Category Header - Clickable to expand/collapse */}
+                          <button
+                            onClick={() => setExpandedCategoryId(isExpanded ? null : theme.id)}
+                            className={cn(
+                              "w-full flex items-center gap-3 p-2.5 rounded-lg transition-all duration-150",
+                              isExpanded 
+                                ? "bg-secondary" 
+                                : "bg-secondary/30 hover:bg-secondary/50"
+                            )}
+                          >
                             <div
                               className={cn(
-                                "w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors",
+                                "w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors duration-150",
                                 hasVisibleLayers 
                                   ? "bg-primary text-primary-foreground" 
                                   : "bg-primary/10 text-primary"
@@ -213,45 +225,65 @@ function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFu
                             >
                               <ThemeIcon className="w-4 h-4" />
                             </div>
-                            <div className="flex-1">
+                            <div className="flex-1 text-left">
                               <p className="font-medium text-sm text-foreground">{theme.name}</p>
+                              {hasVisibleLayers && (
+                                <p className="text-[10px] text-muted-foreground">
+                                  {visibleCount} active
+                                </p>
+                              )}
                             </div>
-                          </div>
-                          <div className="py-2 px-2 space-y-1">
-                            {theme.layers.map((layer) => {
-                              const LayerIcon = getIcon(layer.icon);
-                              const isHighlighted = highlightedLayerId === layer.id;
-                              
-                              return (
-                                <label
-                                  key={layer.id}
-                                  className={cn(
-                                    "flex items-center gap-2 p-2 rounded-lg transition-all cursor-pointer",
-                                    layer.visible ? "bg-card" : "hover:bg-card/50",
-                                    isHighlighted && "ring-2 ring-primary"
-                                  )}
-                                >
-                                  <div
-                                    className="w-6 h-6 rounded flex items-center justify-center flex-shrink-0"
-                                    style={{ backgroundColor: layer.color + '15' }}
+                            <ChevronRight 
+                              className={cn(
+                                "w-4 h-4 text-muted-foreground transition-transform duration-200",
+                                isExpanded && "rotate-90"
+                              )} 
+                            />
+                          </button>
+                          
+                          {/* Expandable Layer List */}
+                          <div 
+                            className={cn(
+                              "overflow-hidden transition-all duration-200 ease-out",
+                              isExpanded ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
+                            )}
+                          >
+                            <div className="py-2 px-2 space-y-1">
+                              {theme.layers.map((layer) => {
+                                const LayerIcon = getIcon(layer.icon);
+                                const isHighlighted = highlightedLayerId === layer.id;
+                                
+                                return (
+                                  <label
+                                    key={layer.id}
+                                    className={cn(
+                                      "flex items-center gap-2 p-2 rounded-lg transition-all duration-150 cursor-pointer",
+                                      layer.visible ? "bg-card" : "hover:bg-card/50",
+                                      isHighlighted && "ring-2 ring-primary"
+                                    )}
                                   >
-                                    <LayerIcon
-                                      className="w-3.5 h-3.5"
-                                      style={{ color: layer.color }}
+                                    <div
+                                      className="w-6 h-6 rounded flex items-center justify-center flex-shrink-0"
+                                      style={{ backgroundColor: layer.color + '15' }}
+                                    >
+                                      <LayerIcon
+                                        className="w-3.5 h-3.5"
+                                        style={{ color: layer.color }}
+                                      />
+                                    </div>
+                                    <span className="flex-1 text-xs text-foreground truncate">
+                                      {layer.name}
+                                    </span>
+                                    <input
+                                      type="checkbox"
+                                      checked={layer.visible}
+                                      onChange={() => onLayerToggle(theme.id, layer.id)}
+                                      className="w-4 h-4 rounded border-border text-primary focus:ring-primary accent-primary"
                                     />
-                                  </div>
-                                  <span className="flex-1 text-xs text-foreground truncate">
-                                    {layer.name}
-                                  </span>
-                                  <input
-                                    type="checkbox"
-                                    checked={layer.visible}
-                                    onChange={() => onLayerToggle(theme.id, layer.id)}
-                                    className="w-4 h-4 rounded border-border text-primary focus:ring-primary"
-                                  />
-                                </label>
-                              );
-                            })}
+                                  </label>
+                                );
+                              })}
+                            </div>
                           </div>
                         </div>
                       );

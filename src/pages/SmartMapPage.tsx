@@ -181,21 +181,33 @@ export default function SmartMapPage() {
           />
         </div>
 
-        {/* Floating Search Bar - Desktop (Top-left) */}
-        <div className="hidden lg:block absolute top-4 left-4 z-[var(--z-floating)] w-[420px]">
-          <SmartSearch 
-            onSearch={handleSearch} 
-            onLocateMe={handleLocateMe} 
-            isSearching={isSearching} 
-            size="default"
-            activeLayerId={activeHospitalLayer}
-            hideSubmitButton
-            disableGlow
-          />
+        {/* Floating Search + Filters Row - Desktop */}
+        <div className="hidden lg:flex absolute top-4 left-4 z-[var(--z-floating)] items-center gap-4">
+          {/* Search Bar */}
+          <div className="w-[400px]">
+            <SmartSearch 
+              onSearch={handleSearch} 
+              onLocateMe={handleLocateMe} 
+              isSearching={isSearching} 
+              size="default"
+              activeLayerId={activeHospitalLayer}
+              hideSubmitButton
+              disableGlow
+            />
+          </div>
           
+          {/* Filter Pills - Vertically centered with search */}
+          <FilterPills 
+            filters={filters} 
+            onFilterChange={setFilters} 
+          />
+        </div>
+
+        {/* Search Message + Results - Below the search row */}
+        <div className="hidden lg:block absolute top-[72px] left-4 z-[var(--z-floating)]">
           {/* Search Message */}
           {userMessage && (
-            <div className="mt-2 flex items-center gap-2 text-sm text-foreground/80 bg-card/95 backdrop-blur-xl rounded-xl px-4 py-3 shadow-lg border border-border/50">
+            <div className="flex items-center gap-2 text-sm text-foreground/80 bg-card/95 backdrop-blur-xl rounded-xl px-4 py-3 shadow-lg border border-border/50 mb-2">
               <Sparkles className="w-3.5 h-3.5 text-primary flex-shrink-0" />
               <span className="line-clamp-2">{userMessage}</span>
             </div>
@@ -203,7 +215,7 @@ export default function SmartMapPage() {
 
           {/* Result Count Badge */}
           {searchResults.length > 0 && (
-            <div className="mt-2 flex items-center gap-2">
+            <div className="flex items-center gap-2">
               <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary text-primary-foreground text-xs font-medium shadow-lg">
                 <MapPin className="w-3 h-3" />
                 <span>{searchResults.length} {searchResults.length === 1 ? 'facility' : 'facilities'}</span>
@@ -215,14 +227,6 @@ export default function SmartMapPage() {
               )}
             </div>
           )}
-        </div>
-
-        {/* Floating Filter Pills - Desktop (Top-center or below search) */}
-        <div className="hidden lg:block absolute top-4 left-[450px] z-[var(--z-floating)]">
-          <FilterPills 
-            filters={filters} 
-            onFilterChange={setFilters} 
-          />
         </div>
 
         {/* Mobile Search Bar - Fixed sticky at top, always visible above menus */}

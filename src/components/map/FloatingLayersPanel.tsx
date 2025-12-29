@@ -35,6 +35,7 @@ interface FloatingLayersPanelProps {
   onClearAll: (themeId: number) => void;
   highlightedLayerId?: number | null;
   className?: string;
+  compact?: boolean;
 }
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -62,6 +63,7 @@ export function FloatingLayersPanel({
   onClearAll,
   highlightedLayerId,
   className,
+  compact = false,
 }: FloatingLayersPanelProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedTheme, setSelectedTheme] = useState<ThemeGroup | null>(null);
@@ -117,42 +119,56 @@ export function FloatingLayersPanel({
 
   return (
     <div ref={panelRef} className={cn("relative", className)}>
-      {/* Floating Button */}
+      {/* Floating Button - Icon only when compact */}
       <button
         onClick={() => {
           setIsOpen(!isOpen);
           if (!isOpen) setSelectedTheme(null);
         }}
         className={cn(
-          "flex items-center gap-2 px-4 py-3 rounded-xl transition-all duration-200",
+          "flex items-center justify-center transition-all duration-200",
           "bg-white dark:bg-card border-2 shadow-lg",
           "hover:shadow-xl active:scale-95",
+          compact ? "w-10 h-10 rounded-xl" : "gap-2 px-4 py-3 rounded-xl",
           isOpen
             ? "border-primary shadow-primary/10"
             : "border-border hover:border-primary/40"
         )}
         aria-expanded={isOpen}
         aria-label="Toggle map layers"
+        title="Map Layers"
       >
         <Layers className={cn(
           "w-5 h-5 transition-colors",
           isOpen ? "text-primary" : "text-muted-foreground"
         )} />
-        <span className="text-sm font-semibold text-foreground">Layers</span>
-        {totalVisible > 0 && (
-          <span className="ml-1 px-2 py-0.5 text-xs font-bold rounded-full bg-primary text-primary-foreground">
+        {!compact && (
+          <>
+            <span className="text-sm font-semibold text-foreground">Layers</span>
+            {totalVisible > 0 && (
+              <span className="ml-1 px-2 py-0.5 text-xs font-bold rounded-full bg-primary text-primary-foreground">
+                {totalVisible}
+              </span>
+            )}
+          </>
+        )}
+        {compact && totalVisible > 0 && (
+          <span className="absolute -top-1 -right-1 w-5 h-5 text-[10px] font-bold rounded-full bg-primary text-primary-foreground flex items-center justify-center">
             {totalVisible}
           </span>
         )}
       </button>
 
-      {/* Panel Overlay */}
+      {/* Panel Overlay - Opens upward when compact (bottom positioned) */}
       {isOpen && (
         <div 
           className={cn(
-            "absolute top-full right-0 mt-2 z-[var(--z-flyout)]",
+            "absolute z-[var(--z-flyout)]",
             "w-80 bg-white dark:bg-card rounded-2xl border border-border",
-            "shadow-2xl animate-fade-in overflow-hidden"
+            "shadow-2xl animate-fade-in overflow-hidden",
+            compact 
+              ? "bottom-full left-0 mb-2" 
+              : "top-full right-0 mt-2"
           )}
         >
           {/* Header */}

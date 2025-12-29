@@ -119,43 +119,50 @@ export function FloatingLayersPanel({
 
   return (
     <div ref={panelRef} className={cn("relative", className)}>
-      {/* Floating Button - Icon only when compact */}
+      {/* Floating Button - Matches legend card style when compact */}
       <button
         onClick={() => {
           setIsOpen(!isOpen);
           if (!isOpen) setSelectedTheme(null);
         }}
         className={cn(
-          "flex items-center justify-center transition-all duration-200",
-          "bg-white dark:bg-card border-2 shadow-lg",
-          "hover:shadow-xl active:scale-95",
-          compact ? "w-10 h-10 rounded-xl" : "gap-2 px-4 py-3 rounded-xl",
+          "flex items-center transition-all duration-200",
+          "bg-card/95 backdrop-blur-sm border shadow-lg",
+          "hover:bg-secondary/50 active:scale-[0.98]",
+          compact 
+            ? "gap-2 px-3 py-2.5 rounded-xl" 
+            : "gap-2 px-4 py-3 rounded-xl",
           isOpen
-            ? "border-primary shadow-primary/10"
-            : "border-border hover:border-primary/40"
+            ? "border-primary/50"
+            : "border-border"
         )}
         aria-expanded={isOpen}
         aria-label="Toggle map layers"
         title="Map Layers"
       >
         <Layers className={cn(
-          "w-5 h-5 transition-colors",
-          isOpen ? "text-primary" : "text-muted-foreground"
+          "w-4 h-4 transition-colors",
+          isOpen ? "text-primary" : "text-primary"
         )} />
-        {!compact && (
+        {compact && (
           <>
             <span className="text-sm font-semibold text-foreground">Layers</span>
             {totalVisible > 0 && (
-              <span className="ml-1 px-2 py-0.5 text-xs font-bold rounded-full bg-primary text-primary-foreground">
+              <span className="text-xs text-muted-foreground bg-secondary rounded-full px-2 py-0.5">
                 {totalVisible}
               </span>
             )}
           </>
         )}
-        {compact && totalVisible > 0 && (
-          <span className="absolute -top-1 -right-1 w-5 h-5 text-[10px] font-bold rounded-full bg-primary text-primary-foreground flex items-center justify-center">
-            {totalVisible}
-          </span>
+        {!compact && (
+          <>
+            <span className="text-sm font-semibold text-foreground">Layers</span>
+            {totalVisible > 0 && (
+              <span className="text-xs text-muted-foreground bg-secondary rounded-full px-2 py-0.5">
+                {totalVisible}
+              </span>
+            )}
+          </>
         )}
       </button>
 
@@ -167,7 +174,7 @@ export function FloatingLayersPanel({
             "w-80 bg-white dark:bg-card rounded-2xl border border-border",
             "shadow-2xl animate-fade-in overflow-hidden",
             compact 
-              ? "bottom-full left-0 mb-2" 
+              ? "bottom-full right-0 mb-2" 
               : "top-full right-0 mt-2"
           )}
         >

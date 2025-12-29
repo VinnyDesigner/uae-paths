@@ -176,12 +176,12 @@ export function Footer({ variant = 'light', compact = false }: FooterProps) {
                   <span className={cn(
                     "w-6 h-6 rounded-md flex items-center justify-center transition-all duration-300",
                     isDark 
-                      ? "bg-cyan-500/15 group-hover:bg-cyan-500/25"
-                      : "bg-education/8 group-hover:bg-education/15"
+                      ? "bg-blue-500/15 group-hover:bg-blue-500/25"
+                      : "bg-healthcare/8 group-hover:bg-healthcare/15"
                   )}>
                     <GraduationCap className={cn(
                       "w-3 h-3",
-                      isDark ? "text-cyan-400" : "text-education"
+                      isDark ? "text-blue-400" : "text-healthcare"
                     )} strokeWidth={2} />
                   </span>
                   Education

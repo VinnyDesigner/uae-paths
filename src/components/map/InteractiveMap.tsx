@@ -124,8 +124,8 @@ function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFu
   const [baseMapOpen, setBaseMapOpen] = useState(false);
   const [legendOpen, setLegendOpen] = useState(false);
   const [layersOpen, setLayersOpen] = useState(false);
-  // Accordion state - first category expanded by default
-  const [expandedCategoryId, setExpandedCategoryId] = useState<number | null>(layers[0]?.id ?? null);
+  // Multiple categories can be expanded - first one expanded by default
+  const [expandedCategories, setExpandedCategories] = useState<number[]>(layers[0]?.id ? [layers[0].id] : []);
 
   // Get visible layers for legend
   const visibleLayers = layers.flatMap(theme =>
@@ -201,13 +201,21 @@ function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFu
                       const ThemeIcon = getIcon(theme.icon);
                       const visibleCount = theme.layers.filter(l => l.visible).length;
                       const hasVisibleLayers = visibleCount > 0;
-                      const isExpanded = expandedCategoryId === theme.id;
+                      const isExpanded = expandedCategories.includes(theme.id);
+
+                      const toggleCategory = () => {
+                        setExpandedCategories(prev => 
+                          prev.includes(theme.id) 
+                            ? prev.filter(id => id !== theme.id)
+                            : [...prev, theme.id]
+                        );
+                      };
 
                       return (
                         <div key={theme.id} className="rounded-lg overflow-hidden">
                           {/* Category Header - Clickable to expand/collapse */}
                           <button
-                            onClick={() => setExpandedCategoryId(isExpanded ? null : theme.id)}
+                            onClick={toggleCategory}
                             className={cn(
                               "w-full flex items-center gap-3 p-2.5 rounded-lg transition-all duration-150",
                               isExpanded 

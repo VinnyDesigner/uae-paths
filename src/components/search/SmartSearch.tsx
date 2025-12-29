@@ -139,7 +139,7 @@ export function SmartSearch({
         <div className="fixed inset-0 bg-black/30 z-[var(--z-popover-backdrop)] pointer-events-none" />
       )}
       
-      {/* Liquid Glass Search Container - Navy themed with always-on glow animation */}
+      {/* Liquid Glass Search Container - Primary action element */}
       <div
         className={cn(
           "relative flex items-center transition-all duration-300 rounded-full overflow-visible z-[var(--z-dropdown)]",
@@ -149,11 +149,11 @@ export function SmartSearch({
             "border-2 border-[#7ac8ff]/30",
             isFocused && "!bg-[#0F304F]/90 !border-[#7ac8ff]/50"
           ] : [
-            "glass-search rounded-[20px] md:rounded-[24px]"
+            "bg-white shadow-[0_4px_16px_rgba(0,0,0,0.12)] border border-border/30 rounded-[28px]"
           ],
           isLarge 
             ? "h-[64px] md:h-[70px] lg:h-[76px]" 
-            : "h-12 md:h-14"
+            : "h-14"
         )}
       >
         {/* Active overlay removed - focus handled by glass-search-liquid:focus-within */}

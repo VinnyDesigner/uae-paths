@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Sparkles, MapPin, Layers } from 'lucide-react';
+import { MapPin, Layers } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { SmartSearch } from '@/components/search/SmartSearch';
 import { InteractiveMap } from '@/components/map/InteractiveMap';
@@ -203,50 +203,48 @@ export default function SmartMapPage() {
           />
         </div>
 
-        {/* Search Message + Results - Below the search row */}
-        <div className="hidden lg:block absolute top-[72px] left-4 z-[var(--z-floating)]">
-          {/* Search Message */}
-          {userMessage && (
-            <div className="flex items-center gap-2 text-sm text-foreground/80 bg-card/95 backdrop-blur-xl rounded-xl px-4 py-3 shadow-lg border border-border/50 mb-2">
-              <Sparkles className="w-3.5 h-3.5 text-primary flex-shrink-0" />
-              <span className="line-clamp-2">{userMessage}</span>
-            </div>
-          )}
-
-          {/* Result Count Badge */}
-          {searchResults.length > 0 && (
-            <div className="flex items-center gap-2">
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary text-primary-foreground text-xs font-medium shadow-lg">
-                <MapPin className="w-3 h-3" />
-                <span>{searchResults.length} {searchResults.length === 1 ? 'facility' : 'facilities'}</span>
-              </div>
-              {searchIntent?.responseMessage && (
-                <span className="text-xs text-muted-foreground bg-card/95 backdrop-blur-sm px-2 py-1 rounded-lg">
-                  {searchIntent.responseMessage}
-                </span>
+        {/* Search Results - Single compact indicator */}
+        {searchResults.length > 0 && (
+          <div className="hidden lg:block absolute top-[72px] left-4 z-[var(--z-floating)]">
+            <div className="flex items-center gap-2 px-3.5 py-2 rounded-full bg-card/95 backdrop-blur-xl shadow-lg border border-border/50">
+              <MapPin className="w-3.5 h-3.5 text-primary flex-shrink-0" />
+              <span className="text-sm font-medium text-foreground">
+                {searchResults.length} {searchResults.length === 1 ? 'facility' : 'facilities'}
+              </span>
+              {searchIntent?.isProximitySearch && (
+                <>
+                  <span className="text-muted-foreground/50">•</span>
+                  <span className="text-sm text-muted-foreground">Near your location</span>
+                </>
+              )}
+              {searchIntent?.emirate && !searchIntent?.isProximitySearch && (
+                <>
+                  <span className="text-muted-foreground/50">•</span>
+                  <span className="text-sm text-muted-foreground">in {searchIntent.emirate}</span>
+                </>
               )}
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Mobile Search Bar - Fixed sticky at top, always visible above menus */}
         <div className="lg:hidden absolute top-3 left-3 right-3 z-[var(--z-popover)]">
           <div className="bg-card/98 backdrop-blur-xl rounded-xl shadow-lg border border-border/50 p-2">
             <SmartSearch onSearch={handleSearch} onLocateMe={handleLocateMe} isSearching={isSearching} />
           </div>
-          {userMessage && (
-            <div className="mt-2 flex items-center gap-2 text-xs text-foreground/80 bg-card/98 backdrop-blur-xl rounded-lg px-3 py-2 shadow-lg border border-border/50">
-              <Sparkles className="w-3 h-3 text-primary flex-shrink-0" />
-              <span className="truncate">{userMessage}</span>
-            </div>
-          )}
-          {/* Mobile results count pill */}
+          {/* Mobile results count - single compact indicator */}
           {searchResults.length > 0 && (
-            <div className="mt-2 flex items-center gap-2">
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary text-primary-foreground text-xs font-medium shadow-lg">
-                <MapPin className="w-3 h-3" />
-                <span>{searchResults.length}</span>
-              </div>
+            <div className="mt-2 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-card/98 backdrop-blur-xl shadow-lg border border-border/50">
+              <MapPin className="w-3.5 h-3.5 text-primary flex-shrink-0" />
+              <span className="text-xs font-medium text-foreground">
+                {searchResults.length} {searchResults.length === 1 ? 'facility' : 'facilities'}
+              </span>
+              {searchIntent?.isProximitySearch && (
+                <>
+                  <span className="text-muted-foreground/40">•</span>
+                  <span className="text-xs text-muted-foreground">Near you</span>
+                </>
+              )}
             </div>
           )}
         </div>

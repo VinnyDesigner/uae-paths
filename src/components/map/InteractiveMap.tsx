@@ -123,7 +123,7 @@ interface MapControlsProps {
 function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFullscreen, selectedBaseMap, onBaseMapChange, layers, onLayerToggle, onSelectAll, onClearAll, highlightedLayerId }: MapControlsProps) {
   const [baseMapOpen, setBaseMapOpen] = useState(false);
   const [legendOpen, setLegendOpen] = useState(false);
-  const [layersOpen, setLayersOpen] = useState(false);
+  const [layersOpen, setLayersOpen] = useState(true);
   // Multiple categories can be expanded - first one expanded by default
   const [expandedCategories, setExpandedCategories] = useState<number[]>(layers[0]?.id ? [layers[0].id] : []);
 

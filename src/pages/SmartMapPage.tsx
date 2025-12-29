@@ -258,7 +258,7 @@ export default function SmartMapPage() {
         </div>
 
         {/* Bottom Right - Floating Layers Button (Desktop) - Left of legends */}
-        <div className="hidden lg:block absolute bottom-6 right-[220px] z-[var(--z-floating)]">
+        <div className="hidden lg:block absolute bottom-6 right-52 z-[var(--z-floating)]">
           <FloatingLayersPanel
             layers={layers}
             onLayerToggle={handleLayerToggle}

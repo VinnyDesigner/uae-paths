@@ -1,5 +1,5 @@
 import { useState, useEffect, ReactNode } from 'react';
-import { ChevronLeft, ChevronRight, Search, Filter, Layers } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Search, Filter } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
   Tooltip,
@@ -132,11 +132,6 @@ export function CollapsibleSidePanel({
             <RailButton 
               icon={Filter} 
               label="Filters" 
-              onClick={handleRailClick}
-            />
-            <RailButton 
-              icon={Layers} 
-              label="Map Layers" 
               onClick={handleRailClick}
             />
           </div>

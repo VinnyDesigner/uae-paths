@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { ZoomIn, ZoomOut, Maximize, LocateFixed, Home, Map, Check, List, Building2, Heart, GraduationCap, Stethoscope, Pill, HeartPulse, Siren, Accessibility, Truck, Microscope, School, Building, BookOpen, Baby, Users } from 'lucide-react';
+import { ZoomIn, ZoomOut, Maximize, LocateFixed, Home, Map, Check, List, Layers, Building2, Heart, GraduationCap, Stethoscope, Pill, HeartPulse, Siren, Accessibility, Truck, Microscope, School, Building, BookOpen, Baby, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ThemeGroup, Facility, MapLayer } from '@/types/map';
 import { baseMaps, BaseMapOption } from './BaseMapSelector';
@@ -114,11 +114,16 @@ interface MapControlsProps {
   selectedBaseMap: string;
   onBaseMapChange: (mapId: string) => void;
   layers: ThemeGroup[];
+  onLayerToggle?: (themeId: number, layerId: number) => void;
+  onSelectAll?: (themeId: number) => void;
+  onClearAll?: (themeId: number) => void;
+  highlightedLayerId?: number | null;
 }
 
-function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFullscreen, selectedBaseMap, onBaseMapChange, layers }: MapControlsProps) {
+function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFullscreen, selectedBaseMap, onBaseMapChange, layers, onLayerToggle, onSelectAll, onClearAll, highlightedLayerId }: MapControlsProps) {
   const [baseMapOpen, setBaseMapOpen] = useState(false);
   const [legendOpen, setLegendOpen] = useState(false);
+  const [layersOpen, setLayersOpen] = useState(false);
 
   // Get visible layers for legend
   const visibleLayers = layers.flatMap(theme =>
@@ -152,8 +157,112 @@ function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFu
         </div>
       </div>
 
-      {/* Desktop/Tablet: Bottom-right controls (Legend, Locate, Zoom, BaseMap) - z-panel */}
+      {/* Desktop/Tablet: Bottom-right controls (Layers, Legend, Locate, Zoom, BaseMap) - z-panel */}
       <div className="hidden md:flex absolute bottom-8 right-4 z-[var(--z-panel)] items-end gap-2 pointer-events-none">
+        {/* Layers Control - NEW */}
+        {onLayerToggle && (
+          <div className="relative pointer-events-auto">
+            <button
+              onClick={() => setLayersOpen(!layersOpen)}
+              className={cn(
+                "bg-card rounded-xl shadow-lg border border-border p-3 hover:bg-secondary hover:scale-105 active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+                layersOpen && "bg-secondary"
+              )}
+              title="Map Layers"
+              aria-label="Toggle map layers"
+              aria-expanded={layersOpen}
+            >
+              <Layers className="w-5 h-5 text-foreground" />
+              {layers.flatMap(t => t.layers).filter(l => l.visible).length > 0 && (
+                <span className="absolute -top-1 -right-1 w-4 h-4 bg-primary rounded-full flex items-center justify-center text-[10px] font-bold text-primary-foreground">
+                  {layers.flatMap(t => t.layers).filter(l => l.visible).length}
+                </span>
+              )}
+            </button>
+
+            {/* Layers Panel */}
+            {layersOpen && (
+              <>
+                <div 
+                  className="fixed inset-0 z-[var(--z-popover-backdrop)]" 
+                  onClick={() => setLayersOpen(false)} 
+                />
+                <div className="absolute bottom-full right-0 mb-2 w-72 bg-card/95 backdrop-blur-xl rounded-xl shadow-xl border border-border overflow-hidden z-[var(--z-popover)] animate-fade-in">
+                  <div className="flex items-center justify-between px-4 py-3 border-b border-border">
+                    <div className="flex items-center gap-2">
+                      <Layers className="w-4 h-4 text-primary" />
+                      <span className="text-sm font-semibold text-foreground">Map Layers</span>
+                    </div>
+                  </div>
+                  <div className="max-h-80 overflow-y-auto p-2 space-y-1">
+                    {layers.map((theme) => {
+                      const ThemeIcon = getIcon(theme.icon);
+                      const visibleCount = theme.layers.filter(l => l.visible).length;
+                      const hasVisibleLayers = visibleCount > 0;
+
+                      return (
+                        <div key={theme.id} className="rounded-lg overflow-hidden">
+                          <div className="flex items-center gap-3 p-2.5 rounded-lg bg-secondary/30">
+                            <div
+                              className={cn(
+                                "w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors",
+                                hasVisibleLayers 
+                                  ? "bg-primary text-primary-foreground" 
+                                  : "bg-primary/10 text-primary"
+                              )}
+                            >
+                              <ThemeIcon className="w-4 h-4" />
+                            </div>
+                            <div className="flex-1">
+                              <p className="font-medium text-sm text-foreground">{theme.name}</p>
+                            </div>
+                          </div>
+                          <div className="py-2 px-2 space-y-1">
+                            {theme.layers.map((layer) => {
+                              const LayerIcon = getIcon(layer.icon);
+                              const isHighlighted = highlightedLayerId === layer.id;
+                              
+                              return (
+                                <label
+                                  key={layer.id}
+                                  className={cn(
+                                    "flex items-center gap-2 p-2 rounded-lg transition-all cursor-pointer",
+                                    layer.visible ? "bg-card" : "hover:bg-card/50",
+                                    isHighlighted && "ring-2 ring-primary"
+                                  )}
+                                >
+                                  <div
+                                    className="w-6 h-6 rounded flex items-center justify-center flex-shrink-0"
+                                    style={{ backgroundColor: layer.color + '15' }}
+                                  >
+                                    <LayerIcon
+                                      className="w-3.5 h-3.5"
+                                      style={{ color: layer.color }}
+                                    />
+                                  </div>
+                                  <span className="flex-1 text-xs text-foreground truncate">
+                                    {layer.name}
+                                  </span>
+                                  <input
+                                    type="checkbox"
+                                    checked={layer.visible}
+                                    onChange={() => onLayerToggle(theme.id, layer.id)}
+                                    className="w-4 h-4 rounded border-border text-primary focus:ring-primary"
+                                  />
+                                </label>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        )}
+
         {/* Legend Control */}
         <div className="relative pointer-events-auto">
           <button
@@ -516,6 +625,10 @@ interface InteractiveMapProps {
   suggestedZoom?: number;
   baseMapId?: string;
   onBaseMapChange?: (mapId: string) => void;
+  onLayerToggle?: (themeId: number, layerId: number) => void;
+  onSelectAll?: (themeId: number) => void;
+  onClearAll?: (themeId: number) => void;
+  highlightedLayerId?: number | null;
   className?: string;
 }
 
@@ -533,6 +646,10 @@ export function InteractiveMap({
   suggestedZoom,
   baseMapId = 'default',
   onBaseMapChange,
+  onLayerToggle,
+  onSelectAll,
+  onClearAll,
+  highlightedLayerId,
   className 
 }: InteractiveMapProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -897,6 +1014,10 @@ export function InteractiveMap({
         selectedBaseMap={baseMapId}
         onBaseMapChange={onBaseMapChange || (() => {})}
         layers={layers}
+        onLayerToggle={onLayerToggle}
+        onSelectAll={onSelectAll}
+        onClearAll={onClearAll}
+        highlightedLayerId={highlightedLayerId}
       />
 
       {/* Gradient overlay at bottom (must not block UI) */}

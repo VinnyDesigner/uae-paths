@@ -45,7 +45,7 @@ export function Header() {
 
             {/* Centered Navigation Pills with liquid glass effect */}
             <nav className="flex items-center justify-center">
-              <div className="flex items-center p-1.5 rounded-full bg-white/[0.08] backdrop-blur-xl border border-white/[0.15] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_4px_20px_-4px_rgba(0,0,0,0.3)]">
+              <div className="flex items-center gap-1.5 p-1.5 rounded-full bg-white/[0.08] backdrop-blur-xl border border-white/[0.15] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_4px_20px_-4px_rgba(0,0,0,0.3)]">
                 {navItems.map((item) => {
                   const isActive = location.pathname === item.path;
                   return (
@@ -56,9 +56,9 @@ export function Header() {
                         "flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 whitespace-nowrap relative overflow-hidden",
                         isActive
                           ? [
-                            "bg-white/20 text-white backdrop-blur-md",
+                            "bg-gradient-to-b from-primary/90 to-primary text-white backdrop-blur-md",
                             "border border-white/30",
-                            "shadow-[inset_0_1px_2px_rgba(255,255,255,0.2),0_4px_16px_-4px_rgba(255,255,255,0.15)]",
+                            "shadow-[0_2px_8px_rgba(0,0,0,0.15),inset_0_1px_2px_rgba(255,255,255,0.2)]",
                             "before:absolute before:inset-0 before:rounded-full before:bg-gradient-to-b before:from-white/20 before:to-transparent before:pointer-events-none"
                           ]
                           : [
@@ -105,7 +105,7 @@ export function Header() {
 
             {/* Centered Navigation Pills with liquid glass effect */}
             <nav className="flex items-center justify-center">
-              <div className="flex items-center p-1 rounded-full bg-white/[0.08] backdrop-blur-xl border border-white/[0.15] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_4px_20px_-4px_rgba(0,0,0,0.3)]">
+              <div className="flex items-center gap-1 p-1 rounded-full bg-white/[0.08] backdrop-blur-xl border border-white/[0.15] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_4px_20px_-4px_rgba(0,0,0,0.3)]">
                 {navItems.map((item) => {
                   const isActive = location.pathname === item.path;
                   return (
@@ -116,9 +116,9 @@ export function Header() {
                         "flex items-center gap-1.5 px-3.5 py-2 rounded-full text-sm font-medium transition-all duration-300 whitespace-nowrap relative overflow-hidden",
                         isActive
                           ? [
-                            "bg-white/20 text-white backdrop-blur-md",
+                            "bg-gradient-to-b from-primary/90 to-primary text-white backdrop-blur-md",
                             "border border-white/30",
-                            "shadow-[inset_0_1px_2px_rgba(255,255,255,0.2),0_4px_16px_-4px_rgba(255,255,255,0.15)]",
+                            "shadow-[0_2px_8px_rgba(0,0,0,0.15),inset_0_1px_2px_rgba(255,255,255,0.2)]",
                             "before:absolute before:inset-0 before:rounded-full before:bg-gradient-to-b before:from-white/20 before:to-transparent before:pointer-events-none"
                           ]
                           : [
@@ -161,7 +161,7 @@ export function Header() {
 
             {/* Centered Navigation Pills - Compact with liquid glass effect */}
             <nav className="flex items-center justify-center overflow-hidden">
-              <div className="flex items-center p-1 rounded-full bg-white/[0.08] backdrop-blur-xl border border-white/[0.15] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_4px_20px_-4px_rgba(0,0,0,0.3)]">
+              <div className="flex items-center gap-1 p-1 rounded-full bg-white/[0.08] backdrop-blur-xl border border-white/[0.15] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_4px_20px_-4px_rgba(0,0,0,0.3)]">
                 {navItems.map((item) => {
                   const isActive = location.pathname === item.path;
                   return (
@@ -172,9 +172,9 @@ export function Header() {
                         "flex items-center justify-center gap-1 px-3 py-2 rounded-full text-xs font-medium transition-all duration-300 min-h-[36px] relative overflow-hidden",
                         isActive
                           ? [
-                            "bg-white/20 text-white backdrop-blur-md",
+                            "bg-gradient-to-b from-primary/90 to-primary text-white backdrop-blur-md",
                             "border border-white/30",
-                            "shadow-[inset_0_1px_2px_rgba(255,255,255,0.2),0_4px_16px_-4px_rgba(255,255,255,0.15)]",
+                            "shadow-[0_2px_8px_rgba(0,0,0,0.15),inset_0_1px_2px_rgba(255,255,255,0.2)]",
                             "before:absolute before:inset-0 before:rounded-full before:bg-gradient-to-b before:from-white/20 before:to-transparent before:pointer-events-none"
                           ]
                           : [

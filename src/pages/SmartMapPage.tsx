@@ -203,24 +203,24 @@ export default function SmartMapPage() {
           />
         </div>
 
-        {/* Search Results - Single compact indicator */}
+        {/* Results Indicator - Secondary element with clear separation */}
         {searchResults.length > 0 && (
-          <div className="hidden lg:block absolute top-[72px] left-4 z-[var(--z-floating)]">
-            <div className="flex items-center gap-2 px-3.5 py-2 rounded-full bg-card/95 backdrop-blur-xl shadow-lg border border-border/50">
-              <MapPin className="w-3.5 h-3.5 text-primary flex-shrink-0" />
-              <span className="text-sm font-medium text-foreground">
+          <div className="hidden lg:block absolute top-[76px] left-4 z-[var(--z-floating)]">
+            <div className="flex items-center gap-2 h-9 px-4 rounded-[18px] bg-white/85 dark:bg-card/85 backdrop-blur-sm shadow-sm border border-border/30">
+              <MapPin className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
+              <span className="text-[13px] font-semibold text-foreground/90">
                 {searchResults.length} {searchResults.length === 1 ? 'facility' : 'facilities'}
               </span>
               {searchIntent?.isProximitySearch && (
                 <>
-                  <span className="text-muted-foreground/50">•</span>
-                  <span className="text-sm text-muted-foreground">Near your location</span>
+                  <span className="text-muted-foreground/40">•</span>
+                  <span className="text-[13px] font-normal text-muted-foreground">Near your location</span>
                 </>
               )}
               {searchIntent?.emirate && !searchIntent?.isProximitySearch && (
                 <>
-                  <span className="text-muted-foreground/50">•</span>
-                  <span className="text-sm text-muted-foreground">in {searchIntent.emirate}</span>
+                  <span className="text-muted-foreground/40">•</span>
+                  <span className="text-[13px] font-normal text-muted-foreground">in {searchIntent.emirate}</span>
                 </>
               )}
             </div>
@@ -229,20 +229,18 @@ export default function SmartMapPage() {
 
         {/* Mobile Search Bar - Fixed sticky at top, always visible above menus */}
         <div className="lg:hidden absolute top-3 left-3 right-3 z-[var(--z-popover)]">
-          <div className="bg-card/98 backdrop-blur-xl rounded-xl shadow-lg border border-border/50 p-2">
-            <SmartSearch onSearch={handleSearch} onLocateMe={handleLocateMe} isSearching={isSearching} />
-          </div>
-          {/* Mobile results count - single compact indicator */}
+          <SmartSearch onSearch={handleSearch} onLocateMe={handleLocateMe} isSearching={isSearching} />
+          {/* Mobile results count - secondary indicator with clear separation */}
           {searchResults.length > 0 && (
-            <div className="mt-2 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-card/98 backdrop-blur-xl shadow-lg border border-border/50">
-              <MapPin className="w-3.5 h-3.5 text-primary flex-shrink-0" />
-              <span className="text-xs font-medium text-foreground">
+            <div className="mt-3 inline-flex items-center gap-1.5 h-9 px-4 rounded-[18px] bg-white/85 dark:bg-card/85 backdrop-blur-sm shadow-sm border border-border/30">
+              <MapPin className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
+              <span className="text-xs font-semibold text-foreground/90">
                 {searchResults.length} {searchResults.length === 1 ? 'facility' : 'facilities'}
               </span>
               {searchIntent?.isProximitySearch && (
                 <>
                   <span className="text-muted-foreground/40">•</span>
-                  <span className="text-xs text-muted-foreground">Near you</span>
+                  <span className="text-xs font-normal text-muted-foreground">Near you</span>
                 </>
               )}
             </div>

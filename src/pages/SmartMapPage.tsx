@@ -183,17 +183,15 @@ export default function SmartMapPage() {
 
         {/* Floating Search Bar - Desktop (Top-left) */}
         <div className="hidden lg:block absolute top-4 left-4 z-[var(--z-floating)] w-[420px]">
-          <div className="bg-card/95 backdrop-blur-xl rounded-2xl shadow-xl border border-border/50 p-3">
-            <SmartSearch 
-              onSearch={handleSearch} 
-              onLocateMe={handleLocateMe} 
-              isSearching={isSearching} 
-              size="default"
-              activeLayerId={activeHospitalLayer}
-              hideSubmitButton={false}
-              disableGlow
-            />
-          </div>
+          <SmartSearch 
+            onSearch={handleSearch} 
+            onLocateMe={handleLocateMe} 
+            isSearching={isSearching} 
+            size="default"
+            activeLayerId={activeHospitalLayer}
+            hideSubmitButton
+            disableGlow
+          />
           
           {/* Search Message */}
           {userMessage && (

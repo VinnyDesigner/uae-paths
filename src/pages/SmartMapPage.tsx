@@ -164,7 +164,7 @@ export default function SmartMapPage() {
 
         {/* Results Indicator - Secondary element with clear separation */}
         {searchResults.length > 0 && <div className="hidden lg:block absolute top-[76px] left-4 z-[var(--z-floating)]">
-            <div className="flex items-center gap-2 h-9 px-4 rounded-[18px] backdrop-blur-sm shadow-sm border border-muted-foreground bg-muted">
+            <div className="flex items-center gap-2 h-9 px-4 rounded-[18px] backdrop-blur-sm shadow-sm bg-muted">
               <MapPin className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
               <span className="text-[13px] font-semibold text-foreground/90">
                 {searchResults.length} {searchResults.length === 1 ? 'facility' : 'facilities'}

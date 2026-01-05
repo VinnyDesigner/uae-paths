@@ -1,11 +1,23 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import { ZoomIn, ZoomOut, Maximize, LocateFixed, Home, Map, Check, List, Layers, ChevronRight, Building2, Heart, GraduationCap, Stethoscope, Pill, HeartPulse, Siren, Accessibility, Truck, Microscope, School, Building, BookOpen, Baby, Users } from 'lucide-react';
+import Map from '@arcgis/core/Map';
+import MapView from '@arcgis/core/views/MapView';
+import Graphic from '@arcgis/core/Graphic';
+import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
+import Point from '@arcgis/core/geometry/Point';
+import PopupTemplate from '@arcgis/core/PopupTemplate';
+import Basemap from '@arcgis/core/Basemap';
+import TileLayer from '@arcgis/core/layers/TileLayer';
+import WebTileLayer from '@arcgis/core/layers/WebTileLayer';
+import esriConfig from '@arcgis/core/config';
+import '@arcgis/core/assets/esri/themes/light/main.css';
+import { ZoomIn, ZoomOut, Maximize, LocateFixed, Home, Map as MapIcon, Check, List, Layers, ChevronRight, Building2, Heart, GraduationCap, Stethoscope, Pill, HeartPulse, Siren, Accessibility, Truck, Microscope, School, Building, BookOpen, Baby, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ThemeGroup, Facility, MapLayer } from '@/types/map';
-import { baseMaps, BaseMapOption } from './BaseMapSelector';
+import { arcgisBaseMaps, ArcGISBaseMapOption } from './BaseMapSelector';
 import { getCategoryColor, getCategoryColorByLayerId, statusColors, ctaColor } from '@/lib/mapColors';
+
+// Configure ArcGIS assets path
+esriConfig.assetsPath = 'https://js.arcgis.com/4.30/@arcgis/core/assets';
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Heart, GraduationCap, Building2, Stethoscope, Pill, HeartPulse, 
@@ -33,77 +45,58 @@ const markerIcons: Record<string, string> = {
   Users: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
 };
 
-// Fix for default marker icons
-delete (L.Icon.Default.prototype as any)._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
-  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-});
-
-// Custom marker icons with consistent colors from unified system
-const createCustomIcon = (facilityType: string, isHighlighted: boolean = false) => {
+// Create custom symbol for facility markers
+function createMarkerSymbol(facilityType: string, isHighlighted: boolean = false) {
   const categoryColor = getCategoryColor(facilityType);
   const color = categoryColor.base;
-  const iconSvg = markerIcons[categoryColor.iconName] || markerIcons['Building2'];
+  const size = isHighlighted ? '48px' : '40px';
   
-  const pulseAnimation = isHighlighted ? `
-    <div style="
-      position: absolute;
-      width: 48px;
-      height: 48px;
-      top: -8px;
-      left: -8px;
-      border-radius: 50%;
-      background: ${categoryColor.glow};
-      animation: pulse 2s infinite;
-    "></div>
-    <style>
-      @keyframes pulse {
-        0% { transform: scale(1); opacity: 1; }
-        50% { transform: scale(1.5); opacity: 0; }
-        100% { transform: scale(1); opacity: 0; }
-      }
-    </style>
-  ` : '';
+  return {
+    type: 'simple-marker',
+    style: 'circle',
+    color: color,
+    size: size,
+    outline: {
+      color: 'white',
+      width: 3
+    }
+  };
+}
 
-  const iconSize = isHighlighted ? 42 : 36;
-  const iconAnchor = isHighlighted ? 21 : 18;
-
-  return L.divIcon({
-    className: 'custom-marker',
-    html: `
-      <div style="position: relative;">
-        ${pulseAnimation}
-        <div style="
-          width: ${iconSize}px;
-          height: ${iconSize}px;
-          background: ${color};
-          border-radius: 50% 50% 50% 0;
-          transform: rotate(-45deg);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          box-shadow: 0 4px 12px ${categoryColor.glow};
-          border: 3px solid white;
-          ${isHighlighted ? 'transform: rotate(-45deg) scale(1.05);' : ''}
-        ">
-          <div style="
-            transform: rotate(45deg);
-            color: white;
-            width: 16px;
-            height: 16px;
-          ">
-            ${iconSvg}
-          </div>
-        </div>
-      </div>
-    `,
-    iconSize: [iconSize, iconSize],
-    iconAnchor: [iconAnchor, iconSize],
-    popupAnchor: [0, -iconSize],
-  });
-};
+// Create CIMSymbol for custom marker with icon
+function createCustomMarkerSymbol(facilityType: string, isHighlighted: boolean = false) {
+  const categoryColor = getCategoryColor(facilityType);
+  const iconSvg = markerIcons[categoryColor.iconName] || markerIcons['Building2'];
+  const size = isHighlighted ? 42 : 36;
+  
+  // Use PictureMarkerSymbol with data URL for custom SVG marker
+  const svgContent = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size + 10}" viewBox="0 0 ${size} ${size + 10}">
+      <defs>
+        <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+          <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="${categoryColor.glow}" flood-opacity="0.5"/>
+        </filter>
+      </defs>
+      <g filter="url(#shadow)">
+        <path d="M${size/2} ${size + 5} L${size * 0.2} ${size * 0.6} A${size/2 - 2} ${size/2 - 2} 0 1 1 ${size * 0.8} ${size * 0.6} Z" fill="${categoryColor.base}" stroke="white" stroke-width="2"/>
+        <circle cx="${size/2}" cy="${size/2 - 2}" r="${size/3}" fill="${categoryColor.base}"/>
+        <g transform="translate(${size/2 - 8}, ${size/2 - 10}) scale(0.7)" fill="none" stroke="white" stroke-width="2">
+          ${iconSvg.replace(/<svg[^>]*>|<\/svg>/g, '')}
+        </g>
+      </g>
+    </svg>
+  `;
+  
+  const dataUrl = `data:image/svg+xml;base64,${btoa(svgContent)}`;
+  
+  return {
+    type: 'picture-marker',
+    url: dataUrl,
+    width: size,
+    height: size + 10,
+    yoffset: (size + 10) / 2
+  };
+}
 
 interface MapControlsProps {
   onZoomIn: () => void;
@@ -303,16 +296,17 @@ function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFu
           <div className="flex flex-col bg-card rounded-xl shadow-lg border border-border overflow-hidden">
             <button
               onClick={onZoomIn}
-              aria-label="Zoom In"
-              className="p-3 hover:bg-secondary active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+              className="p-3 hover:bg-secondary transition-colors border-b border-border"
+              title="Zoom In"
+              aria-label="Zoom in"
             >
               <ZoomIn className="w-5 h-5 text-foreground" />
             </button>
-            <div className="h-px bg-border" />
             <button
               onClick={onZoomOut}
-              aria-label="Zoom Out"
-              className="p-3 hover:bg-secondary active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+              className="p-3 hover:bg-secondary transition-colors"
+              title="Zoom Out"
+              aria-label="Zoom out"
             >
               <ZoomOut className="w-5 h-5 text-foreground" />
             </button>
@@ -320,120 +314,45 @@ function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFu
         </div>
       </div>
 
-      {/* Desktop/Tablet: Bottom-right controls (Legend, Locate, BaseMap) - z-panel */}
-      <div className="hidden md:flex absolute bottom-8 right-4 z-[var(--z-panel)] items-end gap-2 pointer-events-none">
-        {/* Legend Control */}
-        <div className="relative pointer-events-auto">
-          <button
-            onClick={() => setLegendOpen(!legendOpen)}
-            className={cn(
-              "bg-card rounded-xl shadow-lg border border-border p-3 hover:bg-secondary hover:scale-105 active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary",
-              legendOpen && "bg-secondary"
-            )}
-            title="Map Legend"
-            aria-label="Toggle legend"
-            aria-expanded={legendOpen}
-          >
-            <List className="w-5 h-5 text-foreground" />
-            {visibleLayers.length > 0 && (
-              <span className="absolute -top-1 -right-1 w-4 h-4 bg-primary rounded-full flex items-center justify-center text-[10px] font-bold text-primary-foreground">
-                {visibleLayers.length}
-              </span>
-            )}
-          </button>
-
-          {/* Legend Panel */}
-          {legendOpen && (
-            <>
-              <div 
-                className="fixed inset-0 z-[var(--z-popover-backdrop)]" 
-                onClick={() => setLegendOpen(false)} 
-              />
-              <div className="absolute bottom-full right-0 mb-2 bg-card/95 backdrop-blur-xl rounded-xl shadow-xl border border-border overflow-hidden z-[var(--z-popover)] animate-fade-in w-[240px]">
-                <div className="px-3 py-2.5 border-b border-border">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <List className="w-4 h-4 text-primary" />
-                      <span className="text-sm font-semibold text-foreground">Legend</span>
-                    </div>
-                    <span className="text-xs text-muted-foreground bg-secondary rounded-full px-2 py-0.5">
-                      {visibleLayers.length}
-                    </span>
-                  </div>
-                </div>
-                <div className="p-2.5 max-h-52 overflow-y-auto">
-                  {visibleLayers.length === 0 ? (
-                    <p className="text-xs text-muted-foreground p-3 text-center">
-                      No active layers
-                    </p>
-                  ) : (
-                    <div className="space-y-1.5">
-                      {visibleLayers.map((layer) => {
-                        const LayerIcon = getIcon(layer.icon);
-                        return (
-                          <div
-                            key={layer.id}
-                            className="flex items-center gap-3 py-2 px-2.5 rounded-lg hover:bg-secondary/50 transition-colors"
-                          >
-                            {/* Tinted background icon - consistent with side panel */}
-                            <div
-                              className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
-                              style={{ backgroundColor: `${layer.color}15` }}
-                            >
-                              <LayerIcon 
-                                className="w-4 h-4" 
-                                style={{ color: layer.color }} 
-                              />
-                            </div>
-                            <span className="text-xs font-medium text-foreground truncate">{layer.name}</span>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </>
-          )}
-        </div>
-
-        {/* Locate Me + Base Map Controls Stack */}
-        <div className="flex flex-col gap-2 items-end pointer-events-auto">
-          {/* Locate Me - visible on tablet and desktop */}
+      {/* Desktop only: Bottom-left controls (Locate Me, Base Map Selector) - z-map-controls */}
+      <div className="hidden lg:flex absolute bottom-20 left-4 z-[var(--z-map-controls)] flex-col gap-2.5 pointer-events-none">
+        <div className="flex flex-col gap-2.5 pointer-events-auto">
           <button
             onClick={onLocateMe}
-            className="bg-card rounded-xl shadow-lg border border-border p-3 hover:bg-primary hover:text-primary-foreground hover:scale-105 active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-            title="Locate me"
+            className="bg-card rounded-xl shadow-lg border border-border p-3 hover:bg-secondary hover:scale-105 active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            title="Locate Me"
             aria-label="Find my location"
           >
-            <LocateFixed className="w-5 h-5" />
+            <LocateFixed className="w-5 h-5 text-foreground" />
           </button>
 
-          {/* Base Map Control */}
-          <div className="relative pointer-events-auto">
+          {/* Base Map Selector */}
+          <div className="relative">
             <button
               onClick={() => setBaseMapOpen(!baseMapOpen)}
-              className="bg-card rounded-xl shadow-lg border border-border p-3 hover:bg-secondary hover:scale-105 active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-              title="Change Base Map"
-              aria-label="Change base map"
+              className={cn(
+                "bg-card rounded-xl shadow-lg border border-border p-3 hover:bg-secondary hover:scale-105 active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+                baseMapOpen && "bg-secondary"
+              )}
+              title="Base Map"
+              aria-label="Select base map"
               aria-expanded={baseMapOpen}
             >
-              <Map className="w-5 h-5 text-foreground" />
+              <MapIcon className="w-5 h-5 text-foreground" />
             </button>
 
-            {/* Base Map Selector Panel */}
             {baseMapOpen && (
               <>
-                  <div 
-                    className="fixed inset-0 z-[var(--z-popover-backdrop)]" 
-                    onClick={() => setBaseMapOpen(false)} 
-                  />
-                  <div className="absolute bottom-full right-0 mb-2 bg-card/95 backdrop-blur-xl rounded-xl shadow-xl border border-border overflow-hidden z-[var(--z-popover)] animate-fade-in p-3 w-[280px]">
+                <div 
+                  className="fixed inset-0 z-[var(--z-popover-backdrop)]" 
+                  onClick={() => setBaseMapOpen(false)} 
+                />
+                <div className="absolute bottom-0 left-full ml-2 bg-card/95 backdrop-blur-xl rounded-xl shadow-xl border border-border overflow-hidden z-[var(--z-popover)] animate-fade-in p-3 w-[280px]">
                   <p className="text-xs text-muted-foreground font-medium px-1 pb-2 uppercase tracking-wide">
-                    Base Map
+                    Select Base Map
                   </p>
                   <div className="grid grid-cols-3 gap-2">
-                    {baseMaps.map((map) => (
+                    {arcgisBaseMaps.map((map) => (
                       <button
                         key={map.id}
                         onClick={() => {
@@ -441,7 +360,7 @@ function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFu
                           setBaseMapOpen(false);
                         }}
                         className={cn(
-                          "relative group rounded-lg overflow-hidden border-2 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+                          "relative group rounded-lg overflow-hidden border-2 transition-all",
                           selectedBaseMap === map.id
                             ? "border-primary ring-2 ring-primary/30"
                             : "border-transparent hover:border-primary/50"
@@ -478,179 +397,82 @@ function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFu
         </div>
       </div>
 
-      {/* Mobile: Bottom-right controls - always visible/clickable */}
-      <div className="md:hidden absolute bottom-24 right-4 z-[var(--z-panel)] flex flex-col gap-2 pointer-events-none">
-        <div className="flex flex-col gap-2 items-end pointer-events-auto">
-          <button
-            onClick={onResetView}
-            className="bg-card rounded-xl shadow-lg border border-border p-2.5 hover:bg-secondary active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-            title="Reset to UAE"
-            aria-label="Reset map view"
-          >
-            <Home className="w-5 h-5 text-foreground" />
-          </button>
-
+      {/* Mobile controls: Zoom In/Out and Locate Me (more compact) - z-map-controls */}
+      <div className="lg:hidden absolute top-4 right-4 z-[var(--z-map-controls)] flex flex-col gap-2 pointer-events-none">
+        <div className="flex flex-col gap-2 pointer-events-auto">
           <button
             onClick={onLocateMe}
-            className="bg-card rounded-xl shadow-lg border border-border p-2.5 hover:bg-primary hover:text-primary-foreground active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-            title="Locate me"
+            className="bg-card rounded-lg shadow-md border border-border p-2.5 hover:bg-secondary active:scale-95 transition-all"
+            title="Locate Me"
             aria-label="Find my location"
           >
-            <LocateFixed className="w-5 h-5" />
+            <LocateFixed className="w-4 h-4 text-foreground" />
           </button>
-
-          <div className="flex flex-col bg-card rounded-xl shadow-lg border border-border overflow-hidden">
+          <div className="flex flex-col bg-card rounded-lg shadow-md border border-border overflow-hidden">
             <button
               onClick={onZoomIn}
-              aria-label="Zoom In"
-              className="p-2.5 hover:bg-secondary active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+              className="p-2.5 hover:bg-secondary transition-colors border-b border-border"
+              title="Zoom In"
+              aria-label="Zoom in"
             >
-              <ZoomIn className="w-5 h-5 text-foreground" />
+              <ZoomIn className="w-4 h-4 text-foreground" />
             </button>
-            <div className="h-px bg-border" />
             <button
               onClick={onZoomOut}
-              aria-label="Zoom Out"
-              className="p-2.5 hover:bg-secondary active:scale-95 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+              className="p-2.5 hover:bg-secondary transition-colors"
+              title="Zoom Out"
+              aria-label="Zoom out"
             >
-              <ZoomOut className="w-5 h-5 text-foreground" />
+              <ZoomOut className="w-4 h-4 text-foreground" />
             </button>
-          </div>
-
-          {/* Legend */}
-          <div className="relative">
-            <button
-              onClick={() => setLegendOpen(!legendOpen)}
-              className={cn(
-                "bg-card rounded-xl shadow-lg border border-border p-2.5 active:scale-95 transition-all duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center",
-                legendOpen && "bg-secondary"
-              )}
-              aria-label="Toggle legend"
-              aria-expanded={legendOpen}
-            >
-              <List className="w-5 h-5 text-foreground" />
-              {visibleLayers.length > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-primary rounded-full flex items-center justify-center text-[9px] font-bold text-primary-foreground">
-                  {visibleLayers.length}
-                </span>
-              )}
-            </button>
-
-            {/* Mobile Legend Panel */}
-            {legendOpen && (
-              <>
-                <div 
-                  className="fixed inset-0 z-[var(--z-popover-backdrop)]" 
-                  onClick={() => setLegendOpen(false)} 
-                />
-                <div className="absolute bottom-full right-0 mb-2 bg-card/95 backdrop-blur-xl rounded-xl shadow-xl border border-border overflow-hidden z-[var(--z-popover)] animate-fade-in w-[200px]">
-                  <div className="px-3 py-2 border-b border-border">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-semibold text-foreground">Legend</span>
-                      <span className="text-[10px] text-muted-foreground bg-secondary rounded-full px-1.5 py-0.5">
-                        {visibleLayers.length}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="p-2 max-h-44 overflow-y-auto">
-                    {visibleLayers.length === 0 ? (
-                      <p className="text-xs text-muted-foreground p-2 text-center">
-                        No active layers
-                      </p>
-                    ) : (
-                      <div className="space-y-1">
-                        {visibleLayers.map((layer) => {
-                          const LayerIcon = getIcon(layer.icon);
-                          return (
-                            <div
-                              key={layer.id}
-                              className="flex items-center gap-2.5 py-2 px-2 rounded-lg"
-                            >
-                              <div
-                                className="w-6 h-6 rounded-md flex items-center justify-center flex-shrink-0"
-                                style={{ backgroundColor: `${layer.color}15` }}
-                              >
-                                <LayerIcon 
-                                  className="w-3.5 h-3.5" 
-                                  style={{ color: layer.color }} 
-                                />
-                              </div>
-                              <span className="text-[11px] font-medium text-foreground truncate">{layer.name}</span>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
-
-          {/* Base Map */}
-          <div className="relative">
-            <button
-              onClick={() => setBaseMapOpen(!baseMapOpen)}
-              className={cn(
-                "bg-card rounded-xl shadow-lg border border-border p-2.5 active:scale-95 transition-all duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center",
-                baseMapOpen && "bg-secondary"
-              )}
-              aria-label="Change base map"
-              aria-expanded={baseMapOpen}
-            >
-              <Map className="w-5 h-5 text-foreground" />
-            </button>
-
-            {/* Mobile Base Map Panel */}
-            {baseMapOpen && (
-              <>
-                <div 
-                  className="fixed inset-0 z-[var(--z-popover-backdrop)]" 
-                  onClick={() => setBaseMapOpen(false)} 
-                />
-                <div className="absolute bottom-full right-0 mb-2 bg-card/95 backdrop-blur-xl rounded-xl shadow-xl border border-border overflow-hidden z-[var(--z-popover)] animate-fade-in p-2 w-[180px]">
-                  <div className="grid grid-cols-2 gap-1.5">
-                    {baseMaps.map((map) => (
-                      <button
-                        key={map.id}
-                        onClick={() => {
-                          onBaseMapChange(map.id);
-                          setBaseMapOpen(false);
-                        }}
-                        className={cn(
-                          "relative rounded-lg overflow-hidden border-2 transition-all",
-                          selectedBaseMap === map.id
-                            ? "border-primary"
-                            : "border-transparent"
-                        )}
-                      >
-                        <div className="aspect-square relative">
-                          <img
-                            src={map.previewImage}
-                            alt={map.name}
-                            className="w-full h-full object-cover"
-                            loading="lazy"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end justify-center pb-0.5">
-                            <span className="text-[9px] font-medium text-white truncate px-0.5">
-                              {map.name}
-                            </span>
-                          </div>
-                          {selectedBaseMap === map.id && (
-                            <div className="absolute top-0.5 right-0.5 w-3.5 h-3.5 bg-primary rounded-full flex items-center justify-center">
-                              <Check className="w-2 h-2 text-primary-foreground" />
-                            </div>
-                          )}
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </>
-            )}
           </div>
         </div>
       </div>
+
+      {/* Legend Panel - Desktop bottom right - z-panel */}
+      {visibleLayers.length > 0 && (
+        <div className="hidden lg:block absolute bottom-20 right-4 z-[var(--z-panel)] pointer-events-auto">
+          <div className="bg-card/95 backdrop-blur-xl rounded-xl shadow-xl border border-border overflow-hidden">
+            <button
+              onClick={() => setLegendOpen(!legendOpen)}
+              className="w-full flex items-center justify-between px-4 py-3 hover:bg-secondary/50 transition-colors"
+            >
+              <div className="flex items-center gap-2">
+                <List className="w-4 h-4 text-primary" />
+                <span className="text-sm font-semibold text-foreground">Legend</span>
+                <span className="text-xs text-muted-foreground">({visibleLayers.length})</span>
+              </div>
+              <ChevronRight 
+                className={cn(
+                  "w-4 h-4 text-muted-foreground transition-transform duration-200",
+                  legendOpen && "rotate-90"
+                )} 
+              />
+            </button>
+            
+            {legendOpen && (
+              <div className="px-3 pb-3 max-h-48 overflow-y-auto">
+                <div className="space-y-1.5">
+                  {visibleLayers.map((layer) => {
+                    const LayerIcon = getIcon(layer.icon);
+                    return (
+                      <div key={layer.id} className="flex items-center gap-2">
+                        <div
+                          className="w-5 h-5 rounded flex items-center justify-center flex-shrink-0"
+                          style={{ backgroundColor: layer.color }}
+                        >
+                          <LayerIcon className="w-3 h-3 text-white" />
+                        </div>
+                        <span className="text-xs text-foreground truncate">{layer.name}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </>
   );
 }
@@ -673,7 +495,7 @@ interface InteractiveMapProps {
 }
 
 // UAE Center coordinates
-const UAE_CENTER: L.LatLngTuple = [24.4539, 54.3773];
+const UAE_CENTER = { longitude: 54.3773, latitude: 24.4539 };
 const UAE_ZOOM = 10;
 
 export function InteractiveMap({ 
@@ -684,7 +506,7 @@ export function InteractiveMap({
   onFacilitySelect,
   onGetDirections,
   suggestedZoom,
-  baseMapId = 'default',
+  baseMapId = 'streets',
   onBaseMapChange,
   onLayerToggle,
   onSelectAll,
@@ -693,10 +515,10 @@ export function InteractiveMap({
   className 
 }: InteractiveMapProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<L.Map | null>(null);
-  const tileLayerRef = useRef<L.TileLayer | null>(null);
-  const markersRef = useRef<L.Marker[]>([]);
-  const userMarkerRef = useRef<L.Marker | null>(null);
+  const mapRef = useRef<Map | null>(null);
+  const viewRef = useRef<MapView | null>(null);
+  const graphicsLayerRef = useRef<GraphicsLayer | null>(null);
+  const userGraphicRef = useRef<Graphic | null>(null);
 
   // Get visible layer IDs
   const visibleLayerIds = layers.flatMap(theme =>
@@ -724,91 +546,106 @@ export function InteractiveMap({
 
   // Initialize map
   useEffect(() => {
-    if (!mapContainerRef.current || mapRef.current) return;
+    if (!mapContainerRef.current || viewRef.current) return;
 
-    const map = L.map(mapContainerRef.current, {
-      center: UAE_CENTER,
-      zoom: UAE_ZOOM,
-      zoomControl: false,
+    const selectedBasemap = arcgisBaseMaps.find(m => m.id === baseMapId) || arcgisBaseMaps[0];
+    
+    const map = new Map({
+      basemap: selectedBasemap.arcgisBasemap as any
     });
 
-    const initialBaseMap = baseMaps.find(m => m.id === baseMapId) || baseMaps[0];
-    const tileLayer = L.tileLayer(initialBaseMap.url, {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    }).addTo(map);
+    const graphicsLayer = new GraphicsLayer();
+    map.add(graphicsLayer);
 
-    tileLayerRef.current = tileLayer;
+    const view = new MapView({
+      container: mapContainerRef.current,
+      map: map,
+      center: [UAE_CENTER.longitude, UAE_CENTER.latitude],
+      zoom: UAE_ZOOM,
+      ui: {
+        components: [] // Remove default UI components
+      },
+      popup: {
+        dockEnabled: false,
+        dockOptions: {
+          buttonEnabled: false
+        }
+      }
+    });
+
     mapRef.current = map;
+    viewRef.current = view;
+    graphicsLayerRef.current = graphicsLayer;
 
     return () => {
-      map.remove();
-      mapRef.current = null;
-      tileLayerRef.current = null;
+      if (viewRef.current) {
+        viewRef.current.destroy();
+        viewRef.current = null;
+        mapRef.current = null;
+        graphicsLayerRef.current = null;
+      }
     };
   }, []);
 
-  // Update base map when baseMapId changes - remove old layer and add new one
+  // Update basemap when baseMapId changes
   useEffect(() => {
     if (!mapRef.current) return;
 
-    const newBaseMap = baseMaps.find(m => m.id === baseMapId) || baseMaps[0];
-    
-    // Remove existing tile layer
-    if (tileLayerRef.current) {
-      mapRef.current.removeLayer(tileLayerRef.current);
-    }
-    
-    // Add new tile layer with the selected basemap
-    const newTileLayer = L.tileLayer(newBaseMap.url, {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    }).addTo(mapRef.current);
-    
-    tileLayerRef.current = newTileLayer;
+    const selectedBasemap = arcgisBaseMaps.find(m => m.id === baseMapId) || arcgisBaseMaps[0];
+    mapRef.current.basemap = selectedBasemap.arcgisBasemap as any;
   }, [baseMapId]);
 
   // Zoom to search results when they change
   useEffect(() => {
-    if (!mapRef.current || searchResults.length === 0) return;
+    if (!viewRef.current || searchResults.length === 0) return;
 
-    const bounds = L.latLngBounds(
-      searchResults.map(f => [f.coordinates[1], f.coordinates[0]] as L.LatLngTuple)
-    );
+    const points = searchResults.map(f => ({
+      longitude: f.coordinates[0],
+      latitude: f.coordinates[1]
+    }));
 
-    mapRef.current.flyToBounds(bounds, {
-      padding: [80, 80],
-      maxZoom: suggestedZoom || 13,
-      duration: 1
-    });
+    if (points.length === 1) {
+      viewRef.current.goTo({
+        center: [points[0].longitude, points[0].latitude],
+        zoom: suggestedZoom || 13
+      }, { duration: 1000 });
+    } else {
+      const xCoords = points.map(p => p.longitude);
+      const yCoords = points.map(p => p.latitude);
+      
+      viewRef.current.goTo({
+        target: {
+          type: 'extent',
+          xmin: Math.min(...xCoords) - 0.02,
+          ymin: Math.min(...yCoords) - 0.02,
+          xmax: Math.max(...xCoords) + 0.02,
+          ymax: Math.max(...yCoords) + 0.02,
+          spatialReference: { wkid: 4326 }
+        } as any
+      }, { duration: 1000 });
+    }
   }, [searchResults, suggestedZoom]);
 
   // Update markers when visible facilities change
   useEffect(() => {
-    if (!mapRef.current) return;
+    if (!graphicsLayerRef.current || !viewRef.current) return;
 
-    // Clear existing markers
-    markersRef.current.forEach(marker => marker.remove());
-    markersRef.current = [];
+    // Clear existing graphics
+    graphicsLayerRef.current.removeAll();
 
-    // Add new markers
+    // Add new graphics for each facility
     visibleFacilities.forEach(facility => {
       const isHighlighted = isSearchResult(facility);
       const categoryColor = getCategoryColor(facility.type);
-      const iconSvg = markerIcons[categoryColor.iconName] || markerIcons['Building2'];
-      
-      const marker = L.marker([facility.coordinates[1], facility.coordinates[0]], {
-        icon: createCustomIcon(facility.type, isHighlighted),
-        zIndexOffset: isHighlighted ? 1000 : 0,
+
+      const point = new Point({
+        longitude: facility.coordinates[0],
+        latitude: facility.coordinates[1]
       });
 
-      const distanceInfo = facility.distance 
-        ? `<p style="color: ${categoryColor.base}; margin: 4px 0 0 0; font-weight: 500;">
-             📍 ${facility.distance.toFixed(1)} km away
-           </p>` 
-        : '';
-
-      // Hospital-specific popup content with unified colors
+      // Hospital-specific popup content
       const isHospital = facility.type === 'Hospitals';
-      const hospitalSpecificInfo = isHospital ? `
+      const hospitalInfo = isHospital ? `
         <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px;">
           <div style="
             display: flex;
@@ -858,8 +695,14 @@ export function InteractiveMap({
         ` : ''}
       ` : '';
 
+      const distanceInfo = facility.distance 
+        ? `<p style="color: ${categoryColor.base}; margin: 4px 0 0 0; font-weight: 500;">
+             📍 ${facility.distance.toFixed(1)} km away
+           </p>` 
+        : '';
+
       const popupContent = `
-        <div style="padding: 16px; min-width: 280px; font-family: system-ui, sans-serif;">
+        <div style="padding: 8px; min-width: 260px; font-family: system-ui, sans-serif;">
           <div style="display: flex; align-items: flex-start; gap: 12px;">
             <div style="
               width: 48px;
@@ -873,7 +716,7 @@ export function InteractiveMap({
               color: ${categoryColor.base};
             ">
               <div style="width: 24px; height: 24px;">
-                ${iconSvg}
+                ${markerIcons[categoryColor.iconName] || markerIcons['Building2']}
               </div>
             </div>
             <div style="flex: 1; min-width: 0;">
@@ -894,7 +737,7 @@ export function InteractiveMap({
               </span>
             </div>
           </div>
-          ${hospitalSpecificInfo}
+          ${hospitalInfo}
           <div style="margin-top: 14px; font-size: 13px; line-height: 1.5;">
             <p style="color: #64748b; margin: 0;">
               📍 ${facility.address}
@@ -905,7 +748,7 @@ export function InteractiveMap({
             ${distanceInfo}
           </div>
           <div style="display: flex; gap: 8px; margin-top: 14px;">
-            <button onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=${facility.coordinates[1]},${facility.coordinates[0]}', '_blank')" style="
+            <a href="https://www.google.com/maps/dir/?api=1&destination=${facility.coordinates[1]},${facility.coordinates[0]}" target="_blank" style="
               flex: 1;
               padding: 10px;
               border-radius: 10px;
@@ -915,55 +758,103 @@ export function InteractiveMap({
               font-weight: 500;
               border: none;
               cursor: pointer;
-              transition: all 0.2s;
-            " onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+              text-align: center;
+              text-decoration: none;
+              display: block;
+            ">
               📍 Open with Google Maps
-            </button>
+            </a>
           </div>
         </div>
       `;
 
-      marker.bindPopup(popupContent, {
-        maxWidth: 340,
-        className: 'custom-popup'
+      const graphic = new Graphic({
+        geometry: point,
+        symbol: {
+          type: 'simple-marker',
+          style: 'circle',
+          color: categoryColor.base,
+          size: isHighlighted ? 18 : 14,
+          outline: {
+            color: 'white',
+            width: 2
+          }
+        } as any,
+        attributes: {
+          id: facility.id,
+          name: facility.name,
+          type: facility.type,
+          address: facility.address,
+          emirate: facility.emirate
+        },
+        popupTemplate: {
+          title: facility.name,
+          content: popupContent
+        } as any
       });
-      marker.on('click', () => onFacilitySelect?.(facility));
-      marker.addTo(mapRef.current!);
-      markersRef.current.push(marker);
+
+      graphicsLayerRef.current!.add(graphic);
     });
+
+    // Set up click handler for facility selection
+    if (viewRef.current && onFacilitySelect) {
+      viewRef.current.on('click', (event) => {
+        viewRef.current!.hitTest(event).then((response) => {
+          const results = response.results.filter(
+            (result) => (result as any).graphic?.layer === graphicsLayerRef.current
+          );
+          if (results.length > 0) {
+            const graphic = (results[0] as any).graphic;
+            const facility = visibleFacilities.find(f => f.id === graphic.attributes.id);
+            if (facility) {
+              onFacilitySelect(facility);
+            }
+          }
+        });
+      });
+    }
   }, [visibleFacilities, layers, onFacilitySelect, getLayerColor, isSearchResult]);
 
   // Handle selected facility
   useEffect(() => {
-    if (!mapRef.current || !selectedFacility) return;
+    if (!viewRef.current || !selectedFacility) return;
 
-    mapRef.current.flyTo(
-      [selectedFacility.coordinates[1], selectedFacility.coordinates[0]],
-      15,
-      { duration: 0.8 }
+    viewRef.current.goTo({
+      center: [selectedFacility.coordinates[0], selectedFacility.coordinates[1]],
+      zoom: 15
+    }, { duration: 800 });
+
+    // Open popup for selected facility
+    const graphic = graphicsLayerRef.current?.graphics.find(
+      g => g.attributes?.id === selectedFacility.id
     );
-
-    // Find and open the popup for the selected facility
-    const marker = markersRef.current.find(m => {
-      const latlng = m.getLatLng();
-      return latlng.lat === selectedFacility.coordinates[1] && 
-             latlng.lng === selectedFacility.coordinates[0];
-    });
-    if (marker) {
-      marker.openPopup();
+    if (graphic) {
+      viewRef.current.popup.open({
+        features: [graphic],
+        location: graphic.geometry as Point
+      });
     }
   }, [selectedFacility]);
 
   const handleZoomIn = () => {
-    mapRef.current?.zoomIn();
+    if (viewRef.current) {
+      viewRef.current.goTo({ zoom: viewRef.current.zoom + 1 });
+    }
   };
 
   const handleZoomOut = () => {
-    mapRef.current?.zoomOut();
+    if (viewRef.current) {
+      viewRef.current.goTo({ zoom: viewRef.current.zoom - 1 });
+    }
   };
 
   const handleResetView = () => {
-    mapRef.current?.flyTo(UAE_CENTER, UAE_ZOOM, { duration: 1 });
+    if (viewRef.current) {
+      viewRef.current.goTo({
+        center: [UAE_CENTER.longitude, UAE_CENTER.latitude],
+        zoom: UAE_ZOOM
+      }, { duration: 1000 });
+    }
   };
 
   const handleLocateMe = () => {
@@ -973,51 +864,41 @@ export function InteractiveMap({
           const { latitude, longitude } = position.coords;
           
           // Remove existing user marker
-          if (userMarkerRef.current) {
-            userMarkerRef.current.remove();
+          if (userGraphicRef.current && graphicsLayerRef.current) {
+            graphicsLayerRef.current.remove(userGraphicRef.current);
           }
 
           // Add user location marker
-          const userIcon = L.divIcon({
-            className: 'user-location-marker',
-            html: `
-              <div style="position: relative;">
-                <div style="
-                  position: absolute;
-                  width: 40px;
-                  height: 40px;
-                  top: -12px;
-                  left: -12px;
-                  border-radius: 50%;
-                  background: #3b82f633;
-                  animation: userPulse 2s infinite;
-                "></div>
-                <div style="
-                  width: 16px;
-                  height: 16px;
-                  background: #3b82f6;
-                  border-radius: 50%;
-                  border: 3px solid white;
-                  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.5);
-                "></div>
-              </div>
-              <style>
-                @keyframes userPulse {
-                  0% { transform: scale(1); opacity: 0.8; }
-                  50% { transform: scale(1.5); opacity: 0; }
-                  100% { transform: scale(1); opacity: 0; }
-                }
-              </style>
-            `,
-            iconSize: [16, 16],
-            iconAnchor: [8, 8],
+          const userPoint = new Point({
+            longitude: longitude,
+            latitude: latitude
           });
 
-          userMarkerRef.current = L.marker([latitude, longitude], { icon: userIcon })
-            .addTo(mapRef.current!)
-            .bindPopup('📍 Your Location');
+          const userGraphic = new Graphic({
+            geometry: userPoint,
+            symbol: {
+              type: 'simple-marker',
+              style: 'circle',
+              color: '#3b82f6',
+              size: 16,
+              outline: {
+                color: 'white',
+                width: 3
+              }
+            } as any,
+            popupTemplate: {
+              title: '📍 Your Location',
+              content: 'You are here'
+            } as any
+          });
 
-          mapRef.current?.flyTo([latitude, longitude], 14, { duration: 1 });
+          graphicsLayerRef.current?.add(userGraphic);
+          userGraphicRef.current = userGraphic;
+
+          viewRef.current?.goTo({
+            center: [longitude, latitude],
+            zoom: 14
+          }, { duration: 1000 });
         },
         (error) => {
           console.error('Error getting location:', error);

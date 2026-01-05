@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Map, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
+// Legacy Leaflet-style basemaps (kept for reference)
 export interface BaseMapOption {
   id: string;
   name: string;
@@ -69,6 +70,74 @@ export const baseMaps: BaseMapOption[] = [
   }
 ];
 
+// ArcGIS basemaps using SDK 4.x built-in basemaps
+export interface ArcGISBaseMapOption {
+  id: string;
+  name: string;
+  arcgisBasemap: string;
+  preview: string;
+  previewImage: string;
+}
+
+export const arcgisBaseMaps: ArcGISBaseMapOption[] = [
+  {
+    id: 'streets',
+    name: 'Streets',
+    arcgisBasemap: 'streets-vector',
+    preview: '🗺️',
+    previewImage: 'https://www.arcgis.com/sharing/rest/content/items/de26a3cf4cc9451298ea173c4b324736/info/thumbnail/thumbnail1702503399058.jpeg'
+  },
+  {
+    id: 'streets-navigation',
+    name: 'Navigation',
+    arcgisBasemap: 'streets-navigation-vector',
+    preview: '🧭',
+    previewImage: 'https://www.arcgis.com/sharing/rest/content/items/63c47b7177f946b49902c24129b87252/info/thumbnail/thumbnail1702503436892.jpeg'
+  },
+  {
+    id: 'gray',
+    name: 'Light Gray',
+    arcgisBasemap: 'gray-vector',
+    preview: '⬜',
+    previewImage: 'https://www.arcgis.com/sharing/rest/content/items/8a2cba3b0ebf4f9584e2c0e06b77c75d/info/thumbnail/thumbnail1702503352376.jpeg'
+  },
+  {
+    id: 'dark-gray',
+    name: 'Dark Gray',
+    arcgisBasemap: 'dark-gray-vector',
+    preview: '◼️',
+    previewImage: 'https://www.arcgis.com/sharing/rest/content/items/5e9b3685f4c24d8781073dd928ebda50/info/thumbnail/thumbnail1702503271929.jpeg'
+  },
+  {
+    id: 'satellite',
+    name: 'Satellite',
+    arcgisBasemap: 'satellite',
+    preview: '🛰️',
+    previewImage: 'https://www.arcgis.com/sharing/rest/content/items/67372ff42cd145319639a99152b15bc3/info/thumbnail/thumbnail1702501637498.jpeg'
+  },
+  {
+    id: 'hybrid',
+    name: 'Hybrid',
+    arcgisBasemap: 'hybrid',
+    preview: '🌐',
+    previewImage: 'https://www.arcgis.com/sharing/rest/content/items/ea3befe305494bb5b2acd77e1b3135dc/info/thumbnail/thumbnail1702501674605.jpeg'
+  },
+  {
+    id: 'topo',
+    name: 'Topographic',
+    arcgisBasemap: 'topo-vector',
+    preview: '🏔️',
+    previewImage: 'https://www.arcgis.com/sharing/rest/content/items/7dc6cea0b1764a1f9af2e679f642f0f5/info/thumbnail/thumbnail1702503463880.jpeg'
+  },
+  {
+    id: 'osm',
+    name: 'OpenStreetMap',
+    arcgisBasemap: 'osm',
+    preview: '🌍',
+    previewImage: 'https://www.arcgis.com/sharing/rest/content/items/f81bc478e12c4f1691d0d7ab6361f5a6/info/thumbnail/osm_702.png'
+  }
+];
+
 interface BaseMapSelectorProps {
   selectedMap: string;
   onMapChange: (mapId: string) => void;
@@ -78,14 +147,14 @@ interface BaseMapSelectorProps {
 
 export function BaseMapSelector({ selectedMap, onMapChange, className, variant = 'default' }: BaseMapSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const currentMap = baseMaps.find(m => m.id === selectedMap) || baseMaps[0];
+  const currentMap = arcgisBaseMaps.find(m => m.id === selectedMap) || arcgisBaseMaps[0];
 
   // Panel variant - shows grid of image previews
   if (variant === 'panel') {
     return (
       <div className={cn("", className)}>
         <div className="grid grid-cols-3 gap-2">
-          {baseMaps.map((map) => (
+          {arcgisBaseMaps.map((map) => (
             <button
               key={map.id}
               onClick={() => onMapChange(map.id)}
@@ -146,7 +215,7 @@ export function BaseMapSelector({ selectedMap, onMapChange, className, variant =
               Select Base Map
             </p>
             <div className="grid grid-cols-3 gap-2">
-              {baseMaps.map((map) => (
+              {arcgisBaseMaps.map((map) => (
                 <button
                   key={map.id}
                   onClick={() => {

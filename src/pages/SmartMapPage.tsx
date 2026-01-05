@@ -27,7 +27,7 @@ export default function SmartMapPage() {
     distance: null,
     facilityTypes: []
   });
-  const [baseMapId, setBaseMapId] = useState('default');
+  const [baseMapId, setBaseMapId] = useState('streets');
   const [mobileSheetOpen, setMobileSheetOpen] = useState(false);
   const [selectedFacility, setSelectedFacility] = useState<Facility | null>(null);
   const [directionsFacility, setDirectionsFacility] = useState<Facility | null>(null);

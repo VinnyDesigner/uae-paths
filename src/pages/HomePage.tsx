@@ -1,16 +1,13 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   Heart, 
   GraduationCap, 
   ArrowRight,
-  Sparkles,
 } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
-import { SmartSearch } from '@/components/search/SmartSearch';
-import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import heroMapVisual from '@/assets/hero-map-visual.png';
 
 const categories = [
   {
@@ -25,107 +22,60 @@ const categories = [
   },
 ];
 
-const aiSuggestionChips = [
-  { text: 'Nearest hospital', icon: '🏥' },
-  { text: 'Emergency hospital', icon: '🚑' },
-  { text: 'Schools near me', icon: '🎓' },
-];
-
 export default function HomePage() {
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-
-  const handleSearch = (query: string) => {
-    window.location.href = `/map?search=${encodeURIComponent(query)}`;
-  };
-
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
 
       <main className="flex-1">
-        {/* === IMMERSIVE HERO SECTION - Fits in one screen === */}
+        {/* === IMMERSIVE HERO SECTION === */}
         <section className="relative min-h-[calc(100vh-64px)] flex flex-col overflow-hidden">
           
-          {/* === LAYERED IMMERSIVE BACKGROUND (must not block UI) === */}
-          <div className="absolute inset-0 bg-hero-immersive pointer-events-none" />
-          <div className="absolute inset-0 bg-indigo-glow-left pointer-events-none" />
-          <div className="absolute inset-0 bg-teal-glow-right pointer-events-none" />
-          <div className="absolute inset-0 bg-cyan-glow-center pointer-events-none" />
-          <div className="absolute inset-0 bg-wave-flow pointer-events-none" />
-          <div className="absolute inset-0 bg-pulse-glow pointer-events-none" />
+          {/* === HERO IMAGE BACKGROUND === */}
+          <div className="absolute inset-0">
+            <img 
+              src={heroMapVisual} 
+              alt="" 
+              className="w-full h-full object-cover"
+              aria-hidden="true"
+            />
+            {/* Gradient overlay for text readability */}
+            <div className="absolute inset-0 bg-gradient-to-b from-[#0F304F]/70 via-[#0F304F]/40 to-[#1A4B73]/90" />
+            {/* Center spotlight for headline clarity */}
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_40%,transparent_0%,rgba(15,48,79,0.4)_100%)]" />
+          </div>
+
+          {/* Subtle noise overlay */}
           <div className="absolute inset-0 bg-noise-overlay pointer-events-none" />
-          <div className="absolute inset-x-0 bottom-0 h-24 bg-hero-bottom-fade pointer-events-none" />
+          
+          {/* Bottom fade to category section */}
+          <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#1A4B73] to-transparent pointer-events-none" />
 
           {/* === HERO CONTENT === */}
-          <div className="container mx-auto px-4 relative z-10 flex-1 flex flex-col justify-center py-6 md:py-8">
+          <div className="container mx-auto px-4 relative z-10 flex-1 flex flex-col justify-center py-8 md:py-12">
             <div className="max-w-[920px] mx-auto w-full">
               
-              {/* Main Heading - "Smart Map for" normal weight, "Daily Life" bold highlighted */}
-              <div className="text-center mb-3 animate-fade-up relative z-20">
+              {/* Main Heading */}
+              <div className="text-center mb-16 md:mb-20 animate-fade-up relative z-20">
                 <h1 className="font-heading text-[2.75rem] md:text-5xl lg:text-[4.5rem] leading-[1.2] tracking-[0.5px] relative z-10">
                   <span 
                     className="text-white font-normal relative z-10"
-                    style={{ textShadow: '0 2px 12px rgba(0,0,0,0.2)' }}
+                    style={{ textShadow: '0 2px 20px rgba(0,0,0,0.4)' }}
                   >Smart Map for</span>
                   <br className="sm:hidden" />
                   <span 
                     className="ml-2 sm:ml-3 inline-block relative z-10 tracking-[2px] font-bold"
                     style={{
                       color: '#64E8FF',
-                      textShadow: '0 2px 16px rgba(100, 232, 255, 0.5), 0 0 40px rgba(100, 232, 255, 0.4)'
+                      textShadow: '0 2px 24px rgba(100, 232, 255, 0.6), 0 0 60px rgba(100, 232, 255, 0.4)'
                     }}
                   >Daily Life</span>
                 </h1>
               </div>
 
-              {/* Subheading - high contrast */}
-              <p className="text-center text-sm md:text-base text-[rgba(255,255,255,0.78)] max-w-md mx-auto mb-5 md:mb-6 animate-fade-up delay-100 leading-relaxed font-medium">
-                Find healthcare and education services across the UAE
-              </p>
-
-              {/* === PRIMARY SEARCH BAR - More Prominent with wider width === */}
-              <div className="animate-fade-up delay-200 mb-8 md:mb-10 relative z-[var(--z-popover)]">
-                {/* Ambient glow behind search bar */}
-                <div className="absolute inset-0 bg-search-ambient pointer-events-none" />
-                <div className="mx-auto relative" style={{ width: 'min(920px, 95vw)' }}>
-                  <SmartSearch
-                    onSearch={handleSearch} 
-                    size="large"
-                    placeholder="Search healthcare, schools, or wellness centers…"
-                    variant="dark"
-                    onOpenChange={setIsSearchOpen}
-                  />
-                </div>
-              </div>
-
-              {/* Suggestion Chips - Refined styling */}
-              {!isSearchOpen && (
-                <div className="flex flex-wrap justify-center gap-3 md:gap-4 mb-10 md:mb-12 animate-fade-up delay-300">
-                  {aiSuggestionChips.map((chip) => (
-                    <button
-                      key={chip.text}
-                      onClick={() => handleSearch(chip.text)}
-                      className={cn(
-                        "flex items-center gap-2 px-4 py-2.5 rounded-full",
-                        "bg-[#1A4B73]/40 backdrop-blur-md border border-white/10",
-                        "text-white/70 text-sm font-medium",
-                        "hover:bg-[#1A4B73]/60 hover:border-[#7ac8ff]/30 hover:text-white",
-                        "transition-all duration-300 hover:scale-105 hover:shadow-[0_4px_20px_rgba(122,200,255,0.15)]"
-                      )}
-                    >
-                      <span>{chip.icon}</span>
-                      <span>{chip.text}</span>
-                    </button>
-                  ))}
-                </div>
-              )}
-
               {/* === EXPLORE BY CATEGORY === */}
-              <div className={cn(
-                "animate-fade-up delay-400 transition-all duration-300 relative z-[1]",
-                isSearchOpen ? "mt-4" : ""
-              )}>
-                {/* Section Header - Clean and minimal */}
+              <div className="animate-fade-up delay-200 relative z-[1]">
+                {/* Section Header */}
                 <div className="text-center mb-5 md:mb-6">
                   <h2 className="font-heading text-sm md:text-base font-medium text-white/60 tracking-wide">
                     Explore by Category
@@ -135,7 +85,7 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                {/* Category Cards - Clean styling with hover effects */}
+                {/* Category Cards */}
                 <div className="max-w-[640px] mx-auto">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
                     {categories.map((category) => {

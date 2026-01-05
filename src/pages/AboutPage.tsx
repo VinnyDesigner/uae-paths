@@ -74,15 +74,7 @@ export default function AboutPage() {
             <div className="max-w-3xl mx-auto text-center">
               <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-4">
                 About{' '}
-                <span 
-                  className="inline-block"
-                  style={{
-                    background: 'linear-gradient(90deg, #00D1FF 0%, #2B6BFF 50%, #7C3AED 100%)',
-                    WebkitBackgroundClip: 'text',
-                    backgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                  }}
-                >
+                <span className="text-white">
                   Smart Map
                 </span>
               </h1>

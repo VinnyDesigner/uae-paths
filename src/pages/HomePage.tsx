@@ -63,13 +63,12 @@ export default function HomePage() {
                     style={{ textShadow: '0 2px 20px rgba(0,0,0,0.4)' }}
                   >Smart Map for</span>
                   <br className="sm:hidden" />
-                  <span 
-                    className="ml-2 sm:ml-3 inline-block relative z-10 tracking-[2px] font-bold"
-                    style={{
-                      color: '#64E8FF',
-                      textShadow: '0 2px 24px rgba(100, 232, 255, 0.6), 0 0 60px rgba(100, 232, 255, 0.4)'
-                    }}
-                  >Daily Life</span>
+                <span 
+                  className="ml-2 sm:ml-3 inline-block relative z-10 tracking-[2px] font-bold text-white"
+                  style={{
+                    textShadow: '0 2px 20px rgba(0,0,0,0.4)'
+                  }}
+                >Daily Life</span>
                 </h1>
               </div>
 

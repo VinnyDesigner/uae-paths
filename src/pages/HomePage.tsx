@@ -56,7 +56,7 @@ export default function HomePage() {
             <div className="max-w-[920px] mx-auto w-full">
               
               {/* Main Heading */}
-              <div className="text-center mb-16 md:mb-20 animate-fade-up relative z-20">
+              <div className="text-center mb-8 md:mb-10 animate-fade-up relative z-20">
                 <h1 className="font-heading text-[2.75rem] md:text-5xl lg:text-[4.5rem] leading-[1.2] tracking-[0.5px] relative z-10">
                   <span 
                     className="text-white font-normal relative z-10"

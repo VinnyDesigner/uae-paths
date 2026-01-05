@@ -76,7 +76,7 @@ export default function HomePage() {
               <div className="animate-fade-up delay-200 relative z-[1]">
                 {/* Section Header */}
                 <div className="text-center mb-5 md:mb-6">
-                  <h2 className="font-heading text-sm md:text-base font-medium text-white/60 tracking-wide">
+                  <h2 className="font-heading text-sm md:text-base font-medium text-white tracking-wide">
                     Explore by Category
                   </h2>
                   <div className="flex justify-center mt-2">

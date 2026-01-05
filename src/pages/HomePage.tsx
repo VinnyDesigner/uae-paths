@@ -39,17 +39,7 @@ export default function HomePage() {
               className="w-full h-full object-cover"
               aria-hidden="true"
             />
-            {/* Gradient overlay for text readability */}
-            <div className="absolute inset-0 bg-gradient-to-b from-[#0F304F]/70 via-[#0F304F]/40 to-[#1A4B73]/90" />
-            {/* Center spotlight for headline clarity */}
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_40%,transparent_0%,rgba(15,48,79,0.4)_100%)]" />
           </div>
-
-          {/* Subtle noise overlay */}
-          <div className="absolute inset-0 bg-noise-overlay pointer-events-none" />
-          
-          {/* Bottom fade to category section */}
-          <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#1A4B73] to-transparent pointer-events-none" />
 
           {/* === HERO CONTENT === */}
           <div className="container mx-auto px-4 relative z-10 flex-1 flex flex-col justify-center py-8 md:py-12">

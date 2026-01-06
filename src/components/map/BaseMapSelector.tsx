@@ -85,7 +85,7 @@ export const arcgisBaseMaps: ArcGISBaseMapOption[] = [
     name: 'Streets',
     arcgisBasemap: 'streets-vector',
     preview: '🗺️',
-    previewImage: 'https://stamen-tiles.a.ssl.fastly.net/toner-lite/6/32/22.png'
+    previewImage: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/4/6/8'
   },
   {
     id: 'streets-navigation',

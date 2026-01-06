@@ -85,56 +85,56 @@ export const arcgisBaseMaps: ArcGISBaseMapOption[] = [
     name: 'Streets',
     arcgisBasemap: 'streets-vector',
     preview: '🗺️',
-    previewImage: 'https://www.arcgis.com/sharing/rest/content/items/de26a3cf4cc9451298ea173c4b324736/info/thumbnail/thumbnail1702503399058.jpeg'
+    previewImage: 'https://stamen-tiles.a.ssl.fastly.net/toner-lite/6/32/22.png'
   },
   {
     id: 'streets-navigation',
     name: 'Navigation',
     arcgisBasemap: 'streets-navigation-vector',
     preview: '🧭',
-    previewImage: 'https://www.arcgis.com/sharing/rest/content/items/63c47b7177f946b49902c24129b87252/info/thumbnail/thumbnail1702503436892.jpeg'
+    previewImage: 'https://a.tile.openstreetmap.org/6/32/22.png'
   },
   {
     id: 'gray',
     name: 'Light Gray',
     arcgisBasemap: 'gray-vector',
     preview: '⬜',
-    previewImage: 'https://www.arcgis.com/sharing/rest/content/items/8a2cba3b0ebf4f9584e2c0e06b77c75d/info/thumbnail/thumbnail1702503352376.jpeg'
+    previewImage: 'https://cartodb-basemaps-a.global.ssl.fastly.net/light_all/6/32/22.png'
   },
   {
     id: 'dark-gray',
     name: 'Dark Gray',
     arcgisBasemap: 'dark-gray-vector',
     preview: '◼️',
-    previewImage: 'https://www.arcgis.com/sharing/rest/content/items/5e9b3685f4c24d8781073dd928ebda50/info/thumbnail/thumbnail1702503271929.jpeg'
+    previewImage: 'https://cartodb-basemaps-a.global.ssl.fastly.net/dark_all/6/32/22.png'
   },
   {
     id: 'satellite',
     name: 'Satellite',
     arcgisBasemap: 'satellite',
     preview: '🛰️',
-    previewImage: 'https://www.arcgis.com/sharing/rest/content/items/67372ff42cd145319639a99152b15bc3/info/thumbnail/thumbnail1702501637498.jpeg'
+    previewImage: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/6/22/32'
   },
   {
     id: 'hybrid',
     name: 'Hybrid',
     arcgisBasemap: 'hybrid',
     preview: '🌐',
-    previewImage: 'https://www.arcgis.com/sharing/rest/content/items/ea3befe305494bb5b2acd77e1b3135dc/info/thumbnail/thumbnail1702501674605.jpeg'
+    previewImage: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/6/22/32'
   },
   {
     id: 'topo',
     name: 'Topographic',
     arcgisBasemap: 'topo-vector',
     preview: '🏔️',
-    previewImage: 'https://www.arcgis.com/sharing/rest/content/items/7dc6cea0b1764a1f9af2e679f642f0f5/info/thumbnail/thumbnail1702503463880.jpeg'
+    previewImage: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/6/22/32'
   },
   {
     id: 'osm',
     name: 'OpenStreetMap',
     arcgisBasemap: 'osm',
     preview: '🌍',
-    previewImage: 'https://www.arcgis.com/sharing/rest/content/items/f81bc478e12c4f1691d0d7ab6361f5a6/info/thumbnail/osm_702.png'
+    previewImage: 'https://a.tile.openstreetmap.org/6/32/22.png'
   }
 ];
 

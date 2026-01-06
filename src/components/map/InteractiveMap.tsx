@@ -366,13 +366,20 @@ function MapControlsOverlay({ onZoomIn, onZoomOut, onResetView, onLocateMe, onFu
                             : "border-transparent hover:border-primary/50"
                         )}
                       >
-                        <div className="aspect-square relative">
+                        <div className="aspect-square relative bg-muted">
                           <img
                             src={map.previewImage}
                             alt={map.name}
                             className="w-full h-full object-cover"
                             loading="lazy"
+                            onError={(e) => {
+                              e.currentTarget.style.display = 'none';
+                              e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                            }}
                           />
+                          <div className="hidden absolute inset-0 flex items-center justify-center text-2xl bg-muted">
+                            {map.preview}
+                          </div>
                           <div className={cn(
                             "absolute inset-0 bg-gradient-to-t from-black/60 to-transparent",
                             "flex items-end justify-center pb-1"

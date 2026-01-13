@@ -1,16 +1,4 @@
-import { 
-  Building2, 
-  Globe, 
-  MapPin, 
-  Users, 
-  Layers,
-  Database,
-  Shield,
-  Target,
-  Lightbulb,
-  ArrowRight,
-  ExternalLink
-} from 'lucide-react';
+import { Building2, Globe, MapPin, Users, Layers, Database, Shield, Target, Lightbulb, ArrowRight, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
@@ -19,46 +7,34 @@ import { cn } from '@/lib/utils';
 import dgeLogo from '@/assets/dge-logo.png';
 import dgeLogoDark from '@/assets/dge-logo-dark.png';
 import sdiLogo from '@/assets/sdi-logo.png';
-
-const dgeFeatures = [
-  {
-    icon: Target,
-    title: 'Centralised Government Enabler',
-    description: 'Delivering quality services to Abu Dhabi government employees, entities, citizens, and residents.'
-  },
-  {
-    icon: Lightbulb,
-    title: 'Smart Digital Government',
-    description: 'Leading the implementation of Abu Dhabi Government Digital Strategy 2025-2027, driving 100% digitalisation and automation.'
-  },
-  {
-    icon: Users,
-    title: 'Team Behind the Teams',
-    description: 'The unified engine powering Abu Dhabi\'s transformation into a future-ready government.'
-  },
-];
-
-const sdiFeatures = [
-  {
-    icon: Layers,
-    title: 'Geospatial Map Viewer',
-    description: 'Easy access to view maps and analyze spatial data across Abu Dhabi.'
-  },
-  {
-    icon: Database,
-    title: 'Open Data Sharing',
-    description: 'Facilitating the sharing and exchange of geospatial data among government agencies and stakeholders.'
-  },
-  {
-    icon: Shield,
-    title: 'Spatially Enabled Services',
-    description: 'Empowering government and society with open and timely access to geographic information.'
-  },
-];
-
+const dgeFeatures = [{
+  icon: Target,
+  title: 'Centralised Government Enabler',
+  description: 'Delivering quality services to Abu Dhabi government employees, entities, citizens, and residents.'
+}, {
+  icon: Lightbulb,
+  title: 'Smart Digital Government',
+  description: 'Leading the implementation of Abu Dhabi Government Digital Strategy 2025-2027, driving 100% digitalisation and automation.'
+}, {
+  icon: Users,
+  title: 'Team Behind the Teams',
+  description: 'The unified engine powering Abu Dhabi\'s transformation into a future-ready government.'
+}];
+const sdiFeatures = [{
+  icon: Layers,
+  title: 'Geospatial Map Viewer',
+  description: 'Easy access to view maps and analyze spatial data across Abu Dhabi.'
+}, {
+  icon: Database,
+  title: 'Open Data Sharing',
+  description: 'Facilitating the sharing and exchange of geospatial data among government agencies and stakeholders.'
+}, {
+  icon: Shield,
+  title: 'Spatially Enabled Services',
+  description: 'Empowering government and society with open and timely access to geographic information.'
+}];
 export default function AboutPage() {
-  return (
-    <div className="min-h-screen flex flex-col">
+  return <div className="min-h-screen flex flex-col">
       <Header />
 
       <main className="flex-1">
@@ -72,11 +48,10 @@ export default function AboutPage() {
 
           <div className="container mx-auto px-4 relative z-10">
             <div className="max-w-3xl mx-auto text-center">
-              <h1 
-                className="font-heading text-[2.75rem] md:text-5xl lg:text-[4.5rem] leading-[1.2] tracking-[2px] font-medium text-white"
-                style={{ textShadow: '0 2px 20px rgba(0,0,0,0.4)' }}
-              >
-                About Smart Map
+              <h1 className="font-heading text-[2.75rem] md:text-5xl lg:text-[4.5rem] leading-[1.2] tracking-[2px] font-medium text-white" style={{
+              textShadow: '0 2px 20px rgba(0,0,0,0.4)'
+            }}>
+                About Us 
               </h1>
             </div>
           </div>
@@ -91,11 +66,7 @@ export default function AboutPage() {
                 <div>
                   <div className="flex items-center gap-4 mb-6">
                     <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20 flex items-center justify-center p-3">
-                      <img 
-                        src={dgeLogoDark} 
-                        alt="Department of Government Enablement" 
-                        className="w-full h-full object-contain"
-                      />
+                      <img src={dgeLogoDark} alt="Department of Government Enablement" className="w-full h-full object-contain" />
                     </div>
                     <div>
                       <h2 className="font-heading text-xl md:text-2xl font-bold text-foreground">
@@ -123,12 +94,7 @@ export default function AboutPage() {
                     </p>
                   </div>
 
-                  <a 
-                    href="https://www.dge.gov.ae/en" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 mt-6 text-primary hover:text-primary/80 font-medium transition-colors"
-                  >
+                  <a href="https://www.dge.gov.ae/en" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 mt-6 text-primary hover:text-primary/80 font-medium transition-colors">
                     Visit DGE Website
                     <ExternalLink className="w-4 h-4" />
                   </a>
@@ -136,11 +102,7 @@ export default function AboutPage() {
 
                 {/* Features */}
                 <div className="space-y-4">
-                  {dgeFeatures.map((feature) => (
-                    <div 
-                      key={feature.title}
-                      className="p-5 rounded-xl bg-card border border-border hover:border-primary/30 transition-colors"
-                    >
+                  {dgeFeatures.map(feature => <div key={feature.title} className="p-5 rounded-xl bg-card border border-border hover:border-primary/30 transition-colors">
                       <div className="flex items-start gap-4">
                         <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
                           <feature.icon className="w-5 h-5 text-primary" strokeWidth={2} />
@@ -150,8 +112,7 @@ export default function AboutPage() {
                           <p className="text-sm text-muted-foreground">{feature.description}</p>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    </div>)}
                 </div>
               </div>
             </div>
@@ -165,11 +126,7 @@ export default function AboutPage() {
               <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
                 {/* Features - Order reversed on desktop */}
                 <div className="space-y-4 lg:order-2">
-                  {sdiFeatures.map((feature) => (
-                    <div 
-                      key={feature.title}
-                      className="p-5 rounded-xl bg-card border border-border hover:border-primary/30 transition-colors"
-                    >
+                  {sdiFeatures.map(feature => <div key={feature.title} className="p-5 rounded-xl bg-card border border-border hover:border-primary/30 transition-colors">
                       <div className="flex items-start gap-4">
                         <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
                           <feature.icon className="w-5 h-5 text-primary" strokeWidth={2} />
@@ -179,29 +136,21 @@ export default function AboutPage() {
                           <p className="text-sm text-muted-foreground">{feature.description}</p>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    </div>)}
                 </div>
 
                 {/* Content */}
                 <div className="lg:order-1">
                   <div className="flex items-center gap-4 mb-6">
                     <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20 flex items-center justify-center p-3">
-                      <img 
-                        src={sdiLogo} 
-                        alt="Abu Dhabi Spatial Data Infrastructure" 
-                        className="w-full h-full object-contain"
-                      />
+                      <img src={sdiLogo} alt="Abu Dhabi Spatial Data Infrastructure" className="w-full h-full object-contain" />
                     </div>
                     <div>
                       <h2 className="font-heading text-xl md:text-2xl font-bold text-foreground">
-                        <span 
-                          className="font-bold"
-                          style={{
-                            color: '#0F304F',
-                            textShadow: '0 1px 8px rgba(15, 48, 79, 0.2)'
-                          }}
-                        >Abu Dhabi Spatial Data Infrastructure</span>
+                        <span className="font-bold" style={{
+                        color: '#0F304F',
+                        textShadow: '0 1px 8px rgba(15, 48, 79, 0.2)'
+                      }}>Abu Dhabi Spatial Data Infrastructure</span>
                       </h2>
                       <p className="text-sm text-muted-foreground">AD-SDI Program</p>
                     </div>
@@ -227,12 +176,7 @@ export default function AboutPage() {
                     </p>
                   </div>
 
-                  <a 
-                    href="https://sdi.gov.abudhabi/sdi/index.html" 
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 mt-6 text-primary hover:text-primary/80 font-medium transition-colors"
-                  >
+                  <a href="https://sdi.gov.abudhabi/sdi/index.html" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 mt-6 text-primary hover:text-primary/80 font-medium transition-colors">
                     Visit AD-SDI Portal
                     <ExternalLink className="w-4 h-4" />
                   </a>
@@ -303,19 +247,7 @@ export default function AboutPage() {
               <p className="text-muted-foreground mb-8">
                 Discover healthcare and education services near you with our intelligent map platform.
               </p>
-              <Button
-                size="lg"
-                asChild
-                className={cn(
-                  "px-8 h-12 font-semibold text-base rounded-full",
-                  "backdrop-blur-xl border border-white/60",
-                  "bg-white/90 text-[#0F304F]",
-                  "shadow-[0_8px_32px_rgba(255,255,255,0.25),inset_0_1px_2px_rgba(255,255,255,0.8)]",
-                  "hover:bg-white hover:border-[rgba(0,212,255,0.5)]",
-                  "hover:shadow-[0_12px_40px_rgba(0,212,255,0.35),inset_0_1px_2px_rgba(255,255,255,1)]",
-                  "active:scale-[0.96] transition-all duration-300"
-                )}
-              >
+              <Button size="lg" asChild className={cn("px-8 h-12 font-semibold text-base rounded-full", "backdrop-blur-xl border border-white/60", "bg-white/90 text-[#0F304F]", "shadow-[0_8px_32px_rgba(255,255,255,0.25),inset_0_1px_2px_rgba(255,255,255,0.8)]", "hover:bg-white hover:border-[rgba(0,212,255,0.5)]", "hover:shadow-[0_12px_40px_rgba(0,212,255,0.35),inset_0_1px_2px_rgba(255,255,255,1)]", "active:scale-[0.96] transition-all duration-300")}>
                 <Link to="/map" className="flex items-center gap-2">
                   Open Smart Map
                   <ArrowRight className="w-5 h-5" />
@@ -327,6 +259,5 @@ export default function AboutPage() {
       </main>
 
       <Footer variant="light" />
-    </div>
-  );
+    </div>;
 }

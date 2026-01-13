@@ -39,7 +39,7 @@ export default function AboutPage() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative py-16 md:py-24 overflow-hidden">
+        <section className="relative py-16 overflow-hidden md:py-[60px]">
           {/* Background */}
           <div className="absolute inset-0 bg-hero-immersive pointer-events-none" />
           <div className="absolute inset-0 bg-indigo-glow-left pointer-events-none opacity-50" />

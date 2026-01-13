@@ -78,11 +78,6 @@ export default function AboutPage() {
               >
                 About Smart Map
               </h1>
-              <p className="text-white/80 text-base md:text-lg leading-relaxed">
-                A collaborative initiative bringing together Abu Dhabi's leading government 
-                technology organizations to provide seamless access to healthcare and 
-                education services across the UAE.
-              </p>
             </div>
           </div>
         </section>

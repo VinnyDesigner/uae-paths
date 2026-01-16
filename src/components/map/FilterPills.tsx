@@ -3,7 +3,7 @@ import { MapPin, Ruler, Building2, ChevronDown, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { FilterState } from '@/types/map';
 import { Slider } from '@/components/ui/slider';
-import { Checkbox } from '@/components/ui/checkbox';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 interface FilterPillsProps {
   filters: FilterState;
@@ -183,7 +183,11 @@ export function FilterPills({ filters, onFilterChange, className }: FilterPillsP
           <>
             <div className="fixed inset-0 z-[var(--z-popover-backdrop)]" onClick={() => setOpenDropdown(null)} />
             <div className="absolute top-full mt-2 left-0 min-w-[200px] bg-card/95 backdrop-blur-xl rounded-xl shadow-xl border border-border overflow-hidden z-[var(--z-popover)] animate-fade-in">
-              <div className="p-2.5 space-y-1">
+              <RadioGroup
+                value={filters.facilityTypes?.[0] || ''}
+                onValueChange={(value) => onFilterChange({ ...filters, facilityTypes: [value] })}
+                className="p-2.5 space-y-1"
+              >
                 {facilityTypes.map((type) => (
                   <label
                     key={type.id}
@@ -194,15 +198,14 @@ export function FilterPills({ filters, onFilterChange, className }: FilterPillsP
                         : "hover:bg-secondary border border-transparent"
                     )}
                   >
-                    <Checkbox
-                      checked={filters.facilityTypes?.includes(type.id) || false}
-                      onCheckedChange={() => handleFacilityTypeToggle(type.id)}
-                      className="border-primary/50 data-[state=checked]:bg-primary"
+                    <RadioGroupItem
+                      value={type.id}
+                      className="border-primary/50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
                     />
                     <span className="text-sm text-foreground">{type.label}</span>
                   </label>
                 ))}
-              </div>
+              </RadioGroup>
             </div>
           </>
         )}

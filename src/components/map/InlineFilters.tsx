@@ -11,15 +11,11 @@ interface InlineFiltersProps {
   className?: string;
 }
 
-const emirates = [
-  'All Emirates',
+const municipalities = [
+  'All Municipalities',
   'Abu Dhabi',
-  'Dubai',
-  'Sharjah',
-  'Ajman',
-  'Ras Al Khaimah',
-  'Fujairah',
-  'Umm Al Quwain',
+  'Al Ain',
+  'Al Dhafra',
 ];
 
 const facilityTypes = [
@@ -50,13 +46,13 @@ export function InlineFilters({ filters, onFilterChange, className }: InlineFilt
     onFilterChange({ ...filters, facilityTypes: newTypes });
   };
 
-  const hasActiveFilters = filters.emirate !== 'All Emirates' || 
+  const hasActiveFilters = filters.emirate !== 'All Municipalities' || 
     (filters.distance && filters.distance > 0) || 
     (filters.facilityTypes && filters.facilityTypes.length > 0);
 
   const clearFilters = () => {
     onFilterChange({
-      emirate: 'All Emirates',
+      emirate: 'All Municipalities',
       distance: null,
       facilityTypes: [],
     });
@@ -70,16 +66,16 @@ export function InlineFilters({ filters, onFilterChange, className }: InlineFilt
           onClick={() => setOpenDropdown(openDropdown === 'emirate' ? null : 'emirate')}
           className={cn(
             "w-full flex items-center justify-between gap-2 px-4 py-3.5 rounded-xl border transition-all text-sm group",
-            filters.emirate !== 'All Emirates'
+            filters.emirate !== 'All Municipalities'
               ? "bg-primary text-primary-foreground border-primary shadow-sm"
               : "bg-white/30 dark:bg-white/5 border-white/20 dark:border-white/10 hover:bg-white/50 dark:hover:bg-white/10 text-foreground"
           )}
         >
           <div className="flex items-center gap-2">
-            <MapPin className={cn("w-4 h-4", filters.emirate !== 'All Emirates' ? "text-primary-foreground" : "text-primary")} />
-            <span>{filters.emirate}</span>
+            <MapPin className={cn("w-4 h-4", filters.emirate !== 'All Municipalities' ? "text-primary-foreground" : "text-primary")} />
+            <span>{filters.emirate === 'All Municipalities' ? 'Municipality' : filters.emirate}</span>
           </div>
-          <ChevronDown className={cn("w-4 h-4 transition-transform", filters.emirate !== 'All Emirates' ? "text-primary-foreground" : "text-muted-foreground", openDropdown === 'emirate' && "rotate-180")} />
+          <ChevronDown className={cn("w-4 h-4 transition-transform", filters.emirate !== 'All Municipalities' ? "text-primary-foreground" : "text-muted-foreground", openDropdown === 'emirate' && "rotate-180")} />
         </button>
 
         {openDropdown === 'emirate' && (
@@ -87,18 +83,18 @@ export function InlineFilters({ filters, onFilterChange, className }: InlineFilt
             <div className="fixed inset-0 z-[var(--z-popover-backdrop)]" onClick={() => setOpenDropdown(null)} />
             <div className="absolute top-full mt-2 left-0 right-0 bg-white/90 dark:bg-card/95 backdrop-blur-xl rounded-xl shadow-2xl border border-white/30 dark:border-white/10 overflow-hidden z-[var(--z-popover)] animate-fade-in">
               <div className="p-2.5 max-h-64 overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-primary/20">
-                {emirates.map((emirate) => (
+                {municipalities.map((municipality) => (
                   <button
-                    key={emirate}
-                    onClick={() => handleEmirateChange(emirate)}
+                    key={municipality}
+                    onClick={() => handleEmirateChange(municipality)}
                     className={cn(
                       "w-full text-left px-4 py-2.5 rounded-lg text-sm transition-all",
-                      filters.emirate === emirate
+                      filters.emirate === municipality
                         ? "bg-primary text-primary-foreground font-medium"
                         : "hover:bg-primary/10 text-foreground"
                     )}
                   >
-                    {emirate}
+                    {municipality}
                   </button>
                 ))}
               </div>

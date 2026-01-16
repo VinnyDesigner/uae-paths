@@ -12,7 +12,6 @@ interface InlineFiltersProps {
 }
 
 const municipalities = [
-  'All Municipalities',
   'Abu Dhabi',
   'Al Ain',
   'Al Dhafra',

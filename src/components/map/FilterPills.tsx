@@ -11,15 +11,11 @@ interface FilterPillsProps {
   className?: string;
 }
 
-const emirates = [
-  'All Emirates',
+const municipalities = [
+  'All Municipalities',
   'Abu Dhabi',
-  'Dubai',
-  'Sharjah',
-  'Ajman',
-  'Ras Al Khaimah',
-  'Fujairah',
-  'Umm Al Quwain',
+  'Al Ain',
+  'Al Dhafra',
 ];
 
 const facilityTypes = [
@@ -50,13 +46,13 @@ export function FilterPills({ filters, onFilterChange, className }: FilterPillsP
     onFilterChange({ ...filters, facilityTypes: newTypes });
   };
 
-  const hasActiveFilters = filters.emirate !== 'All Emirates' || 
+  const hasActiveFilters = filters.emirate !== 'All Municipalities' || 
     (filters.distance && filters.distance > 0) || 
     (filters.facilityTypes && filters.facilityTypes.length > 0);
 
   const clearFilters = () => {
     onFilterChange({
-      emirate: 'All Emirates',
+      emirate: 'All Municipalities',
       distance: null,
       facilityTypes: [],
     });
@@ -72,16 +68,16 @@ export function FilterPills({ filters, onFilterChange, className }: FilterPillsP
           className={cn(
             "inline-flex items-center gap-2 px-4 py-2.5 rounded-full border transition-all text-sm font-medium",
             "hover:shadow-md active:scale-[0.98]",
-            filters.emirate !== 'All Emirates'
+            filters.emirate !== 'All Municipalities'
               ? "bg-primary text-primary-foreground border-primary shadow-sm"
               : "bg-white/80 dark:bg-card/80 backdrop-blur-sm border-border/50 text-foreground hover:bg-white dark:hover:bg-card"
           )}
         >
           <MapPin className={cn(
             "w-4 h-4",
-            filters.emirate !== 'All Emirates' ? "text-primary-foreground" : "text-primary"
+            filters.emirate !== 'All Municipalities' ? "text-primary-foreground" : "text-primary"
           )} />
-          <span>{filters.emirate}</span>
+          <span>{filters.emirate === 'All Municipalities' ? 'Municipality' : filters.emirate}</span>
           <ChevronDown className={cn(
             "w-3.5 h-3.5 transition-transform",
             openDropdown === 'emirate' && "rotate-180"
@@ -93,18 +89,18 @@ export function FilterPills({ filters, onFilterChange, className }: FilterPillsP
             <div className="fixed inset-0 z-[var(--z-popover-backdrop)]" onClick={() => setOpenDropdown(null)} />
             <div className="absolute top-full mt-2 left-0 min-w-[180px] bg-card/95 backdrop-blur-xl rounded-xl shadow-xl border border-border overflow-hidden z-[var(--z-popover)] animate-fade-in">
               <div className="p-2 max-h-64 overflow-y-auto">
-                {emirates.map((emirate) => (
+                {municipalities.map((municipality) => (
                   <button
-                    key={emirate}
-                    onClick={() => handleEmirateChange(emirate)}
+                    key={municipality}
+                    onClick={() => handleEmirateChange(municipality)}
                     className={cn(
                       "w-full text-left px-3 py-2 rounded-lg text-sm transition-all",
-                      filters.emirate === emirate
+                      filters.emirate === municipality
                         ? "bg-primary text-primary-foreground font-medium"
                         : "hover:bg-secondary text-foreground"
                     )}
                   >
-                    {emirate}
+                    {municipality}
                   </button>
                 ))}
               </div>

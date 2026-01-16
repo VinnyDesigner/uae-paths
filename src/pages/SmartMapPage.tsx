@@ -23,7 +23,7 @@ export default function SmartMapPage() {
   const [searchParams] = useSearchParams();
   const [layers, setLayers] = useState<ThemeGroup[]>(themeGroups);
   const [filters, setFilters] = useState<FilterState>({
-    emirate: 'All Emirates',
+    emirate: 'All Municipalities',
     distance: null,
     facilityTypes: []
   });

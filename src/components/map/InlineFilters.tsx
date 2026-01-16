@@ -19,11 +19,8 @@ const municipalities = [
 ];
 
 const facilityTypes = [
-  { id: 'hospitals', label: 'Hospitals', icon: '🏥' },
-  { id: 'clinics', label: 'Clinics', icon: '🩺' },
-  { id: 'pharmacies', label: 'Pharmacies', icon: '💊' },
-  { id: 'schools', label: 'Schools', icon: '🎓' },
-  { id: 'nurseries', label: 'Nurseries', icon: '👶' },
+  { id: 'healthcare', label: 'Healthcare' },
+  { id: 'education', label: 'Education' },
 ];
 
 export function InlineFilters({ filters, onFilterChange, className }: InlineFiltersProps) {
@@ -186,7 +183,6 @@ export function InlineFilters({ filters, onFilterChange, className }: InlineFilt
                       onCheckedChange={() => handleFacilityTypeToggle(type.id)}
                       className="border-primary/50 data-[state=checked]:bg-primary"
                     />
-                    <span className="text-lg">{type.icon}</span>
                     <span className="text-sm text-foreground">{type.label}</span>
                   </label>
                 ))}
